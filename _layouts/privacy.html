@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+{% include head.html %}
+
+<body>
+	{% include header.html %}
+	<div id="navigation">
+		<div id="privacy" class="content">
+			<div class="heading">
+				<img src="/assets/images/{{ page.privacy_img }}">
+				<span>{{ page.privacy_header }}</span>
+			</div>
+
+			<div class="paper">
+				{{ content }}
+			</div>
+		</div>
+		{% include footer.html %}
+	</div>
+</body>
+
+</html>

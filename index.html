@@ -1,0 +1,228 @@
+---
+title: Massi-X Official DevSite
+navtitle: My Portfolio
+description: Who am I, My Apps, Projects & Contributions.
+---
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+{% include head.html %}
+
+<body>
+	{% include header.html %}
+	<div id="navigation">
+
+		<div id="index" class="content">
+			<!-- HERO SECTION -->
+			<div id="portfolio-header">
+				<div id="portfolio-header-image-container">
+					<img src="./assets/images/avatar.png" class="portfolio-header-image light">
+					<img src="./assets/images/avatar-dark.png" class="portfolio-header-image dark">
+				</div>
+
+				<div id="portfolio-header-text-container">
+					<div class="header-text">
+						<span class="main-title">Hi, I'm Massi-X</span>
+						<div class="body-text">I'm a freelance developer who likes to make people life easier with small
+							but useful tools and applications.</div>
+					</div>
+					<a class="button" href="#apps">
+						<span class="button-text">{{ site.data._strings.en.checkoutmyapps }}</span>
+						<i class="fas fa-arrow-right move"></i>
+					</a>
+				</div>
+			</div>
+
+			<!-- ABOUT SECTION -->
+			<div id="about-section">
+				<span class="subheader-text">{{ site.data._strings.en.aboutme }}</span>
+				<div class="about-section-content">
+					<div class="body-text">
+						<p>Nice to meet you, surfer of the web.</p>Let me introduce myself: I am Massi-X and I'm an
+						all-purpose developer, infact even if my main job is not about programming at all, I do love it!
+						I
+						began learning how to develop in the teenage all by myself and then slowly approached new
+						challenges
+						to keep improving my skills. But what about my everyday life? Well usually I wake up, run into
+						some
+						problems that bores me, fix it with some developing! Let's be serious now, I really do find
+						problems
+						in the computer world and I try my best to improve them, be with a new App/Script/Module, be
+						with a
+						contribution to open source projects. And that's really the reason why you won't find a straight
+						path there: my projects skip from Android apps to FreePBX modules to small scripts that fixes
+						sall
+						annoiances. Another thing that distingueshes my work is the search for perfection: I do really
+						like
+						to make things the best I could putting the UI in front of everything followed by a strong
+						backend,
+						and keep out all the headaches that sometimes are characteristic of some solutions!
+						<p>And if you are interested to learn which languages I have experience with here is a list:
+							Java/Kotlin, PHP, HTML, CSS, Javascript and a little of Python and C++.</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- PROJECTS SECTION -->
+			<div id="apps" class="projects-section">
+
+				<!-- ANDROID -->
+				<span class="subheader-text">{{ site.data._strings.en.aapps }}</span>
+
+				<div class="grid-container">
+					<div class="project-card">
+						<div class="card-image"><img src="/assets/images/bttoolkit_icon.png" class="project-image">
+						</div>
+						<div class="project-card-text-container">
+							<div class="subheader-text project-title">Bluetooth ToolKit</div>
+							<div class="body-text project-card-text">Where everything began.<br>Give new freedom to your
+								Android device!</div>
+						</div>
+						<a class="button" target="_blank"
+							href="https://play.google.com/store/apps/details?id=com.metris.xposed.bluetoothToolkitFree">
+							<span class="button-text">{{ site.data._strings.en.rmore }}</span>
+							<i class="fas fa-arrow-right move"></i>
+						</a>
+					</div>
+					<div class="project-card">
+						<div class="card-image"><img src="/assets/images/pixelmods_icon.png" class="project-image">
+						</div>
+						<div class="project-card-text-container">
+							<div class="subheader-text project-title">Pixel Mods</div>
+							<div class="body-text project-card-text">Always wondered how to learn your launcher some new
+								tricks? Here you go!</div>
+						</div>
+						<a class="button" target="_blank"
+							href="https://play.google.com/store/apps/details?id=com.metris.xposed.pmods">
+							<span class="button-text">{{ site.data._strings.en.rmore }}</span>
+							<i class="fas fa-arrow-right move"></i>
+						</a>
+					</div>
+					<div class="project-card">
+						<div class="card-image"><img src="/assets/images/castenabler_icon.png" class="project-image">
+						</div>
+						<div class="project-card-text-container">
+							<div class="subheader-text project-title">Cast Enabler for A12+</div>
+							<div class="body-text project-card-text">Bring back cast control to the system dialogs when
+								needed</div>
+						</div>
+						<a class="button" target="_blank"
+							href="https://forum.xda-developers.com/t/cast-enabler-for-android-12-xposed.4394713/">
+							<span class="button-text">{{ site.data._strings.en.rmore }}</span>
+							<i class="fas fa-arrow-right move"></i>
+						</a>
+					</div>
+					<div class="project-card">
+						<div class="card-image"><img src="/assets/images/vibrationenable_icon.png"
+								class="project-image">
+						</div>
+						<div class="project-card-text-container">
+							<div class="subheader-text project-title">Vibration Enable</div>
+							<div class="body-text project-card-text">Miss vibration when battery saver is ON? Bring it
+								back
+								easily!</div>
+						</div>
+						<a class="button" target="_blank"
+							href="https://forum.xda-developers.com/t/app-5-0-vibration-enable-for-battery-saver.4631627/">
+							<span class="button-text">{{ site.data._strings.en.rmore }}</span>
+							<i class="fas fa-arrow-right move"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- OTHERS -->
+			<div class="projects-section">
+				<span class="subheader-text">{{ site.data._strings.en.otherproj }}</span>
+
+				<div class="grid-container">
+					<div class="project-card">
+						<div class="card-image"><img src="/assets/images/carddavmiddleware_icon.png"
+								class="project-image">
+						</div>
+						<div class="project-card-text-container">
+							<div class="subheader-text project-title">CardDAV Middleware</div>
+							<div class="body-text project-card-text">Fill the gap between your CardDAV Server and
+								FreePBX!
+							</div>
+						</div>
+						<a class="button" target="_blank"
+							href="https://phonemiddleware.000webhostapp.com/releases#readme">
+							<span class="button-text">{{ site.data._strings.en.rmore }}</span>
+							<i class="fas fa-arrow-right move"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- CONTRIBUTIONS -->
+			<div class="projects-section">
+				<span class="subheader-text">{{ site.data._strings.en.contributions }}</span>
+
+				<div class="grid-container">
+					<div class="project-card">
+						<div class="card-image"><img src="/assets/images/freepbx_icon.png" class="project-image"></div>
+						<div class="project-card-text-container">
+							<div class="subheader-text project-title">FreePBX modules</div>
+							<div class="body-text project-card-text">I've sent some contributions to the FreePBX
+								project,
+								some were fixes and some entirely new features. Check them out here.</div>
+						</div>
+						<a class="button"
+							href="https://issues.freepbx.org/browse/FREEPBX-24277?filter=-4&amp;jql=reporter%20%3D%20Massi-X%20ORDER%20BY%20created%20DESC"
+							target="_blank">
+							<span class="button-text">See on Jira</span>
+							<i class="fas fa-arrow-up-right-from-square rotate"></i>
+						</a>
+					</div>
+					<div class="project-card">
+						<div class="card-image"><img src="/assets/images/github_icon.png" class="project-image"></div>
+						<div class="project-card-text-container">
+							<div class="subheader-text project-title">Misc Github PRs</div>
+							<div class="body-text project-card-text">You can find some of my other contributions to
+								various
+								projects on GitHub.</div>
+						</div>
+						<a class="button" target="_blank" href="https://github.com/stars/Massi-X/lists/contributions">
+							<span class="button-text">See on GitHub</span>
+							<i class="fas fa-arrow-up-right-from-square rotate"></i>
+						</a>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- TODO: Consider moving blog at the top when it is the right time -->
+			<!-- BLOG -->
+			<div class="projects-section">
+				<span class="subheader-text">{{ site.data._strings.en.blog }}</span>
+
+				<div class="grid-container equal">
+					<!-- version used to loop through the available colors for blog cards -->
+					{% assign version = 1 %}
+
+					{% for post in site.posts %}
+					<a href="{{ post.url }}" class="blog-card v{{ version }} hoverable">
+						<p>
+							{{ post.title }}
+						</p>
+						<span class="hide-1024">
+							{{ post.description }}
+						</span>
+					</a>
+
+					{% if version == 5 %}
+					{% assign version = 0 %}
+					{% endif %}
+
+					{% assign version = version | plus: 1 %}
+
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		{% include footer.html %}
+	</div>
+</body>
+
+</html>

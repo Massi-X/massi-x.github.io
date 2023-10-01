@@ -1,0 +1,20 @@
+<div id="footer">
+	© <span id="year">2023</span> {{ site.author }} | {{ site.data._strings.en.themeby }} <a target="_blank"
+		href="https://github.com/ndoherty-xyz/unemployables-portfolio-template">{{ site.data._strings.en.unemployable }}</a> |
+		<a href="javascript:;" onclick="openPopup(privacy_details)">{{ site.data._strings.en.privacypolicy }}</a> | 
+	<a href="javascript:;" onclick="cc.showSettings()" title="Cookie Settings" class="cookie-settings"><i
+			class="fas fa-cookie-bite"></i> {{ site.data._strings.en.managecookie }}</a>
+</div>
+
+<script>
+	//create the js object needed for popup build
+	var privacy_details = {
+		title: 'Privacy Policies',
+		html:
+			'<ul class="prettier">' +
+			'{% for page in site.pages %}{% assign check = page.url | split: "/privacy_policy" %}{% if check[0] == "" %}<li><a href="{{ page.url }}">{{ page.title }}</a></li>{% endif %}{% endfor %}' +
+			'</ul>',
+		showConfirmButton: false
+	};
+
+</script>

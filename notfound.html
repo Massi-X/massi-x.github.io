@@ -1,0 +1,23 @@
+---
+title: Page Unavailable
+navtitle: Page Unavailable
+description: The page you're looking for is currently not available.
+---
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+{% include head.html %}
+
+<body>
+	{% include header.html %}
+	<div id="navigation">
+		<div class="content" id="notfound">
+			<i class="fas fa-circle-exclamation"></i>
+			<span>{{ site.data._strings.en.pageunavailabletext }}</span>
+		</div>
+	</div>
+	<!-- no footer on purpose -->
+	</div>
+</body>
+
+</html>

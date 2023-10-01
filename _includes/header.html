@@ -1,0 +1,41 @@
+<header id="navbar">
+	<div id="breadcumb">
+		<a class="link" href="/" {% if page.url !="/" %} data-insert-navigation="true" {% else %}
+			data-insert-navigation="false" {% endif %}>
+			<i class="fas fa-chevron-left"></i>
+		</a>
+		<span id="title-container" {% if page.url=="/" %} style="max-width: none;" {% endif %}>
+			<div class="real-title" data-type="title">
+				{% if page.navtitle %}
+				{{ page.navtitle }}
+				{% else %}
+				{{ page.title }}
+				{% endif %}
+			</div>
+			<div class="loading-title" data-type="loading-placeholder">{{ site.data._strings.en.loading }}</div>
+		</span>
+	</div>
+	<div class="buttons">
+		<a class="button" target="_blank" href="https://play.google.com/store/apps/dev?id=5916168791200129933">
+			<i class="icon fa-brands fa-google-play"></i>
+			<span class="button-text hide-1024">{{ site.data._strings.en.findgoogle }}</span>
+			<span class="button-text show-1024">{{ site.data._strings.en.googleplay }}</span>
+		</a>
+		<a class="button" target="_blank" href="https://forum.xda-developers.com/m/massi-x.5576742">
+			<div class="icon">
+				<img src="/assets/images/xda_icon.svg" class="xda-icon"></i>
+			</div>
+			<span class="button-text hide-1024">{{ site.data._strings.en.findxda }}</span>
+			<span class="button-text show-1024">{{ site.data._strings.en.xda }}</span>
+		</a>
+		<a class="button" target="_blank" href="https://github.com/Massi-X">
+			<i class="icon fa-brands fa-github"></i>
+			<span class="button-text hide-1024">{{ site.data._strings.en.findgithub }}</span>
+			<span class="button-text show-1024">{{ site.data._strings.en.github }}</span>
+		</a>
+		<a class="button" target="_blank" href="mailto:firemetris@gmail.com">
+			<i class="icon fas fa-envelope"></i>
+			<span class="button-text">{{ site.data._strings.en.support }}</span>
+		</a>
+	</div>
+</header>

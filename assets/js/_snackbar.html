@@ -1,0 +1,144 @@
+<!-- Ex snackbar implementation, abandoned for now -->
+
+<script>
+	window.onresize = () => {
+		if (window.savedwidth !== window.innerWidth)
+			saveBottomPadding();
+	}
+	function saveBottomPadding() {
+		console.log('updating stored width');
+		window.savedwidth = window.innerWidth;
+		if (document.querySelector('#navbar>.buttons').getBoundingClientRect().bottom - window.innerHeight == 0)
+			document.documentElement.style.setProperty('--snackbar-offset', document.querySelector('#navbar>.buttons').offsetHeight + 'px');
+		else
+			document.documentElement.style.setProperty('--snackbar-offset', '0px');
+	}
+	offlinePopup(!window.navigator.onLine);
+	window.addEventListener('online', () => { offlinePopup(false) });
+	window.addEventListener('offline', () => { offlinePopup(true) });
+
+	function offlinePopup(offline) {
+		let oldPopups = document.getElementsByClassName('snackbar');
+		if (oldPopups.length) {
+			oldPopups[0].remove();
+			//oldPopups[0].addEventListener('transitionend', () => {
+			//	oldPopups[0].remove();
+			//}, { once: true });
+			//oldPopups[0].classList.remove('open');
+		}
+
+		if (!offline)
+			return; //stop after removing the old popup beacuse we are online again
+
+		let snackbar = document.createElement('div');
+		snackbar.classList.add('snackbar', 'open', 'invisible', 'noanim');
+		snackbar.innerHTML = '<i class="fas fa-circle-info"></i><span>' + strings.en.offlinewarn + '</span>';
+		document.body.appendChild(snackbar);
+
+		let height = snackbar.getBoundingClientRect().height;
+		let width = snackbar.getBoundingClientRect().width;
+		snackbar.style = 'width: ' + width + 'px; height: ' + height + 'px';
+		document.querySelector('.snackbar>span').style = 'width: ' + document.querySelector('.snackbar>span').getBoundingClientRect().width + 'px';
+		snackbar.classList.remove('open', 'invisible');
+		snackbar.classList.add('shrink', 'shrink-delayed');
+		setTimeout(() => {
+			snackbar.classList.remove('noanim');
+
+			snackbar.addEventListener('transitionend', () => {
+				console.log('received trasend1, classes: ' + snackbar.classList);
+				snackbar.addEventListener('transitionend', () => {
+					console.log('received trasend2, classes: ' + snackbar.classList);
+				}, { once: true });
+				snackbar.classList.remove('shrink');
+
+				setTimeout(() => snackbar.classList.add('shrink', 'shrink-delayed'), 2000);
+			}, { once: true });
+
+			snackbar.classList.add('open');
+		}, 1);
+
+		snackbar.addEventListener('mouseover', () => {
+			snackbar.classList.remove('shrink');
+
+			setTimeout(() => snackbar.classList.add('shrink', 'shrink-delayed'), 2000);
+		});
+	}
+
+</script>
+
+<style>
+	:root {
+		--snackbar-offset: 0;
+	}
+
+	@media(prefers-reduced-motion: reduce) {
+
+		.snackbar {}
+	}
+
+	.snackbar.shrink {
+		width: 45px !important;
+		padding: 13px 14px;
+	}
+
+	.snackbar.shrink.shrink-delayed {
+		height: 45px !important;
+	}
+
+	.snackbar.shrink-delayed>span {
+		left: 33px;
+		position: absolute;
+		top: 50%;
+		transform: translate(0, -50%);
+		transition: filter .3s ease;
+	}
+
+	.snackbar.shrink>span {
+		filter: opacity(0);
+	}
+
+	.snackbar {
+		overflow: hidden;
+		display: table;
+	}
+
+	.snackbar {
+		transition: width .3s ease, height .3s ease, padding .3s ease, margin .3s ease, transform .5s ease;
+	}
+
+	.snackbar span {
+		display: table-cell;
+		padding-left: 10px;
+	}
+
+	.snackbar>i {
+		display: table-cell;
+		vertical-align: middle;
+	}
+
+	.snackbar {
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		margin: 15px 20px;
+		padding: 13px 18px;
+		background: #EF5350;
+		border: 1px solid #C62828;
+		border-radius: 0.3em;
+		font-size: 15px;
+		color: #fafafa;
+		user-select: none;
+		transform: scale(0);
+		margin-bottom: calc(var(--snackbar-offset) + 20px);
+	}
+
+	@media only screen and (max-width: 600px) {
+		.snackbar {
+			width: calc(100% - 40px);
+		}
+	}
+
+	.snackbar.open {
+		transform: none;
+	}
+</style>
