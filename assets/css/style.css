@@ -66,6 +66,8 @@
 }
 
 html {
+	/*TODO reenable bounce on the navigation contaner in some way? */
+	overscroll-behavior-y: none;
 	text-size-adjust: none;
 	-webkit-text-size-adjust: none;
 	-moz-text-size-adjust: none;
