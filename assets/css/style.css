@@ -294,7 +294,7 @@ p {
 	}
 }
 
-@media (pointer: fine) {
+@media (hover: hover) {
 
 	.cookie-settings:hover,
 	.cookie-settings:focus-visible {
@@ -302,7 +302,7 @@ p {
 	}
 }
 
-@media (pointer: coarse) {
+@media (hover: none) {
 
 	.cookie-settings:active,
 	.cookie-settings:focus-visible {
@@ -366,7 +366,7 @@ a.hoverable {
 	border-radius: .1em;
 }
 
-@media (pointer: fine) {
+@media (hover: hover) {
 
 	a:not([class]):hover,
 	a.hoverable:hover,
@@ -376,7 +376,7 @@ a.hoverable {
 	}
 }
 
-@media (pointer: coarse) {
+@media (hover: none) {
 
 	a:not([class]):active,
 	a.hoverable:active,
@@ -433,7 +433,7 @@ a.button.icon-link:hover a.button.icon-link:focus-visible {
 	transform: rotate(15deg);
 }
 
-@media (pointer: fine) {
+@media (hover: hover) {
 
 	a.button:hover,
 	a.button:focus-visible {
@@ -456,7 +456,7 @@ a.button.icon-link:hover a.button.icon-link:focus-visible {
 	}
 }
 
-@media (pointer: coarse) {
+@media (hover: none) {
 
 	a.button:active,
 	a.button:focus-visible {
@@ -647,7 +647,7 @@ ul.prettier ::marker {
 	transform: none;
 }
 
-@media (pointer: fine) {
+@media (hover: hover) {
 
 	#navbar>#breadcumb>.link:hover,
 	#navbar>#breadcumb>.link:focus-visible {
@@ -656,7 +656,7 @@ ul.prettier ::marker {
 	}
 }
 
-@media (pointer: coarse) {
+@media (hover: none) {
 
 	#navbar>#breadcumb>.link:active,
 	#navbar>#breadcumb>.link:focus-visible {
@@ -801,7 +801,7 @@ ul.prettier ::marker {
 		margin-left: 10px;
 	}
 
-	@media (pointer: fine) {
+	@media (hover: hover) {
 
 		#navbar>.buttons>.button:hover>*,
 		#navbar>.buttons>.button:focus-visible>* {
@@ -815,7 +815,7 @@ ul.prettier ::marker {
 		}
 	}
 
-	@media (pointer: coarse) {
+	@media (hover: none) {
 
 		#navbar>.buttons>.button:active>*,
 		#navbar>.buttons>.button:focus-visible>* {
