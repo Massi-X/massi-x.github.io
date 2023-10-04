@@ -285,9 +285,12 @@ p {
 
 .cookie-settings {
 	display: inline-block;
-	text-decoration: none;
 	color: #A1887F;
 	transition: color .15s ease;
+}
+
+.cookie-settings>i {
+	padding-right: 3px;
 }
 
 @media only screen and (max-width: 1023px) {
