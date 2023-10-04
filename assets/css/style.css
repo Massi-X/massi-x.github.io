@@ -72,7 +72,7 @@ html {
 	-webkit-text-size-adjust: none;
 	-moz-text-size-adjust: none;
 	-ms-text-size-adjust: none;
-	overflow: hidden;
+	overflow-x: hidden;
 	background: var(--background);
 	/* leave background here for smooth opacity transition */
 }
@@ -84,6 +84,7 @@ body {
 	margin: 0;
 	width: 100vw;
 	min-height: 100vh;
+	overflow: hidden;
 	background: var(--background);
 }
 
