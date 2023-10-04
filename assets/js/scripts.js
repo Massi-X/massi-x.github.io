@@ -220,8 +220,6 @@ if ('navigation' in window) {
 		if (window.reduceanimation || navigateEvent.navigationType == 'reload' || navigateEvent.navigationType == 'replace')
 			return;
 
-		swal.close(); //first hide any popup (even if the navigation can still fail for any reason)
-
 		let newPageContent;
 		let animationTarget;
 		let animated = false;
@@ -252,9 +250,22 @@ if ('navigation' in window) {
 
 			if (currentIndex < newIndex) //FORWARD
 				animationTarget.classList.add('navigate-forward');
-			else //BACK
+			else { //BACK 
+				//if cookieconsent is open stop there. This tries to emulate back button in Android apps to close things
+				if (document.documentElement.classList.contains('show--settings')) {
+					cc.hideSettings();
+					navigateEvent.preventDefault();
+					return;
+				}
+
+				//else...
 				animationTarget.classList.add('navigate-back');
+			}
 		}
+
+		//hide any open popup (even if the navigation can still fail for any reason)
+		cc.hideSettings();
+		swal.close();
 
 		window.currentIndex = newIndex; //always update current index
 
