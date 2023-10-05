@@ -610,8 +610,10 @@ ul.prettier ::marker {
 
 #navbar>#breadcumb>.link {
 	flex-shrink: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	font-size: 17px;
-	text-align: center;
 	border-radius: 50%;
 	height: var(--back-width);
 	width: var(--back-width);

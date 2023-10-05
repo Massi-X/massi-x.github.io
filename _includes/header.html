@@ -1,8 +1,8 @@
 <header id="navbar">
 	<div id="breadcumb">
 		<a class="link" href="/" {% if page.url !="/" %} data-insert-navigation="true" {% else %}
-			data-insert-navigation="false" {% endif %}>
-			<i class="fas fa-chevron-left"></i>
+			data-insert-navigation="false" {% endif %} title="{{ site.data._strings.en.backhome }}">
+			<i class="fas fa-house"></i>
 		</a>
 		<span id="title-container" {% if page.url=="/" %} style="max-width: none;" {% endif %}>
 			<div class="real-title" data-type="title">
