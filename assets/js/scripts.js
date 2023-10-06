@@ -15,6 +15,7 @@ breadcumb = document.getElementById('breadcumb');
 navTitleText = document.querySelector('[data-type="title"]');
 navTitleContainer = document.getElementById('title-container');
 breadcumbArrow = document.body.querySelector('[data-insert-navigation]');
+rootURL = new URL(window.location.origin);
 
 //prevent the browser from restoring the previous scroll position when navigating (unvalid with Navigate API, see below the oher method used there)
 if (history.scrollRestoration) history.scrollRestoration = "manual";
@@ -173,16 +174,33 @@ window.onresize = () => {
 	}, 100);
 };
 
+//for PWA home navigation/injection. See below
+const UNSET = 0;
+const STANDARD = 1;
+const SPECIAL = 2;
+window.alterNavigation = {
+	type: UNSET,
+	title: ''
+};
+
 //custom navigation handling (transitions and errors)
 if ('navigation' in window) {
 	//save initial navigation index
-	window.currentIndex = navigation.currentEntry.index;
+	currentIndex = navigation.currentEntry.index;
 
 	//register listener
 	navigation.addEventListener('navigate', navigateEvent => { //if page is not in domain is not considered a navigate event. One less problem
+
+		//handle event in a special way preventing double navigations (for PWA home injection)
+		if (window.alterNavigation.type === SPECIAL) {
+			metaTitle.innerText = window.alterNavigation.title; //head title must be replaced here to not mess up history entries
+			currentIndex = 0; //current index will always be 0 in this case
+			return;
+		}
+
 		//save old and new URL, will come useful later
 		const oldURL = new URL(navigation.currentEntry.url);
-		const newURL = new URL(navigateEvent.destination.url);
+		let newURL = new URL(navigateEvent.destination.url);
 
 		//1: if is anchor, animate (if not prevented by reduced-animation) and return
 		if (navigateEvent.destination.sameDocument) {
@@ -228,8 +246,40 @@ if ('navigation' in window) {
 		if (newIndex == -1) //this page is not in history, create the new index manually
 			newIndex = currentIndex + 1;
 
-		//3: circle animation originating from the link click
-		if (navigateEvent.navigationType == 'push') {
+		//3: if cookieconsent is open stop there. This tries to emulate back button in Android apps to close things
+		if (navigateEvent.navigationType == 'traverse' && currentIndex > newIndex) {
+			if (document.documentElement.classList.contains('show--settings')) {
+				cc.hideSettings();
+				navigateEvent.preventDefault();
+				return;
+			}
+		}
+
+		//4: if we are inside a PWA and we navigate back to the home page provide a better user experience by making it a real home page (back will close the app)
+		if (isStandalone() && window.alterNavigation.type == UNSET && newURL.href == rootURL.href && (currentIndex > 1 || navigateEvent.navigationType != 'traverse')) {
+			navigateEvent.preventDefault();
+
+			if (currentIndex == 0) { //special handling when the first loaded page was not home. See also below
+				window.alterNavigation = {
+					type: SPECIAL,
+					title: metaTitle.innerText //save title so that it can be reset on the copied history entry
+				};
+				history.pushState(null, "", navigation.entries()[0].url); //create another identical entry, so that...
+				history.go(-1); //...we can navigate back again and later replace the state of this one to rootURL
+			}
+			else { //if the first page loaded was home, is easy as going back to the first history entry
+				window.alterNavigation.type = STANDARD;
+				history.go(-currentIndex);
+				return;
+			}
+		}
+
+		//complying to the reduced animation policy is easy as letting the browser handle everything starting from there. Moreover these navigation types are not handled, so we let the broswer do it's default with them
+		if (window.reduceanimation || navigateEvent.navigationType == 'reload' || navigateEvent.navigationType == 'replace')
+			return;
+
+		//5: circle animation originating from the link click
+		if (navigateEvent.navigationType == 'push' || window.alterNavigation.type == STANDARD) {
 			animationTarget = document.createElement('div');
 			animationTarget.id = 'circle-reveal';
 
@@ -267,7 +317,7 @@ if ('navigation' in window) {
 		cc.hideSettings();
 		swal.close();
 
-		window.currentIndex = newIndex; //always update current index
+		currentIndex = newIndex; //always update current index
 
 		//animate navbar title to "Loading..." while keeping a min-width to avoid overflow clipping
 		let placeholderWidth = loadingPlaceholder.getBoundingClientRect().width;
@@ -279,7 +329,7 @@ if ('navigation' in window) {
 
 		//animate the main loading view. This must be kept synced on the longer animation (currently the circle/slide)
 		animationTarget.addEventListener('transitionend', () => {
-			if (navigateEvent.navigationType == 'push') {
+			if (navigateEvent.navigationType == 'push' || window.alterNavigation.type == STANDARD) {
 				navigationContainer.classList.add('pagefixed');
 				navigationContainer.style = 'margin-top: -' + window.scrollY + 'px;';
 				animationTarget.classList.add('blink');
@@ -292,25 +342,40 @@ if ('navigation' in window) {
 		}, { once: true });
 
 		//here we load the new content
-		navigateEvent.intercept({
-			scroll: 'manual',
-			async handler() {
-				//head title must be replaced here to not mess up history entries
-				metaTitle.innerText = strings.en.loading;
-				let response;
+		if (window.alterNavigation.type == SPECIAL) //when the first page is not home
+			getData();
+		else
+			navigateEvent.intercept({
+				scroll: 'manual',
+				async handler() { await getData() }
+			});
 
-				try { //try to load the page...
+		//main function that retrieves data from the network
+		async function getData() {
+			//head title must be replaced here to not mess up history entries
+			metaTitle.innerText = strings.en.loading;
+			let response;
+
+			try { //try to load the page...
+				if (window.alterNavigation.type == SPECIAL) {
+					response = await fetch(newURL);
+					window.history.replaceState(null, '', rootURL.href); //make sure to update the rootURL of the new added entry
+				}
+				else
 					response = await fetch(newURL, { signal: navigateEvent.signal });
-				}
-				catch (e) { //or catch the error if something fail, giving back an error page
-					response = await fetch('/notfound.html'); //this is cached when the worker is installed, always present
-				}
 
-				newPageContent = new DOMParser().parseFromString(await response.text(), "text/html");
-				loadPage();
-			},
-		});
+				if (!response.ok) //throw error in case of server errors (Promise errors goes directly to the catch below)
+					throw new Error();
+			}
+			catch (e) { //or catch the error if something fail, giving back an error page
+				response = await fetch('/notfound.html'); //this is cached when the worker is installed, always present
+			}
 
+			newPageContent = new DOMParser().parseFromString(await response.text(), "text/html");
+			loadPage();
+		}
+
+		//renders the page given the content is fully loaded
 		function loadPage() {
 			//the DOM is not ready. We don't know anything yet and we can't continue
 			if (newPageContent == null)
@@ -333,7 +398,7 @@ if ('navigation' in window) {
 				behavior: "instant"
 			});
 
-			if (navigateEvent.navigationType == 'push') { //if push navigation: fade the circle out and then remove it
+			if (navigateEvent.navigationType == 'push' || window.alterNavigation.type == STANDARD) { //if push navigation: fade the circle out and then remove it
 				animationTarget.classList.add('fadeout');
 				navigationContainer.classList.remove('pagefixed');
 				navigationContainer.style = '';
@@ -361,6 +426,8 @@ if ('navigation' in window) {
 			navTitleContainer.classList.remove('loading');
 
 			ccShowHideDinamic();
+
+			window.alterNavigation.type = UNSET; //reset after the handling is complete
 		}
 	});
 }
@@ -397,6 +464,14 @@ function togglegtag(enable) {
 			'analytics_storage': 'denied'
 		});
 	}
+}
+
+/**
+ * Check if the current window is running in standalone mode (read: is a PWA)
+ * @returns {Boolean} true if the window is standalone, false otherwise
+ */
+function isStandalone() {
+	return (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches);
 }
 
 /**
