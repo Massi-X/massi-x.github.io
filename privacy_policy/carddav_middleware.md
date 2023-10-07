@@ -38,7 +38,7 @@ privacy_img: carddavmiddleware_icon.png
 </div>
 <p class="title">Your Choices:</p>
 <p class="text">You can request the deletion of all of your data (and consequently permanently lose eventual
-	benefits associated with your donation) by writing an email at &#60;firemetris@gmail.com&#62; with
+	benefits associated with your donation) by writing an email at &#60;firemetris [at] gmail.com&#62; with
 	Subject: "GDPR CardDAV Middleware" and indicating in the body of the message your email or purchase ID.
 	Requests will be processed in a meaningful time frame; you will receive a response as soon as the
 	deletion is complete.</p>
