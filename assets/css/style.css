@@ -606,6 +606,7 @@ ul.prettier ::marker {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	cursor: default;
+	text-align: center;
 }
 
 #navbar>#breadcumb>.link {
@@ -767,12 +768,12 @@ ul.prettier ::marker {
 	}
 
 	#navbar>#breadcumb>#title-container>.loading-title {
-		left: 50%;
-		transform: translateX(-50%);
+		width: 100%;
+		left: 0;
 	}
 
 	#navbar>#breadcumb>#title-container.loading>.loading-title {
-		transform: translateX(-50%) translateY(-100%);
+		transform: translateY(-100%);
 	}
 
 	#navbar>.buttons {
