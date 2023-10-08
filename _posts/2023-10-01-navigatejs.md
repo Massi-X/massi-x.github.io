@@ -13,7 +13,7 @@ description: "Alternative title: Click me to see the beautiful transition (Only 
 
 During the creation of this site I faced many challenges regarding mainly the design/animation and what I should expect as a result.
 
-The initial idea was to create a simple showcase of all of my creatures 🦖 that could be easily updated in case anything changed; while this is still the main point of the work, I found myself repeatly in situation like "Why didn't I add this animation?", "Oh, a blog seems like a good idea to share ideas with others, why not creating one?" or "Yeah, I should absolutely come up with a solution that allow me to save this two lines of code...".
+The initial idea was to create a simple showcase of all of my creatures 🦖 that could be easily updated in case anything changed; while this is still the main point of the work, I found myself repeatly in situation like "Why didn't I add this animation?", "Oh, a blog seems like a good idea to share ideas with others, why not creating one?" or "Yeah, I should absolutely come up with a solution that allow me to save these two lines of code...".
 With this spirit I could not accept an abrupt page transition when navigating to other pages, so I begin implementing the (yet in proposal) [Navigate API](https://developer.chrome.com/docs/web-platform/navigation-api/){:target="_blank"}. While technically the [View Transition API](https://developer.chrome.com/docs/web-platform/view-transitions/){:target="_blank"} is more suitable for this kind of job, I found myself pretty comfortable using the aforementioned Navigate API for the same purpose.
 
 Still don't know what I'm talking about? Let's start a shallow dive inside the beautiful word of this new API.
