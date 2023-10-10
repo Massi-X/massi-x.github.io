@@ -134,7 +134,8 @@ body {
 }
 
 body,
-a {
+a,
+button {
 	color: var(--text);
 }
 
@@ -396,10 +397,12 @@ a.hoverable {
 /********************************************************************************
 ********************************* Button styles *********************************
 /********************************************************************************/
-a.button {
+.button {
 	user-select: none;
+    font-size: 16px;
 	padding: 8px 16px;
 	border: 3px solid var(--button-border);
+	background: none;
 	border-radius: 50px;
 	text-decoration: none;
 	width: fit-content;
@@ -409,13 +412,13 @@ a.button {
 	cursor: pointer;
 }
 
-a.button,
-a.button * {
+.button,
+.button * {
 	transition: background-color .15s ease, filter .15s ease, translate .3s ease, transform .3s ease;
 }
 
-a.button>.button-text {
-    pointer-events: none;
+.button>.button-text {
+	pointer-events: none;
 	font-size: 14px;
 	font-weight: 700;
 	overflow: hidden;
@@ -423,17 +426,17 @@ a.button>.button-text {
 	text-overflow: ellipsis;
 }
 
-a.button.right-arrow-icon {
+.button.right-arrow-icon {
 	width: 16px;
 	height: 16px;
 	margin-top: 1px;
 }
 
-a.button.icon-link {
+.button.icon-link {
 	transition: transform 200ms ease-in-out;
 }
 
-a.button.icon-link:hover a.button.icon-link:focus-visible {
+.button.icon-link:hover .button.icon-link:focus-visible {
 	cursor: pointer;
 	stroke-width: 5;
 	margin: 0;
@@ -442,46 +445,46 @@ a.button.icon-link:hover a.button.icon-link:focus-visible {
 
 @media (hover: hover) {
 
-	a.button:hover,
-	a.button:focus-visible {
+	.button:hover,
+	.button:focus-visible {
 		background: var(--button-bg-hover);
 	}
 
-	a.button:hover>i.move,
-	a.button:focus-visible>i.move {
+	.button:hover>i.move,
+	.button:focus-visible>i.move {
 		translate: 5px;
 	}
 
-	a.button:hover>i.rotate,
-	a.button:focus-visible>i.rotate {
+	.button:hover>i.rotate,
+	.button:focus-visible>i.rotate {
 		transform: rotateZ(45deg);
 	}
 
-	a.button:hover>*,
-	a.button:focus-visible>* {
+	.button:hover>*,
+	.button:focus-visible>* {
 		filter: invert(1);
 	}
 }
 
 @media (hover: none) {
 
-	a.button:active,
-	a.button:focus-visible {
+	.button:active,
+	.button:focus-visible {
 		background: var(--button-bg-hover);
 	}
 
-	a.button:active>i.move,
-	a.button:focus-visible>i.move {
+	.button:active>i.move,
+	.button:focus-visible>i.move {
 		translate: 5px;
 	}
 
-	a.button:active>i.rotate,
-	a.button:focus-visible>i.rotate {
+	.button:active>i.rotate,
+	.button:focus-visible>i.rotate {
 		transform: rotateZ(45deg);
 	}
 
-	a.button:active>*,
-	a.button:focus-visible>* {
+	.button:active>*,
+	.button:focus-visible>* {
 		filter: invert(1);
 	}
 }
@@ -621,7 +624,7 @@ ul.prettier ::marker {
 }
 
 #navbar>.buttons>.button>.icon {
-    pointer-events: none;
+	pointer-events: none;
 	height: 17px;
 	display: inline-flex;
 	justify-content: center;
@@ -1235,9 +1238,9 @@ a.blog-card span {
 	#navigation,
 	a:not([class]),
 	a.hoverable,
-	a.button,
-	a.button *,
-	a.button.icon-link,
+	.button,
+	.button *,
+	.button.icon-link,
 	#navbar,
 	#navbar>#breadcumb,
 	#navbar>#breadcumb>.link,
