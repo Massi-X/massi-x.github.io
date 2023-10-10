@@ -606,7 +606,6 @@ ul.prettier ::marker {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	cursor: default;
-	text-align: center;
 }
 
 #navbar>#breadcumb>.link {
@@ -759,6 +758,11 @@ ul.prettier ::marker {
 
 	#navbar>#breadcumb>.link[data-insert-navigation="false"] {
 		transform: translateX(calc(-100% - 10px));
+	}
+
+	#navbar>#breadcumb>#title-container>.real-title,
+	#navbar>#breadcumb>#title-container>.loading-title {
+		text-align: center;
 	}
 
 	#navbar>#breadcumb>#title-container {
