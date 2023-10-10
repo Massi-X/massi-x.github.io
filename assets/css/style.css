@@ -415,6 +415,7 @@ a.button * {
 }
 
 a.button>.button-text {
+    pointer-events: none;
 	font-size: 14px;
 	font-weight: 700;
 	overflow: hidden;
@@ -620,6 +621,7 @@ ul.prettier ::marker {
 }
 
 #navbar>.buttons>.button>.icon {
+    pointer-events: none;
 	height: 17px;
 	display: inline-flex;
 	justify-content: center;
