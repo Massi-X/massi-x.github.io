@@ -33,6 +33,34 @@ description: Who am I, My Apps, Projects & Contributions.
 				</div>
 			</div>
 
+			<!-- BLOG -->
+			<div class="projects-section">
+				<span class="subheader-text">{{ site.data._strings.en.blog }}</span>
+
+				<div class="grid-container equal">
+					<!-- version used to loop through the available colors for blog cards -->
+					{% assign version = 1 %}
+
+					{% for post in site.posts %}
+					<a href="{{ post.url }}" class="blog-card v{{ version }} hoverable">
+						<p>
+							{{ post.title }}
+						</p>
+						<span class="hide-1024">
+							{{ post.description }}
+						</span>
+					</a>
+
+					{% if version == 5 %}
+					{% assign version = 0 %}
+					{% endif %}
+
+					{% assign version = version | plus: 1 %}
+
+					{% endfor %}
+				</div>
+			</div>
+
 			<!-- ABOUT SECTION -->
 			<div id="about-section">
 				<span class="subheader-text">{{ site.data._strings.en.aboutme }}</span>
@@ -189,35 +217,6 @@ description: Who am I, My Apps, Projects & Contributions.
 						</a>
 					</div>
 
-				</div>
-			</div>
-
-			<!-- TODO: Consider moving blog at the top when it is the right time -->
-			<!-- BLOG -->
-			<div class="projects-section">
-				<span class="subheader-text">{{ site.data._strings.en.blog }}</span>
-
-				<div class="grid-container equal">
-					<!-- version used to loop through the available colors for blog cards -->
-					{% assign version = 1 %}
-
-					{% for post in site.posts %}
-					<a href="{{ post.url }}" class="blog-card v{{ version }} hoverable">
-						<p>
-							{{ post.title }}
-						</p>
-						<span class="hide-1024">
-							{{ post.description }}
-						</span>
-					</a>
-
-					{% if version == 5 %}
-					{% assign version = 0 %}
-					{% endif %}
-
-					{% assign version = version | plus: 1 %}
-
-					{% endfor %}
 				</div>
 			</div>
 		</div>
