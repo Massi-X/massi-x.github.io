@@ -20,6 +20,7 @@ en:
   contributions: "Contributions"
   blog: "Blog"
   pageunavailabletext: "The content you're looking for is currently unavailable. Please check the URL or your network connection and try again."
+  titlenotloaded: "Can't load the title"
   acceptall: "Accept all"
   rejectall: "Reject all"
   savesettings: "Save settings"
