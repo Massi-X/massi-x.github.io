@@ -565,23 +565,27 @@ html.swal2-height-auto {
 }
 
 .swal2-container.fadein {
-	animation: swal-fadein .25s linear;
+	animation: .25s swal-fadein linear;
 }
 
 .swal2-container.fadeout {
-	animation: swal-fadeout .25s linear;
+	animation: .25s swal-fadeout linear;
 }
 
 .swal2-popup.zoomin {
-	animation: swal-zoomin .25s ease;
+	animation: .25s swal-zoomin ease;
 }
 
 .swal2-popup.zoomout {
-	animation: swal-zoomout .25s ease;
+	animation: .25s swal-zoomout ease;
 }
 
 @keyframes swal-fadein {
 	0% {
+		background: transparent;
+	}
+
+	10% {
 		background: transparent;
 	}
 
