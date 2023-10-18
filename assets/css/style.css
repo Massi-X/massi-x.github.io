@@ -6,6 +6,10 @@
 
 	--navbar-h-noshrink: 100px;
 	--nav-buttons-h: 71px;
+
+	/* standardize swal and cookieconsent */
+	--cc-overlay-opacity: 0.8 !important;
+	--cc-overlay-bg: #000 !important;
 }
 
 @media only screen and (max-width: 1023px) {
@@ -538,31 +542,86 @@ ul.prettier ::marker {
 /********************************************************************************
 ******************************* Sweetalert styles *******************************
 /********************************************************************************/
-.swal2-container {
-	visibility: hidden;
-	background: transparent;
-	transition: background-color .15s linear, visibility .25s linear !important;
+html.swal2-shown {
+	overflow-y: hidden;
 }
 
-.swal2-container.fade {
-	visibility: visible;
-	background: rgba(10, 10, 10, var(--cc-overlay-opacity));
+html.swal2-height-auto {
+	height: auto;
 }
 
 .swal2-popup {
-	opacity: 0;
-	transform: scale(0.96);
 	background: var(--cc-bg) !important;
-	transition: opacity .25s ease, transform .25s ease !important;
-}
-
-.swal2-popup.zoom {
-	opacity: 1;
-	transform: scale(1);
 }
 
 .swal2-title {
 	color: var(--text) !important;
+}
+
+.swal2-container {
+	background-color: var(--cc-overlay-bg);
+
+	background: rgba(0, 0, 0, var(--cc-overlay-opacity));
+}
+
+.swal2-container.fadein {
+	animation: swal-fadein .25s linear;
+}
+
+.swal2-container.fadeout {
+	animation: swal-fadeout .25s linear;
+}
+
+.swal2-popup.zoomin {
+	animation: swal-zoomin .25s ease;
+}
+
+.swal2-popup.zoomout {
+	animation: swal-zoomout .25s ease;
+}
+
+@keyframes swal-fadein {
+	0% {
+		background: transparent;
+	}
+
+	100% {
+		background: rgba(0, 0, 0, var(--cc-overlay-opacity));
+	}
+}
+
+@keyframes swal-fadeout {
+	0% {
+		background: rgba(0, 0, 0, var(--cc-overlay-opacity));
+	}
+
+	100% {
+		background: transparent;
+	}
+}
+
+@keyframes swal-zoomin {
+	0% {
+		opacity: 0;
+		transform: scale(0.96);
+	}
+
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes swal-zoomout {
+	0% {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	100% {
+		opacity: 0;
+		transform: scale(0.96);
+	}
 }
 
 /********************************************************************************
