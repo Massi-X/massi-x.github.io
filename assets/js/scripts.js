@@ -221,7 +221,7 @@ if ('navigation' in window) {
 		if (newIndex == -1) //this page is not in history, create the new index manually
 			newIndex = window.currentIndex + 1;
 
-		//1: if any popup is open and you are requesting to navigate bacwards, then close it and stop here. This tries to emulate back button in Android apps to close things
+		//1: if any popup is open and you are requesting to navigate backwards, then close it and stop here. This tries to emulate back button in Android apps to close things
 		if (navigateEvent.navigationType == 'traverse' && window.currentIndex > newIndex && isAnyPopupOpen()) {
 			navigateEvent.preventDefault();
 			closeAllPopups();
@@ -320,14 +320,6 @@ if ('navigation' in window) {
 					animationTarget.classList.add('navigate-forward');
 				}
 			} else { //BACK 
-				//if cookieconsent is open stop there. This tries to emulate back button in Android apps to close things
-				if (document.documentElement.classList.contains('show--settings')) {
-					cc.hideSettings();
-					navigateEvent.preventDefault();
-					return;
-				}
-
-				//else (notes about navigation same as above)...
 				if (animationTarget.classList.contains('navigate-back'))
 					animated = true;
 				else {
