@@ -553,10 +553,13 @@ function openPopup(details) {
 		showConfirmButton: details.showConfirmButton, //TODO: if ever used, change styles
 		returnFocus: false,
 		showClass: {
-			backdrop: 'fade',
-			popup: 'zoom'
+			backdrop: 'fadein',
+			popup: 'zoomin'
 		},
-		hideClass: { popup: '' }
+		hideClass: {
+			backdrop: 'fadeout',
+			popup: 'zoomout'
+		}
 	})
 }
 
