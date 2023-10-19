@@ -142,10 +142,14 @@ cc.run({
 	}
 });
 
-//apply the correct light/dark theme to cookieconsent
+//apply the correct light/dark theme to cookieconsent and iOS splash screen (+ generate it)
 ccColorScheme(matchMedia("(prefers-color-scheme: dark)").matches);
-matchMedia("(prefers-color-scheme: dark)")
-	.addEventListener("change", e => ccColorScheme(e.matches));
+buildiOSSplash(matchMedia("(prefers-color-scheme: dark)").matches);
+
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
+	ccColorScheme(e.matches);
+	buildiOSSplash(e.matches);
+});
 
 //show cookieconsent if needed only outside of privacy policy page
 ccShowHideDinamic();
@@ -459,7 +463,7 @@ if ('navigation' in window) {
  * Apply the theme on configuration change
  */
 function applyTheme() {
-	let color = getComputedStyle(document.body).getPropertyValue('--theme-color'); //load the color value from css
+	const color = getComputedStyle(document.body).getPropertyValue('--theme-color'); //load the color value from css
 	let meta = document.querySelector('meta[name=theme-color]'); //find the element
 
 	//or create one if not exist
@@ -518,9 +522,23 @@ function slideArrow(out) {
 
 /**
  * Correctly apply cookieconsent dark/light theme
- * @param {boolean} dark 
+ * @param {boolean} dark we are in dark mode
  */
 function ccColorScheme(dark) { dark ? document.body.classList.add('c_darkmode') : document.body.classList.remove('c_darkmode'); }
+
+/**
+* Generate and attach iOS Splash screen
+* thanks to https://github.com/avadhesh18/iosPWASplash !
+ * @param {boolean} dark we are in dark mode
+*/
+function buildiOSSplash(dark) {
+	document.head.querySelectorAll('[rel=apple-touch-startup-image]').forEach(elem => elem.remove()); //remove existing splashscreens
+
+	const color = getComputedStyle(document.body).getPropertyValue('--background'); //load the color value from css
+	const icon = dark ? 'avatar-dark.png' : 'avatar.png';
+
+	iosPWASplash('/assets/images/' + icon, color); //generate new ones
+}
 
 /********************************************************************************
 ******************************** Popup functions ********************************
