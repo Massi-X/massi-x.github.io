@@ -1,7 +1,16 @@
 {
+	"_TODO_theme": "keep an eye on https://github.com/w3c/manifest/issues/975",
+	"_TODO_shortcuts": [
+		"when appropriate..."
+	],
 	"name": "Massi-X DevSite",
+	"description": "An awesome home for my projects and thoughts!",
 	"start_url": "/",
-	"short_name": "",
+	"id": "massi-x.github.io",
+	"background_color": "#fafafa",
+	"theme_color": "#fafafa",
+	"display": "standalone",
+	"orientation": "any",
 	"icons": [
 		{
 			"src": "/assets/images/manifest-192x192.png",
@@ -28,6 +37,42 @@
 			"purpose": "maskable"
 		}
 	],
-	"background_color": "#fafafa",
-	"display": "standalone"
+	"screenshots": [
+	  {
+		"src": "/assets/images/manifest-adv_wide_1.png",
+		"type": "image/png",
+		"sizes": "2000x1499",
+		"form_factor": "wide"
+	  },
+	  {
+		"src": "/assets/images/manifest-adv_wide_2.png",
+		"type": "image/png",
+		"sizes": "2000x1499",
+		"form_factor": "wide"
+	  },
+	  {
+		"src": "/assets/images/manifest-adv_wide_3.png",
+		"type": "image/png",
+		"sizes": "2000x1499",
+		"form_factor": "wide"
+	  },
+	  {
+		"src": "/assets/images/manifest-adv_mobile_1.png",
+		"type": "image/png",
+		"sizes": "832x1800",
+		"form_factor": "narrow"
+	  },
+	  {
+		"src": "/assets/images/manifest-adv_mobile_2.png",
+		"type": "image/png",
+		"sizes": "832x1800",
+		"form_factor": "narrow"
+	  },
+	  {
+		"src": "/assets/images/manifest-adv_mobile_3.png",
+		"type": "image/png",
+		"sizes": "832x1800",
+		"form_factor": "narrow"
+	  }
+	]
 }
