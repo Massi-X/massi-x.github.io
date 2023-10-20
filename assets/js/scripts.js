@@ -225,7 +225,6 @@ if ('navigation' in window) {
 		if (newIndex == -1) //this page is not in history, create the new index manually
 			newIndex = window.currentIndex + 1;
 
-		//1: if any popup is open and you are requesting to navigate backwards, then close it and stop here. This tries to emulate back button in Android apps to close things
 		if (navigateEvent.navigationType == 'traverse' && window.currentIndex > newIndex && isAnyPopupOpen()) {
 			navigateEvent.preventDefault();
 			closeAllPopups();
@@ -238,15 +237,22 @@ if ('navigation' in window) {
 
 		//2: if is anchor, animate (if not prevented by reduced-animation) and return
 		if (navigateEvent.destination.sameDocument) {
-			let hash = navigateEvent.destination.url.split('#')[1];
+			const oldHash = oldURL.href.split('#')[1];
+			const newHash = newURL.href.split('#')[1];
 
-			if (hash) { //we must make sure that this is an anchor link, if not it is probably case 2) below
+			//do not continue in navigation if hash is present but empty or we are navigating towards a no hash page from an empty hash one
+			if ((newHash !== undefined && newHash.length === 0) ||
+				oldHash !== undefined && oldHash.length === 0 && newHash === undefined)
+				return;
+
+			//handle hash if there
+			if (newHash) {
 				navigateEvent.preventDefault();
 
 				closeAllPopups();
 				scrollTo({
 					top: //distance of the target element + scrolling position - navbar shrinked height - 20 (so it's not sticky at the top)
-						document.getElementById(hash).getBoundingClientRect().top +
+						document.getElementById(newHash).getBoundingClientRect().top +
 						window.scrollY - breadcumb.offsetHeight -
 						20,
 				});
@@ -635,6 +641,13 @@ function linkTo_UnCryptMailto(s, newWindow = true) {
 /**
  * Add the Home Page if missing as first history entry. This only executes whe the site is in "app" mode (standalone).
  * Used to simulate a real app experience, with the back button leading to the home page before exit
+ * For future reference there is a bug that appears like a feature: if you open the app on Android following these exact steps ->
+ * 1. Open the browser and navigate to a page != home
+ * 2. Launch the app from the overflow menu
+ * When you go back the app will close, returning to the browser (and not the website home). However injectHome is executed and indeed if you
+ * click the home icon everything works fine. I did extensive testing and research on this and it appears to be a nifty bug, because simply
+ * interacting with the page (but not scrolling!) restores the correct behavior.
+ * Anyway after this digression, I will keep it like that because almost all Android native apps behave the same way.
  * @returns {Promise} a promise containing the new index to be stored (always index + 1 if the homepage was added)
  */
 async function injectHomepage() {
