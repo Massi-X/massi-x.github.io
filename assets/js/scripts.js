@@ -196,10 +196,10 @@ onresize = () => {
 if ('navigation' in window) {
 	window.alterNavigation = NAVIGATION_UNSET; //for PWA home navigation/injection. See below
 	window.loadProcessing = false;
-	injectHomepage().then(index => currentIndex = index); //save initial navigation index
 	navigation.updateCurrentEntry({ state: { title: document.title } }); //save the page title in the state for later use
+	injectHomepage().then(index => currentIndex = index); //save initial navigation index
 
-	//listen for configuration changes so that we inject home page when the user switch to PWA from defalt browser view (mainly desktops)
+	//listen for configuration changes so that we inject home page when the user switch to PWA from defalt browser view (desktops)
 	matchMedia('(display-mode: standalone)').addEventListener('change', async evt => {
 		if (evt.matches) window.currentIndex = await injectHomepage();
 	});
@@ -529,7 +529,8 @@ function ccColorScheme(dark) { dark ? document.body.classList.add('c_darkmode') 
 /**
 * Generate and attach iOS Splash screen
 * thanks to https://github.com/avadhesh18/iosPWASplash !
- * @param {boolean} dark we are in dark mode
+* see also https://github.com/elegantapp/pwa-asset-generator/issues/93 (could things just work?)
+* @param {boolean} dark we are in dark mode
 */
 function buildiOSSplash(dark) {
 	document.head.querySelectorAll('[rel=apple-touch-startup-image]').forEach(elem => elem.remove()); //remove existing splashscreens
