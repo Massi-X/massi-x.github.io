@@ -1,6 +1,7 @@
 en:
   loading: "Loading..."
   ok: "OK"
+  seeall: "See All"
   backhome: "Go Back Home"
   findgoogle: "Find me on Google"
   googleplay: "Google Play"
@@ -18,7 +19,7 @@ en:
   rmore: "Read More"
   otherproj: "Other Projects"
   contributions: "Contributions"
-  blog: "Blog"
+  blogposts: "Latest Posts"
   pageunavailabletext: "The content you're looking for is currently unavailable. Please check the URL or your network connection and try again."
   titlenotloaded: "Can't load the title"
   acceptall: "Accept all"
