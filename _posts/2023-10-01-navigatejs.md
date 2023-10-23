@@ -4,6 +4,7 @@ layout: post
 title: The JS Navigate Event API
 navtitle: Navigate!
 description: "Alternative title: Click me to see the beautiful transition (Only Chrome M102+ currently)"
+thumbnail: /public/growtika-firefox.jpg
 ---
 
 <div class="post-img">
