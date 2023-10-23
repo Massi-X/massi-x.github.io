@@ -4,6 +4,12 @@
 @font-face {
 	font-family: HelveticaNeue;
 	font-weight: normal;
+	src: url("/assets/fonts/HelveticaNeue-Regular.ttf");
+}
+
+@font-face {
+	font-family: HelveticaNeue;
+	font-weight: 500;
 	src: url("/assets/fonts/HelveticaNeue-Medium.ttf");
 }
 
@@ -105,7 +111,7 @@ html {
 }
 
 body {
-	font-family: HelveticaNeue, Helvetica, Arial, sans-serif;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	margin: 0;
