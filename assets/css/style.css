@@ -7,6 +7,9 @@
 	--navbar-h-noshrink: 100px;
 	--nav-buttons-h: 71px;
 
+	--cookieconsent-link: #A1887F;
+	--cookieconsent-link-active: #FFCC80;
+
 	/* standardize swal and cookieconsent */
 	--cc-overlay-opacity: 0.8 !important;
 	--cc-overlay-bg: #000 !important;
@@ -31,6 +34,8 @@
 		--button-border: #141414;
 		--button-bg-hover: #212121;
 		--button-bg-hover-inverted: #fafafa;
+		--button-filled-bg: #757575;
+		--button-filled-bg-hover: #424242;
 
 		--navbar-bg: rgba(255 255 255 / 50%);
 		--navbar-border: rgba(0 0 0 / 5%);
@@ -52,6 +57,8 @@
 		--button-border: #fafafa;
 		--button-bg-hover: #fafafa;
 		--button-bg-hover-inverted: #212121;
+		--button-filled-bg: #E0E0E0;
+		--button-filled-bg-hover: #FAFAFA;
 
 		--navbar-bg: rgba(0 0 0 / 20%);
 		--navbar-border: rgba(0 0 0 / 5%);
@@ -291,7 +298,7 @@ p {
 
 .cookie-settings {
 	display: inline-block;
-	color: #A1887F;
+	color: var(--cookieconsent-link);
 	transition: color .15s ease;
 }
 
@@ -309,7 +316,7 @@ p {
 
 	.cookie-settings:hover,
 	.cookie-settings:focus-visible {
-		color: #FFCC80;
+		color: var(--cookieconsent-link-active);
 	}
 }
 
@@ -317,7 +324,7 @@ p {
 
 	.cookie-settings:active,
 	.cookie-settings:focus-visible {
-		color: #FFCC80;
+		color: var(--cookieconsent-link-active);
 	}
 }
 
@@ -402,6 +409,7 @@ a.hoverable {
 ********************************* Button styles *********************************
 /********************************************************************************/
 .button {
+	display: inline-flex;
 	user-select: none;
 	font-size: 16px;
 	padding: 8px 16px;
@@ -410,10 +418,10 @@ a.hoverable {
 	border-radius: 50px;
 	text-decoration: none;
 	width: fit-content;
-	display: flex;
 	gap: 5px;
 	align-items: flex-end;
 	cursor: pointer;
+	vertical-align: bottom;
 }
 
 .button,
@@ -447,6 +455,29 @@ a.hoverable {
 	transform: rotate(15deg);
 }
 
+.button.filled {
+	background: var(--button-filled-bg);
+	border: none;
+}
+
+.button.filled>.button-text,
+.button.filled>i {
+	filter: invert(1);
+}
+
+.button.mini {
+	font-size: 13px;
+	padding: 5px 9px;
+}
+
+.button.mini>i {
+	padding-bottom: 1px;
+}
+
+.button.mini>.button-text {
+	font-size: 13px;
+}
+
 @media (hover: hover) {
 
 	.button:hover,
@@ -467,6 +498,16 @@ a.hoverable {
 	.button:hover>*,
 	.button:focus-visible>* {
 		filter: invert(1);
+	}
+
+	.button.filled:hover,
+	.button.filled:focus-visible {
+		background: var(--button-filled-bg-hover);
+	}
+
+	.button.mini:hover>i.move,
+	.button.mini:focus-visible>i.move {
+		translate: 2px;
 	}
 }
 
@@ -490,6 +531,16 @@ a.hoverable {
 	.button:active>*,
 	.button:focus-visible>* {
 		filter: invert(1);
+	}
+
+	.button.filled:active,
+	.button.filled:focus-visible {
+		background: var(--button-filled-bg-hover);
+	}
+
+	.button.mini:active>i.move,
+	.button.mini:focus-visible>i.move {
+		translate: 2px;
 	}
 }
 
@@ -909,7 +960,7 @@ html.swal2-height-auto {
 
 		#navbar>.buttons>.button:hover>.icon,
 		#navbar>.buttons>.button:focus-visible>.icon {
-			background: var(--button-bg-hover);
+			background: var(--button-bg-hover-inverted);
 			filter: invert(1);
 		}
 	}
