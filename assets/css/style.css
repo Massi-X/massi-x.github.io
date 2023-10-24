@@ -633,7 +633,6 @@ html.swal2-height-auto {
 
 .swal2-container {
 	background-color: var(--cc-overlay-bg);
-
 	background: rgba(0, 0, 0, var(--cc-overlay-opacity));
 }
 
