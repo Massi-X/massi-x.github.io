@@ -6,6 +6,7 @@ const SCROLL_SHRINKED = 1;
 const NAVIGATION_UNSET = 0;
 const NAVIGATION_HOME_FORCE = 1;
 const NAVIGATION_HOME_ADD = 2;
+const NAVIGATION_POPUP = '_popup_handle';
 
 //register the worker for PWA
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('/worker.js').catch(err => console.warn('Error whilst registering service worker', err));
@@ -161,8 +162,8 @@ togglegtag(cc.allowedCategory('analytics'));
 //global 'esc' handler
 onkeydown = e => {
 	if (e.key === "Escape") {
-		if (swal.isVisible()) swal.close(); //close swal on esc key click (if the focus is outside the popup itself)
-		else e.preventDefault(); //prevent the user from terminate the navigation with 'esc' (still possible from browser UI)
+		closeAllPopups();
+		e.preventDefault(); //prevent the user from terminate the navigation with 'esc' (still possible from browser UI)
 	}
 }
 
@@ -204,7 +205,25 @@ if ('navigation' in window) {
 		if (evt.matches) window.currentIndex = await injectHomepage();
 	});
 
-	//register listener
+	//redefine cc.showSettings() so that if we are in PWA everytime we open the popup we push a new state (fixes back hanling on first page)
+	cc.showSettings = (superFun => {
+		return () => {
+			_handlePopupOpen();
+
+			superFun();
+		}
+	})(cc.showSettings);
+
+	//redefine cc.hideSettings() so that if we are in PWA everytime we close the popup "discard" the dummy state
+	cc.hideSettings = (superFun => {
+		return () => {
+			_handlePopupClose();
+
+			superFun();
+		}
+	})(cc.hideSettings);
+
+	//register main listener
 	navigation.addEventListener('navigate', navigateEvent => {
 		//0: the home page is missing while in PWA (i.e. the app launched directly to an URL)
 		if (alterNavigation === NAVIGATION_HOME_ADD) {
@@ -221,63 +240,61 @@ if ('navigation' in window) {
 		let animationTarget;
 		let animated = false;
 		let newIndex = navigateEvent.destination.index;
+		const oldURL = new URL(navigation.currentEntry.url);
+		const oldHash = oldURL.href.split('#')[1];
 
 		if (newIndex == -1) //this page is not in history, create the new index manually
 			newIndex = window.currentIndex + 1;
 
-		if (navigateEvent.navigationType == 'traverse' && window.currentIndex > newIndex && isAnyPopupOpen()) {
-			navigateEvent.preventDefault();
+		//1: if any popup is open and you are requesting to navigate backwards, then close it and stop here. This tries to emulate back button in Android apps to close things
+		if (navigateEvent.navigationType == 'traverse' && window.currentIndex >= newIndex && isAnyPopupOpen()) {
+			//when not standalone, no states are pushed and we only provide a semi-functional way to close popups
+			if (isStandalone()) navigateEvent.intercept({ scroll: 'manual' });
+			else navigateEvent.preventDefault();
+
 			closeAllPopups();
 			return;
 		}
 
-		//save old and new URL, will come useful later
-		const oldURL = new URL(navigation.currentEntry.url);
 		let newURL = new URL(navigateEvent.destination.url);
+		const newHash = newURL.href.split('#')[1];
 
 		//2: if is anchor, animate (if not prevented by reduced-animation) and return
 		if (navigateEvent.destination.sameDocument) {
-			const oldHash = oldURL.href.split('#')[1];
-			const newHash = newURL.href.split('#')[1];
-
-			//do not continue in navigation if hash is present but empty or we are navigating towards a no hash page from an empty hash one
-			if ((newHash !== undefined && newHash.length === 0) ||
-				oldHash !== undefined && oldHash.length === 0 && newHash === undefined)
+			//stop if we are navigating to the same hash
+			if (oldURL == newURL && oldHash === newHash)
 				return;
 
 			//handle hash if there
 			if (newHash) {
-				navigateEvent.preventDefault();
+				const target = document.getElementById(newHash);
 
-				closeAllPopups();
-				scrollTo({
-					top: //distance of the target element + scrolling position - navbar shrinked height - 20 (so it's not sticky at the top)
-						document.getElementById(newHash).getBoundingClientRect().top +
-						window.scrollY - breadcumb.offsetHeight -
-						20,
-				});
+				if (target != undefined) {
+					navigateEvent.preventDefault();
+
+					closeAllPopups();
+					scrollTo({
+						top: //distance of the target element + scrolling position - navbar shrinked height - 20 (so it's not sticky at the top)
+							target.getBoundingClientRect().top +
+							window.scrollY - breadcumb.offsetHeight -
+							20,
+					});
+				}
 
 				return;
 			}
 		}
 
-		//3: if it is the same page, scroll to top and return
+		//3: if it is the same page...
 		if (oldURL.href == newURL.href) {
-			navigateEvent.preventDefault();
-
-			if (isAnyPopupOpen()) //do not try to scroll if any popup is open. When it closes usually will go back to the scroll position the library itself saved
-				closeAllPopups();
-			else
-				scrollTo({
-					top: 0
-				});
+			//... prevent going into dummy states with traverse if it is the case (even if not in PWA)...
+			if (navigateEvent.destination.getState().handle == NAVIGATION_POPUP && navigateEvent.navigationType == 'traverse')
+				navigateEvent.preventDefault();
+			else //... or do nothing but accept the new pushed state
+				navigateEvent.intercept({ scroll: 'manual' });
 
 			return;
 		}
-
-		//complying to the reduced animation policy is easy as letting the browser handle everything starting from there. Moreover these navigation types are not handled, so we let the broswer do it's default with them
-		if (window.reduceanimation || navigateEvent.navigationType == 'reload' || navigateEvent.navigationType == 'replace')
-			return;
 
 		//4: if we are inside a PWA and we navigate back to the home page provide a better user experience by making it a real home page (back will close the app)
 		if (isStandalone() && window.alterNavigation == NAVIGATION_UNSET && newURL.href == rootURL.href && newIndex > 0) {
@@ -289,7 +306,7 @@ if ('navigation' in window) {
 		}
 
 		//complying to the reduced animation policy is easy as letting the browser handle everything starting from there. Moreover these navigation types are not handled, so we let the broswer do it's default with them
-		if (window.reduceanimation || navigateEvent.navigationType == 'reload' || navigateEvent.navigationType == 'replace')
+		if (window.reduceanimation || (navigateEvent.navigationType != 'traverse' && navigateEvent.navigationType != 'push'))
 			return;
 
 		//5: circle animation originating from the link click
@@ -552,14 +569,6 @@ function buildiOSSplash(dark) {
 /********************************************************************************/
 
 /**
- * Check if any popup is open in the page
- * @returns {Boolean}
- */
-function isAnyPopupOpen() {
-	return document.documentElement.classList.contains('show--settings') || swal.isVisible();
-}
-
-/**
  * Open a popup with Swal by giving a valid js object with details for the needed sections (limited to this for now)
  * @param {Array} details must contain the following fields: [title, html, showConfirmButton]
  */
@@ -576,8 +585,15 @@ function openPopup(details) {
 		hideClass: {
 			backdrop: 'fadeout',
 			popup: 'zoomout'
+		},
+		didClose: () => {
+			//if we are in PWA everytime we close the popup "discard" the dummy state
+			if ('navigation' in window) _handlePopupClose();
 		}
-	})
+	});
+
+	//push a dummy state only when we are in PWA for correct back hanling on first page
+	if ('navigation' in window) _handlePopupOpen();
 }
 
 /**
@@ -586,6 +602,30 @@ function openPopup(details) {
 function closeAllPopups() {
 	swal.close();
 	cc.hideSettings();
+}
+
+/**
+ * Check if any popup is open in the page
+ * @returns {Boolean}
+ */
+function isAnyPopupOpen() {
+	return document.documentElement.classList.contains('show--settings') || swal.isVisible();
+}
+
+/**
+ * Service function only
+ */
+function _handlePopupOpen() {
+	if (isStandalone())
+		navigation.navigate('', { history: 'push', state: { handle: NAVIGATION_POPUP } });
+}
+
+/**
+ * Service function only
+ */
+function _handlePopupClose() {
+	if (isStandalone() && navigation.currentEntry.getState().handle == NAVIGATION_POPUP) //only if this is a dummy state
+		navigation.back();
 }
 
 /**
