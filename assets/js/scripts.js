@@ -510,11 +510,11 @@ function scrollingHeader(noanim = false) {
 
 	if (noanim === true) window.header.classList.add('noanim');
 
-	if (window.scrollingExec != SCROLL_SHRINKED && document.documentElement.scrollTop > 35) {
-		window.header.classList.add('shrinked'); //35px is good enough
+	if (window.scrollingExec != SCROLL_SHRINKED && document.documentElement.scrollTop > 25) {
+		window.header.classList.add('shrinked'); //25px is good enough
 		window.scrollingExec = SCROLL_SHRINKED;
 	}
-	else if (document.documentElement.scrollTop <= 35 && window.scrollingExec == SCROLL_SHRINKED) {
+	else if (document.documentElement.scrollTop <= 25 && window.scrollingExec == SCROLL_SHRINKED) {
 		window.header.classList.remove('shrinked');
 		window.scrollingExec = SCROLL_UNSET;
 	}
