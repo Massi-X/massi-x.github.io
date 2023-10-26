@@ -1,8 +1,4 @@
 {
-	"_TODO_theme": "keep an eye on https://github.com/w3c/manifest/issues/975",
-	"_TODO_shortcuts": [
-		"when appropriate..."
-	],
 	"name": "Massi-X DevSite",
 	"description": "An awesome home for my projects and thoughts!",
 	"start_url": "/",

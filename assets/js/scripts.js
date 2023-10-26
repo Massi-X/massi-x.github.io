@@ -1,5 +1,3 @@
-//TODO should i use restore scroll?
-
 //constants
 const SCROLL_UNSET = 0;
 const SCROLL_SHRINKED = 1;
@@ -576,7 +574,7 @@ function openPopup(details) {
 	Swal.fire({
 		title: details.title,
 		html: details.html,
-		showConfirmButton: details.showConfirmButton, //TODO: if ever used, change styles
+		showConfirmButton: details.showConfirmButton,
 		returnFocus: false,
 		showClass: {
 			backdrop: 'fadein',
