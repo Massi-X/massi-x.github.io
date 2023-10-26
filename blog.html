@@ -1,0 +1,37 @@
+---
+title: Blog
+navtitle: Blog
+description: All of my posts and thoughts.
+---
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+{% include head.html %}
+
+<body>
+	{% include header.html %}
+	<div id="navigation">
+		<div id="blog" class="content">
+			<div class="heading">
+				<h2>Blog Home</h2>
+				<span>Welcome to my (blog) house! Navigate trough this section to find some interesting stories and
+					facts.</span>
+			</div>
+			{% for post in site.posts reversed %}
+			<a href="{{ post.url }}" class="blog-card hoverable">
+				<div class="flex">
+					<img src="{{ post.thumbnail }}" class="thumbnail">
+					<div class="text">
+						<p>{{ post.title }}</p>
+						<span>{{ post.description }}</span>
+					</div>
+				</div>
+				<span class="date">{{ post.date | date: "%-d %B %Y" }}</span>
+			</a>
+			{% endfor %}
+		</div>
+		{% include footer.html %}
+	</div>
+</body>
+
+</html>
