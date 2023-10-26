@@ -35,6 +35,9 @@
 	/* standardize swal and cookieconsent */
 	--cc-overlay-opacity: 0.8 !important;
 	--cc-overlay-bg: #000 !important;
+
+	/* give cc a reasonable z-index (same as swal default one) */
+    --cc-z-index: 1060 !important;
 }
 
 @media only screen and (max-width: 1023px) {
@@ -99,7 +102,6 @@
 }
 
 html {
-	/*TODO reenable bounce on the navigation contaner in some way? */
 	overscroll-behavior-y: none;
 	text-size-adjust: none;
 	-webkit-text-size-adjust: none;
@@ -119,6 +121,10 @@ body {
 	min-height: 100vh;
 	overflow: hidden;
 	background: var(--background);
+}
+
+.flex {
+	display: flex;
 }
 
 .pagefixed {
@@ -217,18 +223,20 @@ p {
 *************************** Navigation specific (js) ****************************
 /********************************************************************************/
 #circle-reveal {
-	background: var(--circle);
+	position: fixed;
 	width: 1px;
 	height: 1px;
+	background: var(--circle);
 	border-radius: 50%;
-	position: fixed;
-	transition: transform .4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity .3s ease;
 	transform: scale(1);
-	/* not setting z-index on purpose for navbar */
+	transition: transform .4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity .3s ease;
+	opacity: 0.5;
+	/* z-index must be set accordingly to navbar and popups */
+	z-index: 2000;
 }
 
 #circle-reveal.fadeout {
-	opacity: 0;
+	opacity: 0 !important;
 }
 
 #navigation {
@@ -272,14 +280,22 @@ p {
 
 #footer,
 .content {
-	margin: 100px 20vw 0;
+	margin: 120px 20vw 0;
+}
+
+@media only screen and (max-width: 2100px) {
+
+	#footer,
+	.content {
+		margin: 120px 16vw 0;
+	}
 }
 
 @media only screen and (max-width: 1600px) {
 
 	#footer,
 	.content {
-		margin: 100px 175px 0;
+		margin: 120px 175px 0;
 	}
 }
 
@@ -730,7 +746,13 @@ html.swal2-height-auto {
 /********************************************************************************/
 #navbar {
 	position: relative;
-	z-index: 99;
+	z-index: 3000;
+}
+
+html.swal2-shown #navbar,
+html.show--settings #navbar {
+	/* adapt navbar to go beyond popups. Needed for circle animation */
+	z-index: 1000;
 }
 
 #navbar>#breadcumb {
@@ -887,6 +909,14 @@ html.swal2-height-auto {
 	}
 }
 
+@media only screen and (min-width: 2101px) {
+	#navbar {
+		width: calc(100% - 40vw);
+		margin-left: 20vw;
+		padding: 0;
+	}
+}
+
 @media only screen and (max-width: 1023px) {
 	#navbar>#breadcumb {
 		top: 0;
@@ -1027,6 +1057,36 @@ html.swal2-height-auto {
 	margin-top: 225px;
 }
 
+#index .blog-card {
+	border-radius: 2em;
+	color: #fafafa;
+	/* harcoded cause it's the same for light/dark */
+}
+
+#index .blog-card span {
+	margin-top: 18px;
+}
+
+#index .blog-card.v1 {
+	background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+}
+
+#index .blog-card.v2 {
+	background-image: linear-gradient(43deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
+}
+
+#index .blog-card.v3 {
+	background-image: linear-gradient(43deg, #8ba6ff 0%, #2BD2FF 52%, #2bffd1 90%);
+}
+
+#index .blog-card.v4 {
+	background-image: linear-gradient(43deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
+}
+
+#index .blog-card.v5 {
+	background-image: linear-gradient(43deg, #FAD961 0%, #ffb388 50%, #fff5d3 100%);
+}
+
 @media only screen and (max-width: 1600px) {
 	#index.content {
 		margin-top: 225px;
@@ -1036,6 +1096,11 @@ html.swal2-height-auto {
 @media only screen and (max-width: 1023px) {
 	#index.content {
 		margin-top: 100px;
+	}
+
+	#index .blog-card {
+		text-align: center;
+		justify-content: center;
 	}
 }
 
@@ -1162,56 +1227,27 @@ html.swal2-height-auto {
 }
 
 /* Blog cards */
-a.blog-card {
+.blog-card {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
 	padding: 25px 20px;
-	border-radius: 2em;
 	border: 1px solid var(--img-border);
 	text-decoration: none;
-	color: #fafafa;
-	/* harcoded cause it's the same for light/dark */
 }
 
-a.blog-card.v1 {
-	background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
-}
-
-a.blog-card.v2 {
-	background-image: linear-gradient(43deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
-}
-
-a.blog-card.v3 {
-	background-image: linear-gradient(43deg, #8ba6ff 0%, #2BD2FF 52%, #2bffd1 90%);
-}
-
-a.blog-card.v4 {
-	background-image: linear-gradient(43deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
-}
-
-a.blog-card.v5 {
-	background-image: linear-gradient(43deg, #FAD961 0%, #ffb388 50%, #fff5d3 100%);
-}
-
-a.blog-card p {
+.blog-card p {
 	margin: 0;
 	font-size: 20px;
 	font-weight: bold;
 }
 
-a.blog-card span {
-	margin-top: 18px;
+.blog-card span {
 	font-size: 17px;
 }
 
 @media only screen and (max-width: 1023px) {
-	a.blog-card {
-		text-align: center;
-		justify-content: center;
-	}
-
-	a.blog-card p {
+	.blog-card p {
 		font-size: 18px;
 	}
 }
@@ -1376,6 +1412,82 @@ a.blog-card span {
 
 	#notfound.content>span {
 		font-size: 17px;
+	}
+}
+
+/***************************** Blog Page Layout ****************************/
+
+#blog .heading {
+	padding: 60px 20px;
+	background: linear-gradient(45deg, #B39DDB, transparent);
+	border: 1px solid var(--img-border);
+	border-bottom: none;
+	border-top-right-radius: 2em;
+	border-top-left-radius: 2em;
+}
+
+#blog .heading h2 {
+	margin-top: 0;
+}
+
+#blog .blog-card {
+	border-top: none;
+	padding: 29px 20px 9px 20px;
+}
+
+#blog .blog-card .thumbnail {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+	border-radius: 1em;
+}
+
+#blog .blog-card .text {
+	margin: auto 0 auto 20px;
+	min-width: 0;
+}
+
+#blog .blog-card p {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+#blog .blog-card span {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	overflow: hidden;
+	-webkit-box-orient: vertical;
+	margin-top: 10px;
+}
+
+#blog .blog-card .date {
+	margin-top: 4px;
+	font-size: 14px;
+	font-style: italic;
+	text-align: right;
+}
+
+#blog>:last-child {
+	border-bottom-right-radius: 2em;
+	border-bottom-left-radius: 2em;
+}
+
+@media (prefers-color-scheme: dark) {
+	#blog .heading {
+		background: linear-gradient(45deg, #673AB7, transparent);
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	#blog .heading {
+		padding: 40px 20px;
+	}
+
+	#blog .blog-card .thumbnail {
+		width: 85px;
+		height: 85px;
 	}
 }
 
