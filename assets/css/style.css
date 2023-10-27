@@ -37,7 +37,7 @@
 	--cc-overlay-bg: #000 !important;
 
 	/* give cc a reasonable z-index (same as swal default one) */
-    --cc-z-index: 1060 !important;
+	--cc-z-index: 1060 !important;
 }
 
 @media only screen and (max-width: 1023px) {
@@ -232,7 +232,7 @@ p {
 	transition: transform .4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity .3s ease;
 	opacity: 0.5;
 	/* z-index must be set accordingly to navbar and popups */
-	z-index: 2000;
+	z-index: 500;
 }
 
 #circle-reveal.fadeout {
@@ -746,13 +746,8 @@ html.swal2-height-auto {
 /********************************************************************************/
 #navbar {
 	position: relative;
-	z-index: 3000;
-}
-
-html.swal2-shown #navbar,
-html.show--settings #navbar {
-	/* adapt navbar to go beyond popups. Needed for circle animation */
-	z-index: 1000;
+	/* according to circle and popups */
+	z-index: 800;
 }
 
 #navbar>#breadcumb {
