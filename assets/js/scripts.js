@@ -203,23 +203,36 @@ if ('navigation' in window) {
 		if (evt.matches) window.currentIndex = await injectHomepage();
 	});
 
-	//redefine cc.showSettings() so that if we are in PWA everytime we open the popup we push a new state (fixes back hanling on first page)
-	cc.showSettings = (superFun => {
-		return () => {
-			_handlePopupOpen();
+	//observe changes in html classes. Needed to handle popup navigation in standalone mode
+	window.htmlClasses = document.documentElement.classList.toString();
+	const observer = new MutationObserver(mutations => {
+		mutations.forEach(mutation => {
+			const currentClasses = mutation.target.classList.toString();
 
-			superFun();
-		}
-	})(cc.showSettings);
+			if (window.htmlClasses != currentClasses) { //a popup is being shown
+				if (!window.htmlClasses.includes('swal2-shown') && currentClasses.includes('swal2-shown')
+					|| !window.htmlClasses.includes('show--settings') && currentClasses.includes('show--settings')) {
+					if (isStandalone())
+						navigation.navigate('', { history: 'push', state: { handle: NAVIGATION_POPUP } });
+				}
+				else if (window.htmlClasses.includes('swal2-shown') && !currentClasses.includes('swal2-shown') ||
+					window.htmlClasses.includes('show--settings') && !currentClasses.includes('show--settings')) { //a popup is being closed
+					//only if this is a dummy state execute the hook
+					if (isStandalone() && navigation.currentEntry.getState() !== undefined && navigation.currentEntry.getState().handle == NAVIGATION_POPUP)
+						setTimeout(() => navigation.back(), 0); //for whatever obscure reason when navigating back with cc open an 'invalid key' error is raised. All is correct obviously because this simple fake timeout fixes everything (after hours wasted over this...) 
+				}
 
-	//redefine cc.hideSettings() so that if we are in PWA everytime we close the popup "discard" the dummy state
-	cc.hideSettings = (superFun => {
-		return () => {
-			_handlePopupClose();
+				window.htmlClasses = currentClasses;
+			}
+		});
+	});
 
-			superFun();
-		}
-	})(cc.hideSettings);
+	observer.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ['class'],
+		childList: false,
+		characterData: false
+	});
 
 	//register main listener
 	navigation.addEventListener('navigate', navigateEvent => {
@@ -247,9 +260,7 @@ if ('navigation' in window) {
 		//1: if any popup is open and you are requesting to navigate backwards, then close it and stop here. This tries to emulate back button in Android apps to close things
 		if (navigateEvent.navigationType == 'traverse' && window.currentIndex >= newIndex && isAnyPopupOpen()) {
 			//when not standalone, no states are pushed and we only provide a semi-functional way to close popups
-			if (isStandalone()) navigateEvent.intercept({ scroll: 'manual' });
-			else navigateEvent.preventDefault();
-
+			navigateEvent.preventDefault();
 			closeAllPopups();
 			return;
 		}
@@ -286,7 +297,7 @@ if ('navigation' in window) {
 		//3: if it is the same page...
 		if (oldURL.href == newURL.href) {
 			//... prevent going into dummy states with traverse if it is the case (even if not in PWA)...
-			if (navigateEvent.destination.getState().handle == NAVIGATION_POPUP && navigateEvent.navigationType == 'traverse')
+			if (navigateEvent.destination.getState() !== undefined && navigateEvent.destination.getState().handle == NAVIGATION_POPUP && navigateEvent.navigationType == 'traverse')
 				navigateEvent.preventDefault();
 			else //... or do nothing but accept the new pushed state
 				navigateEvent.intercept({ scroll: 'manual' });
@@ -327,7 +338,7 @@ if ('navigation' in window) {
 
 				document.body.appendChild(animationTarget);
 				animationTarget.offsetWidth; //trigger reflow (workaround for no transition)
-				animationTarget.style = 'left: ' + window.cx + 'px; top: ' + window.cy + 'px; transform: scale(' + factorS + ');';
+				animationTarget.style = 'opacity: 1; left: ' + window.cx + 'px; top: ' + window.cy + 'px; transform: scale(' + factorS + ');';
 			}
 		}
 		//6: sliding animation for back/forward
@@ -583,15 +594,13 @@ function openPopup(details) {
 		hideClass: {
 			backdrop: 'fadeout',
 			popup: 'zoomout'
-		},
-		didClose: () => {
-			//if we are in PWA everytime we close the popup "discard" the dummy state
-			if ('navigation' in window) _handlePopupClose();
 		}
 	});
 
-	//push a dummy state only when we are in PWA for correct back hanling on first page
-	if ('navigation' in window) _handlePopupOpen();
+	//close the popup on link click
+	swal.getHtmlContainer().querySelectorAll('a').forEach(e => {
+		e.addEventListener('click', () => swal.close());
+	})
 }
 
 /**
@@ -608,22 +617,6 @@ function closeAllPopups() {
  */
 function isAnyPopupOpen() {
 	return document.documentElement.classList.contains('show--settings') || swal.isVisible();
-}
-
-/**
- * Service function only
- */
-function _handlePopupOpen() {
-	if (isStandalone())
-		navigation.navigate('', { history: 'push', state: { handle: NAVIGATION_POPUP } });
-}
-
-/**
- * Service function only
- */
-function _handlePopupClose() {
-	if (isStandalone() && navigation.currentEntry.getState().handle == NAVIGATION_POPUP) //only if this is a dummy state
-		navigation.back();
 }
 
 /**
