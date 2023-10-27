@@ -419,7 +419,6 @@ h1.heading {
 a:not([class]),
 a.hoverable {
 	transition: box-shadow .1s ease;
-	border-radius: .1em;
 }
 
 @media (hover: hover) {
