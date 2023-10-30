@@ -454,19 +454,22 @@ if ('navigation' in window) {
 
 			if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_HOME_FORCE) { //if push navigation: fade the circle out and then remove it
 				animationTarget.classList.add('fadeout');
-				navigationContainer.classList.remove('pagefixed');
-				navigationContainer.style = '';
 
 				animationTarget.addEventListener('transitionend', () => {
 					animationTarget.remove();
+					navigationContainer.classList.remove('pagefixed');
+					navigationContainer.style = '';
 				}, { once: true });
-			}
-			else if (navigateEvent.navigationType == 'traverse') { //if forward/back navigation: slide in new page
-				document.body.classList.remove('pagefixed', 'blink');
+			} else if (navigateEvent.navigationType == 'traverse') { //if forward/back navigation: slide in new page
+				document.body.classList.remove('blink');
 				animationTarget.classList.add('inverse', 'noanim');
 
 				//artificial delay to prevent issues with 'slow 3g' mode in Chrome. Don't think this applies to real life scenario, anyway it doesn'm atter too much
 				setTimeout(() => animationTarget.classList.remove('noanim', 'navigate-back', 'navigate-forward', 'inverse'), 20);
+
+				animationTarget.addEventListener('transitionend', () => {
+					document.body.classList.remove('pagefixed');
+				}, { once: true });
 			}
 
 			//replace the title in navbar and animate it back into view + replace head title + save the state in history
