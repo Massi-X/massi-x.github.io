@@ -6,7 +6,6 @@
 	"background_color": "#fafafa",
 	"theme_color": "#fafafa",
 	"display": "standalone",
-	"orientation": "any",
 	"icons": [
 		{
 			"src": "/assets/images/manifest-192x192.png",
