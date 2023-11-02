@@ -25,23 +25,6 @@ self.addEventListener('activate', event => {
 	fetch('/notfound.html?v=1.0.1').then(res => {
 		if (res.ok) caches.open('cache').then(cache => cache.put('/notfound.html', res.clone()));
 	});
-
-	//Purge old caches. Requirements are: the page is expired and the client is online.
-	event.waitUntil(caches.open('cache')
-		.then(cache => cache.keys()
-			.then(keyList =>
-				Promise.all(
-					keyList.map(key => {
-						caches.match(key).then(res => {
-							const date = new Date(res.headers.get('date')) //calculate expiration date
-							if (Date.now() >= date.getTime() + cacheTime && navigator.onLine)
-								cache.delete(res.url);
-						});
-					}),
-				),
-			),
-		)
-	);
 });
 
 //cache the pages for offline usage
@@ -49,14 +32,14 @@ self.addEventListener('fetch', event => {
 	event.respondWith(async function () {
 		let skipCache = false;
 
-		//first thing to check: is this an URL that we always need to serve from cache? If so skeep fetch
+		//first thing to check: is this an URL that we always need to serve from cache? If so skip fetch
 		for (entry of keepInCache) {
-			let matchedURL = this.origin + entry;
-			if (event.request.url.startsWith(matchedURL)) {
-				let res = await checkCache(caches, event.request, event.request.url);
+			if (event.request.url.startsWith(this.origin + entry)) {
+				const res = await checkCache(caches, event.request, event.request.url);
 
-				if (res)
-					return res;
+				//return cache if valid -or- if expired but navigator is offline
+				if (res.cache != null && (!res.expired || res.expired && !navigator.onLine))
+					return res.cache;
 				else {
 					skipCache = true; //skip another check in cache in case this page does not exist or you're offline and is not cached in the next steps
 					break;
@@ -68,7 +51,7 @@ self.addEventListener('fetch', event => {
 			let res = await fetch(event.request);
 
 			if (res.ok) { //if the response is 2xx then we can proceed and cache the page
-				var cache = await caches.open('cache');
+				const cache = await caches.open('cache');
 				cache.put(event.request.url, res.clone());
 			}
 
@@ -78,23 +61,36 @@ self.addEventListener('fetch', event => {
 			if (!skipCache) return await checkCache(caches, event.request, event.request.url);
 		}
 
-		//if we reach here it means nothing had success. Let the browser handle the rest
+		return await fetch('notfound.html'); //as last resort
 	}());
 });
 
 //convenient method to check for match of given URL in cache
 async function checkCache(caches, request, url) {
-	let cached = await caches.match(request);
+	const cache = await caches.open('cache');
+	const cached = await cache.match(request);
 
-	if (url == '/notfound.html')
-		return cached;
+	if (url == '/notfound.html') //never delete notfound!
+		return {
+			cache: cached,
+			expired: false
+		};
 
-	if (cached) { //if cache is not expired return it
-		const date = new Date(cached.headers.get('date'))
+	if (cached) { //if cache is there always return it
+		const date = new Date(cached.headers.get('date'));
+		let expired = false;
 
-		if (Date.now() < date.getTime() + cacheTime)
-			return cached;
+		if (Date.now() >= date.getTime() + cacheTime)
+			expired = true;
+
+		return {
+			cache: cached,
+			expired: expired
+		};
 	}
 
-	return null;
+	return {
+		cache: null,
+		expired: true
+	};;
 }
