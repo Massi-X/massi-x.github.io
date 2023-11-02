@@ -1,5 +1,6 @@
 //array of folders (or files for that matter) to always serve from cache. This still follows the max-age of cache currently set to 1 month in func checkCache()
 const keepInCache = [
+	'/notfound.html',
 	'/assets/css',
 	'/assets/fontawesome',
 	'/assets/images',
