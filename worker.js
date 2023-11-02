@@ -67,7 +67,7 @@ self.addEventListener('fetch', event => {
 			if (!skipCache) return await checkCache(caches, event.request, event.request.url);
 		}
 
-		return await fetch('notfound.html'); //as last resort
+		return await fetch('/notfound.html'); //as last resort
 	}());
 });
 
