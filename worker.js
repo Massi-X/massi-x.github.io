@@ -6,7 +6,7 @@ const keepInCache = [
 	'/assets/js',
 	'/public'
 ];
-//how much time to keep things in cache
+//how much time to keep things in cache (30 days)
 const cacheTime = 1000 * 60 * 60 * 24 * 30;
 
 //took from https://googlechrome.github.io/samples/service-worker/fallback-response/
@@ -25,6 +25,12 @@ self.addEventListener('activate', event => {
 	fetch('/notfound.html?v=1.0.1').then(res => {
 		if (res.ok) caches.open('cache').then(cache => cache.put('/notfound.html', res.clone()));
 	});
+
+	//Purge old caches on each update
+	caches.keys().then(function (names) {
+		for (let name of names) caches.delete(name);
+	});
+
 });
 
 //cache the pages for offline usage
