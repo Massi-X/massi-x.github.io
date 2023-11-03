@@ -6,8 +6,15 @@ const NAVIGATION_FORCE_PUSH = 1;
 const NAVIGATION_HOME_ADD = 2;
 const NAVIGATION_POPUP = '_popup_handle';
 
-//register the worker for PWA
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('/worker.js').catch(err => console.warn('Error whilst registering service worker', err));
+if ('serviceWorker' in navigator) {
+	//register the worker for PWA
+	navigator.serviceWorker.register('/worker.js').catch(err => console.warn('Error whilst registering service worker', err));
+
+	//send a message to purge the cache. Note that this wil not work on first install but it is fine
+	navigator.serviceWorker.ready.then(registration => {
+		registration.active.postMessage('purge');
+	});
+}
 
 //show page as soon as possible
 navigationContainer = document.getElementById('navigation');

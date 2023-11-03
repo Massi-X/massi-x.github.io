@@ -7,8 +7,8 @@ const keepInCache = [
 	'/assets/js',
 	'/public'
 ];
-//how much time to keep things in cache (30 days)
-const cacheTime = 1000 * 60 * 60 * 24 * 30;
+const cacheTime = 1000 * 60 * 60 * 24 * 30; //how much time to keep things in cache (30 days)
+const notfound = '/notfound.html';
 
 //took from https://googlechrome.github.io/samples/service-worker/fallback-response/
 self.addEventListener('install', event => {
@@ -23,15 +23,30 @@ self.addEventListener('activate', event => {
 	event.waitUntil(self.clients.claim());
 
 	//cache the error page for use with navigate JS. If an update is needed put a versioning number there
-	fetch('/notfound.html?v=1.0.1').then(res => {
-		if (res.ok) caches.open('cache').then(cache => cache.put('/notfound.html', res.clone()));
+	fetch(notfound + '?v=1.0.1').then(res => {
+		if (res.ok) caches.open('cache').then(cache => cache.put(notfound, res.clone()));
 	});
+});
 
-	//Purge old caches on each update
-	caches.keys().then(function (names) {
-		for (let name of names) caches.delete(name);
-	});
+//global message receiver
+self.addEventListener('message', (event) => {
+	//Purge old caches. Requirements are: the page is expired and the client is online.
+	if (event.data == 'purge') {
+		caches.open('cache').then(cache => cache.keys()
+			.then(keyList =>
+				Promise.all(
+					keyList.map(key => {
+						caches.match(key).then(res => {
+							if (res.url == notfound) return; //do not delete notfound.html!
 
+							const date = new Date(res.headers.get('date')) //calculate expiration date and
+							if (Date.now() >= date.getTime() + cacheTime && navigator.onLine) cache.delete(res.url); //delete file if expired
+						});
+					}),
+				),
+			),
+		);
+	}
 });
 
 //cache the pages for offline usage
@@ -68,7 +83,7 @@ self.addEventListener('fetch', event => {
 			if (!skipCache) return await checkCache(caches, event.request, event.request.url);
 		}
 
-		return await fetch('/notfound.html'); //as last resort
+		return await fetch(notfound); //as last resort
 	}());
 });
 
@@ -77,7 +92,7 @@ async function checkCache(caches, request, url) {
 	const cache = await caches.open('cache');
 	const cached = await cache.match(request);
 
-	if (url == '/notfound.html') //never delete notfound!
+	if (url == notfound) //never delete notfound!
 		return {
 			cache: cached,
 			expired: false
