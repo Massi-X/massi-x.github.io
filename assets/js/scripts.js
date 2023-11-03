@@ -2,7 +2,7 @@
 const SCROLL_UNSET = 0;
 const SCROLL_SHRINKED = 1;
 const NAVIGATION_UNSET = 0;
-const NAVIGATION_HOME_FORCE = 1;
+const NAVIGATION_FORCE_PUSH = 1;
 const NAVIGATION_HOME_ADD = 2;
 const NAVIGATION_POPUP = '_popup_handle';
 
@@ -309,7 +309,9 @@ if ('navigation' in window) {
 		if (isStandalone() && window.alterNavigation == NAVIGATION_UNSET && newURL.href == rootURL.href && newIndex > 0) {
 			navigateEvent.preventDefault();
 
-			window.alterNavigation = NAVIGATION_HOME_FORCE;
+			if (navigateEvent.navigationType == 'push') //force push on next iteration
+				window.alterNavigation = NAVIGATION_FORCE_PUSH;
+
 			navigation.traverseTo(navigation.entries()[0].key);
 			return;
 		}
@@ -319,7 +321,7 @@ if ('navigation' in window) {
 			return;
 
 		//5: circle animation originating from the link click
-		if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_HOME_FORCE) {
+		if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_FORCE_PUSH) {
 			const id = 'circle-reveal';
 
 			//this is impossible, but anyway: if the user clicks fast enough one link and then another the page may become stuck because of the transitionend not triggering.
@@ -384,7 +386,7 @@ if ('navigation' in window) {
 			if (window.loadProcessing) //do not continue if loadPage is already processing the request or we will overwrite something!
 				return;
 
-			if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_HOME_FORCE) {
+			if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_FORCE_PUSH) {
 				navigationContainer.classList.add('pagefixed');
 				navigationContainer.style = 'margin-top: -' + window.scrollY + 'px;';
 				animationTarget.classList.add('blink');
@@ -452,7 +454,7 @@ if ('navigation' in window) {
 				behavior: "instant"
 			});
 
-			if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_HOME_FORCE) { //if push navigation: fade the circle out and then remove it
+			if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_FORCE_PUSH) { //if push navigation: fade the circle out and then remove it
 				animationTarget.classList.add('fadeout');
 
 				animationTarget.addEventListener('transitionend', () => {
