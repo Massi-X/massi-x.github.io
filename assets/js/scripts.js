@@ -251,24 +251,38 @@ if ('navigation' in window) {
 		let animationTarget;
 		let animated = false;
 		let newIndex = navigateEvent.destination.index;
+		let newURL = new URL(navigateEvent.destination.url);
+		const newHash = newURL.href.split('#')[1];
 		const oldURL = new URL(navigation.currentEntry.url);
 		const oldHash = oldURL.href.split('#')[1];
+		let navigationType = navigateEvent.navigationType;
 
-		if (newIndex == -1) //this page is not in history, create the new index manually
+		//force type to be 'push' even for replace when needed
+		if (window.alterNavigation == NAVIGATION_FORCE_PUSH)
+			navigationType = 'push';
+
+		//this page is not in history, create the new index manually
+		if (newIndex == -1)
 			newIndex = window.currentIndex + 1;
 
-		//1: if any popup is open and you are requesting to navigate backwards, then close it and stop here. This tries to emulate back button in Android apps to close things
-		if (navigateEvent.navigationType == 'traverse' && window.currentIndex >= newIndex && isAnyPopupOpen()) {
+		//if any popup is open and you are requesting to navigate backwards, then close it and stop here. This tries to emulate back button in Android apps to close things
+		if (navigationType == 'traverse' && window.currentIndex >= newIndex && isAnyPopupOpen()) {
 			//when not standalone, no states are pushed and we only provide a semi-functional way to close popups
 			navigateEvent.preventDefault();
 			closeAllPopups();
 			return;
 		}
 
-		let newURL = new URL(navigateEvent.destination.url);
-		const newHash = newURL.href.split('#')[1];
+		//when navigating away from a popup in PWA we must overwrite the current history entry so that the forward button will continue to work
+		if (isStandalone() && window.alterNavigation == NAVIGATION_UNSET && navigation.currentEntry.getState() !== undefined &&
+			navigation.currentEntry.getState().handle == NAVIGATION_POPUP && navigationType == 'push') {
+			navigateEvent.preventDefault();
+			window.alterNavigation = NAVIGATION_FORCE_PUSH;
+			navigation.navigate(navigateEvent.destination.url, { history: 'replace' });
+			return;
+		}
 
-		//2: if is anchor, animate (if not prevented by reduced-animation) and return
+		//if is anchor, animate (if not prevented by reduced-animation) and return
 		if (navigateEvent.destination.sameDocument) {
 			//stop if we are navigating to the same hash
 			if (oldURL == newURL && oldHash === newHash)
@@ -294,10 +308,10 @@ if ('navigation' in window) {
 			}
 		}
 
-		//3: if it is the same page...
+		//if it is the same page...
 		if (oldURL.href == newURL.href) {
 			//... prevent going into dummy states with traverse if it is the case (even if not in PWA)...
-			if (navigateEvent.destination.getState() !== undefined && navigateEvent.destination.getState().handle == NAVIGATION_POPUP && navigateEvent.navigationType == 'traverse')
+			if (navigateEvent.destination.getState() !== undefined && navigateEvent.destination.getState().handle == NAVIGATION_POPUP && navigationType == 'traverse')
 				navigateEvent.preventDefault();
 			else //... or do nothing but accept the new pushed state
 				navigateEvent.intercept({ scroll: 'manual' });
@@ -305,11 +319,11 @@ if ('navigation' in window) {
 			return;
 		}
 
-		//4: if we are inside a PWA and we navigate back to the home page provide a better user experience by making it a real home page (back will close the app)
+		//if we are inside a PWA and we navigate back to the home page provide a better user experience by making it a real home page (back will close the app)
 		if (isStandalone() && window.alterNavigation == NAVIGATION_UNSET && newURL.href == rootURL.href && newIndex > 0) {
 			navigateEvent.preventDefault();
 
-			if (navigateEvent.navigationType == 'push') //force push on next iteration
+			if (navigationType == 'push') //force push on next iteration
 				window.alterNavigation = NAVIGATION_FORCE_PUSH;
 
 			navigation.traverseTo(navigation.entries()[0].key);
@@ -317,11 +331,11 @@ if ('navigation' in window) {
 		}
 
 		//complying to the reduced animation policy is easy as letting the browser handle everything starting from there. Moreover these navigation types are not handled, so we let the broswer do it's default with them
-		if (window.reduceanimation || (navigateEvent.navigationType != 'traverse' && navigateEvent.navigationType != 'push'))
+		if (window.reduceanimation || (navigationType != 'traverse' && navigationType != 'push'))
 			return;
 
-		//5: circle animation originating from the link click
-		if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_FORCE_PUSH) {
+		//circle animation originating from the link click...
+		if (navigationType == 'push') {
 			const id = 'circle-reveal';
 
 			//this is impossible, but anyway: if the user clicks fast enough one link and then another the page may become stuck because of the transitionend not triggering.
@@ -343,8 +357,8 @@ if ('navigation' in window) {
 				animationTarget.style = 'opacity: 1; left: ' + window.cx + 'px; top: ' + window.cy + 'px; transform: scale(' + factorS + ');';
 			}
 		}
-		//6: sliding animation for back/forward
-		else if (navigateEvent.navigationType == 'traverse') {
+		//...or sliding animation for back/forward
+		else if (navigationType == 'traverse') {
 			animationTarget = navigationContainer;
 			animationTarget.classList.remove('inverse');
 
@@ -386,12 +400,12 @@ if ('navigation' in window) {
 			if (window.loadProcessing) //do not continue if loadPage is already processing the request or we will overwrite something!
 				return;
 
-			if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_FORCE_PUSH) {
+			if (navigationType == 'push') {
 				navigationContainer.classList.add('pagefixed');
 				navigationContainer.style = 'margin-top: -' + window.scrollY + 'px;';
 				animationTarget.classList.add('blink');
 			}
-			else if (navigateEvent.navigationType == 'traverse')
+			else if (navigationType == 'traverse')
 				document.body.classList.add('pagefixed', 'blink');
 
 			animated = true;
@@ -454,7 +468,7 @@ if ('navigation' in window) {
 				behavior: "instant"
 			});
 
-			if (navigateEvent.navigationType == 'push' || window.alterNavigation == NAVIGATION_FORCE_PUSH) { //if push navigation: fade the circle out and then remove it
+			if (navigationType == 'push') { //if push navigation: fade the circle out and then remove it
 				animationTarget.classList.add('fadeout');
 
 				animationTarget.addEventListener('transitionend', () => {
@@ -462,7 +476,7 @@ if ('navigation' in window) {
 					navigationContainer.classList.remove('pagefixed');
 					navigationContainer.style = '';
 				}, { once: true });
-			} else if (navigateEvent.navigationType == 'traverse') { //if forward/back navigation: slide in new page
+			} else if (navigationType == 'traverse') { //if forward/back navigation: slide in new page
 				document.body.classList.remove('blink');
 				animationTarget.classList.add('inverse', 'noanim');
 
