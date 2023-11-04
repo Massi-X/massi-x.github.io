@@ -226,7 +226,13 @@ if ('navigation' in window) {
 					window.htmlClasses.includes('show--settings') && !currentClasses.includes('show--settings')) { //a popup is being closed
 					//only if this is a dummy state execute the hook
 					if (isStandalone() && navigation.currentEntry.getState() !== undefined && navigation.currentEntry.getState().handle == NAVIGATION_POPUP)
-						setTimeout(() => navigation.back(), 0); //for whatever obscure reason when navigating back with cc open an 'invalid key' error is raised. All is correct obviously because this simple fake timeout fixes everything (after hours wasted over this...) 
+						//settimeout needed to correctly handle navigate event combined with popup close
+						setTimeout(() => {
+							if (window.alterNavigation !== NAVIGATION_UNSET)
+								return;
+
+							navigation.back()
+						}, 0);
 				}
 
 				window.htmlClasses = currentClasses;
