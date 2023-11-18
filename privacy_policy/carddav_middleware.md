@@ -15,7 +15,7 @@ privacy_img: carddavmiddleware_icon.png
 <p class="title">Product interested:</p>
 <p class="text">CardDAV Middleware (FreePBX Module)</p>
 <p class="title">Link to Download Page:</p>
-<p class="text"><a target="_blank" href="https://phonemiddleware.000webhostapp.com/releases/">Website</a>
+<p class="text"><a target="_blank" href="https://carddavmiddleware.massi-x.dev">Website</a>
 </p>
 <p class="title">Data Collected:</p>
 <div class="text">

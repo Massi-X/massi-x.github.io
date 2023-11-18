@@ -2,7 +2,7 @@
 	"name": "Massi-X DevSite",
 	"description": "An awesome home for my projects and thoughts!",
 	"start_url": "/",
-	"id": "massi-x.github.io",
+	"id": "massi-x.dev",
 	"background_color": "#fafafa",
 	"theme_color": "#fafafa",
 	"display": "standalone",

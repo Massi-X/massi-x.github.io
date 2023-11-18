@@ -16,7 +16,7 @@ privacy_img: web_icon.png
 <p class="title">Product interested:</p>
 <p class="text">Massi-X Website</p>
 <p class="title">Link to the website:</p>
-<p class="text"><a href="https://massi-x.github.io">https://massi-x.github.io</a>
+<p class="text"><a href="https://massi-x.dev">https://massi-x.dev</a>
 </p>
 <p class="title">Data Collected:</p>
 <div class="text">
