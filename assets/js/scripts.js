@@ -474,6 +474,7 @@ if ('navigation' in window) {
 			//replace the main content
 			newPageContent.getElementById('navigation').classList.add('ready');
 			navigationContainer.innerHTML = newPageContent.getElementById('navigation').innerHTML;
+			navigationContainer.style = '';
 
 			//scroll to the top while it's hidden to allow the animation to look more natural (in addition to scroll: manual in intercept)
 			scrollTo({
@@ -487,7 +488,6 @@ if ('navigation' in window) {
 				animationTarget.addEventListener('transitionend', () => {
 					animationTarget.remove();
 					navigationContainer.classList.remove('pagefixed');
-					navigationContainer.style = '';
 				}, { once: true });
 			} else if (navigationType == 'traverse') { //if forward/back navigation: slide in new page
 				document.body.classList.remove('blink');
