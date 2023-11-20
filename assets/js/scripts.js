@@ -164,6 +164,11 @@ ccShowHideDinamic();
 window.dataLayer = window.dataLayer || [];
 togglegtag(cc.allowedCategory('analytics'));
 
+//disable contextual menu in PWA to make a true native experience
+oncontextmenu = e => {
+	if (isStandalone()) e.preventDefault();
+}
+
 //global 'esc' handler
 onkeydown = e => {
 	if (e.key === "Escape") {
