@@ -676,6 +676,7 @@ function gtag() { dataLayer.push(arguments); }
 //Analytics as provided by Google
 function togglegtag(enable) {
 	if (enable) {
+		gtag('consent', 'update', { 'analytics_storage': 'granted' });
 		gtag('js', new Date());
 		gtag('config', 'G-H8RP322KHJ');
 	} else
