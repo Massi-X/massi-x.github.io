@@ -125,6 +125,11 @@ body {
 	background: var(--background);
 }
 
+img,
+br {
+	user-select: none;
+}
+
 .flex {
 	display: flex;
 }
@@ -331,6 +336,7 @@ p {
 ************************************ Footer *************************************
 /********************************************************************************/
 #footer {
+	user-select: none;
 	position: relative;
 	margin-top: auto !important;
 	text-align: center;
@@ -374,12 +380,14 @@ p {
 ********************************** Text styles **********************************
 /********************************************************************************/
 .main-title {
+	user-select: none;
 	margin-top: 0;
 	font-size: 40px;
 	font-weight: 700;
 }
 
 .subheader-text {
+	user-select: none;
 	font-size: 24px;
 	font-weight: 700;
 	margin-bottom: 10px;
@@ -388,6 +396,10 @@ p {
 .body-text {
 	font-size: 16px;
 	font-weight: 500;
+}
+
+.heading {
+	user-select: none;
 }
 
 .align-right {
@@ -632,8 +644,12 @@ ul.prettier ::marker {
 }
 
 /********************************************************************************
-******************************* Sweetalert styles *******************************
+**************************** Sweetalert + CC styles *****************************
 /********************************************************************************/
+#cc--main {
+	user-select: none;
+}
+
 html.swal2-shown {
 	overflow-y: hidden;
 }
@@ -651,6 +667,7 @@ html.swal2-height-auto {
 }
 
 .swal2-container {
+	user-select: none;
 	background-color: var(--cc-overlay-bg);
 	background: rgba(0, 0, 0, var(--cc-overlay-opacity));
 }
@@ -1056,6 +1073,7 @@ html.swal2-height-auto {
 }
 
 #index .blog-card {
+	user-select: none;
 	border-radius: 2em;
 	color: #fafafa;
 	/* harcoded cause it's the same for light/dark */
