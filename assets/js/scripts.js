@@ -164,17 +164,22 @@ ccShowHideDinamic();
 window.dataLayer = window.dataLayer || [];
 togglegtag(cc.allowedCategory('analytics'));
 
-//disable contextual menu in PWA to make a true native experience
-oncontextmenu = e => {
-	if (isStandalone()) e.preventDefault();
-}
-
 //global 'esc' handler
 onkeydown = e => {
 	if (e.key === "Escape") {
 		closeAllPopups();
 		e.preventDefault(); //prevent the user from terminate the navigation with 'esc' (still possible from browser UI)
 	}
+}
+
+//PWA: prevent the user from scrolling the page when the touch begin in header/bottom bar
+window.header.ontouchmove = e => {
+	if (isStandalone()) e.preventDefault();
+}
+
+//disable contextual menu in PWA to make a true native experience
+oncontextmenu = e => {
+	if (isStandalone()) e.preventDefault();
 }
 
 //register scrollingHeader as the on scroll function
