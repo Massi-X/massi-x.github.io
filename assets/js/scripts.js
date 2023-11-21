@@ -140,7 +140,7 @@ cc.run({
 						]
 					}, {
 						title: strings.en.moreinfo,
-						description: strings.en.cookiesettingsmoreinfo + ' <a href="/privacy_policy/website.html" class="cc-link" onclick="cc.hideSettings(); cc.hide();">' + strings.en.privacypolicy + '</a>.',
+						description: strings.en.cookiesettingsmoreinfo + ' <a href="/privacy_policy/website.html" class="cc-link">' + strings.en.privacypolicy + '</a>.',
 					}
 				]
 			}
@@ -177,8 +177,8 @@ window.header.ontouchmove = e => {
 	if (isStandalone()) e.preventDefault();
 }
 
-//disable contextual menu in PWA to make a true native experience
-oncontextmenu = e => {
+//disable contextual menu and dragging in PWA to make a true native experience
+ondragstart = oncontextmenu = e => {
 	if (isStandalone()) e.preventDefault();
 }
 
@@ -333,9 +333,14 @@ if ('navigation' in window) {
 
 		//if it is the same page...
 		if (oldURL.href == newURL.href) {
-			//... prevent going into dummy states with traverse if it is the case (even if not in PWA)...
 			if (navigateEvent.destination.getState() !== undefined && navigateEvent.destination.getState().handle == NAVIGATION_POPUP && navigationType == 'traverse')
+				//... prevent going into dummy states with traverse if it is the case (even if not in PWA)...
 				navigateEvent.preventDefault();
+			else if (navigation.currentEntry.getState() !== undefined && navigation.currentEntry.getState().handle == NAVIGATION_POPUP && isAnyPopupOpen()) {
+				//... close any open popups if push-ing away from it (see also mutationobserver above) ...
+				navigateEvent.preventDefault();
+				closeAllPopups();
+			}
 			else //... or do nothing but accept the new pushed state
 				navigateEvent.intercept({ scroll: 'manual' });
 
@@ -477,6 +482,9 @@ if ('navigation' in window) {
 			if (window.loadProcessing)
 				return;
 			window.loadProcessing = true;
+
+			//remove any highlight to the text
+			window.getSelection().removeAllRanges()
 
 			//extract arrow from new page to determine if it should be visible or not
 			slideArrow(!newPageContent.querySelector('[data-insert-navigation="true"]'));
@@ -638,11 +646,6 @@ function openPopup(details) {
 			popup: 'zoomout'
 		}
 	});
-
-	//close the popup on link click
-	swal.getHtmlContainer().querySelectorAll('a').forEach(e => {
-		e.addEventListener('click', () => swal.close());
-	})
 }
 
 /**
@@ -667,8 +670,10 @@ function isAnyPopupOpen() {
 function ccShowHideDinamic() {
 	if (location.pathname !== '/privacy_policy/website.html' && !cc.validConsent())
 		cc.show();
-	else if (location.pathname === '/privacy_policy/website.html' || cc.validConsent())
+	else if (location.pathname === '/privacy_policy/website.html' || cc.validConsent()) {
 		cc.hide();
+		cc.hideSettings();
+	}
 }
 
 /********************************************************************************
