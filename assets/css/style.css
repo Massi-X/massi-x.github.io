@@ -694,6 +694,7 @@ html.swal2-height-auto {
 @media (hover: hover) {
 
 	.swal2-confirm.swal2-styled:hover,
+	.swal2-confirm.swal2-styled:active,
 	.swal2-confirm.swal2-styled:focus-visible {
 		/* Style like cc */
 		background: var(--cc-btn-primary-hover-bg) !important;
