@@ -176,8 +176,7 @@ description: Who am I, My Apps, Projects & Contributions.
 								FreePBX!
 							</div>
 						</div>
-						<a class="button" target="_blank"
-							href="https://carddavmiddleware.massi-x.dev/#readme">
+						<a class="button" target="_blank" href="https://carddavmiddleware.massi-x.dev/#readme">
 							<span class="button-text">{{ site.data._strings.en.rmore }}</span>
 							<i class="fas fa-arrow-right move"></i>
 						</a>
@@ -198,9 +197,7 @@ description: Who am I, My Apps, Projects & Contributions.
 								project,
 								some were fixes and some entirely new features. Check them out here.</div>
 						</div>
-						<a class="button"
-							href="https://issues.freepbx.org/browse/FREEPBX-23170?filter=-4&jql=reporter%20%3D%20Massi-X%20ORDER%20BY%20created%20DESC&desktop=true"
-							target="_blank">
+						<a class="button" href="javascript:;" onclick="openPopup(jira_temp_details)">
 							<span class="button-text">See on Jira</span>
 							<i class="fas fa-arrow-up-right-from-square rotate"></i>
 						</a>
@@ -224,6 +221,17 @@ description: Who am I, My Apps, Projects & Contributions.
 		</div>
 		{% include footer.html %}
 	</div>
+
+	<script>
+		//temp popup details till switch to GitHub is completed (therefore no translation used)
+		var jira_temp_details = {
+			title: 'Temporarily Unavailable',
+			html:
+				'The content you are looking for is currently unavailable because of Sangoma decision to replace Jira with GitHub. As soon as this is completed the link will be restored. More info <a target="_blank" href="https://community.freepbx.org/t/issues-moving-to-github/92860">here</a>.',
+			showConfirmButton: true
+		};
+
+	</script>
 </body>
 
 </html>
