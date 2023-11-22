@@ -666,10 +666,49 @@ html.swal2-height-auto {
 	color: var(--text) !important;
 }
 
+.swal2-html-container {
+	color: var(--cc-block-text) !important;
+}
+
 .swal2-container {
 	user-select: none;
 	background-color: var(--cc-overlay-bg);
 	background: rgba(0, 0, 0, var(--cc-overlay-opacity));
+}
+
+.swal2-actions {
+	margin: 0.75em auto 0;
+}
+
+.swal2-confirm.swal2-styled {
+	/* Style like cc */
+	transition: background-color .25s ease;
+	box-shadow: none !important;
+	background: var(--cc-btn-primary-bg);
+	color: var(--cc-btn-primary-text);
+	font-weight: 600;
+	font-size: .82em;
+	padding: 1em 1.7em;
+}
+
+@media (hover: hover) {
+
+	.swal2-confirm.swal2-styled:hover,
+	.swal2-confirm.swal2-styled:focus-visible {
+		/* Style like cc */
+		background: var(--cc-btn-primary-hover-bg) !important;
+		color: var(--cc-btn-primary-hover-text) !important;
+	}
+}
+
+@media (hover: none) {
+
+	.swal2-confirm.swal2-styled:active,
+	.swal2-confirm.swal2-styled:focus-visible {
+		/* Style like cc */
+		background: var(--cc-btn-primary-hover-bg) !important;
+		color: var(--cc-btn-primary-hover-text) !important;
+	}
 }
 
 .swal2-container.fadein {
