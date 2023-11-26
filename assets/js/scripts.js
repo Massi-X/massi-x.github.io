@@ -105,7 +105,6 @@ cc.run({
 				],
 				blocks: [ //the expandable blocks that contains singular elements that can be enabled or disabled
 					{
-						title: strings.en.cookiesettingsheader,
 						description: strings.en.cookiesettingsdesc
 					}, {
 						title: strings.en.cookiesettings_blockstricttitle,
@@ -637,6 +636,7 @@ function openPopup(details) {
 		html: details.html,
 		showConfirmButton: details.showConfirmButton,
 		returnFocus: false,
+		showCloseButton: true,
 		showClass: {
 			backdrop: 'fadein',
 			popup: 'zoomin'
@@ -644,6 +644,17 @@ function openPopup(details) {
 		hideClass: {
 			backdrop: 'fadeout',
 			popup: 'zoomout'
+		},
+		customClass: {
+			container: 'cclike-container',
+			popup: 'cclike-popup',
+			title: 'cclike-title',
+			closeButton: 'cclike-closebutton',
+			htmlContainer: 'cclike-htmlcontainer',
+			actions: 'cclike-actions',
+			confirmButton: 'cclike-confirmbutton',
+			denyButton: 'cclike-denymbutton',
+			cancelButton: 'cclike-cancelmbutton'
 		}
 	});
 }
