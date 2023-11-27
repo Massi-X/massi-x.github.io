@@ -611,21 +611,20 @@ ul.prettier {
 	text-align: left;
 }
 
-ul.prettier li {
-	padding: 5px 0 5px 9px;
-	color: var(--text);
+ul.prettier li:not(:last-of-type) {
+	padding-bottom: 13px;
 }
 
-ul.prettier li * {
-	vertical-align: middle;
+ul.prettier li::marker {
+	content: '';
 }
 
-ul.prettier ::marker {
+ul.prettier li::before {
 	content: '\f054';
 	font-family: 'Font Awesome 6 Free';
-	font-size: 14px;
-	color: var(--text);
-	margin: 0 10px;
+	font-size: inherit;
+	color: inherit;
+	margin-right: 7px;
 }
 
 /********************************************************************************
@@ -658,45 +657,179 @@ html.swal2-height-auto {
 	height: auto;
 }
 
-.swal2-popup {
-	background: var(--cc-bg) !important;
+.show--settings {
+	height: auto;
+	overflow-y: hidden;
 }
 
-.swal2-title {
-	color: var(--text) !important;
+[class^=swal2] {
+	box-shadow: none !important;
 }
 
-.swal2-html-container {
-	color: var(--cc-block-text) !important;
+.c-bn:focus-visible,
+.b-tl.exp:focus-visible,
+.c-tgl:focus-visible,
+.cc-link:focus-visible,
+[class^=swal2] button:focus-visible {
+	outline: 2px solid #2196F3;
 }
 
-.swal2-container {
+@media (prefers-color-scheme: dark) {
+
+	.c-bn:focus-visible,
+	.b-tl.exp:focus-visible,
+	.c-tgl:focus-visible,
+	.cc-link:focus-visible,
+	[class^=swal2] button:focus-visible {
+		outline: 2px solid #1E88E5;
+	}
+}
+
+#s-ttl {
+	font-size: 1.3em !important;
+}
+
+#s-hdr,
+#s-bns {
+	border: none !important;
+}
+
+#s-bl {
+	padding: 0 1.6em !important;
+}
+
+#s-cnt .p:first-child {
+	margin-top: 0;
+}
+
+.cclike-container {
 	user-select: none;
+	padding: 0;
 	background-color: var(--cc-overlay-bg);
 	background: rgba(0, 0, 0, var(--cc-overlay-opacity));
 }
 
-.swal2-actions {
-	margin: 0.75em auto 0;
+.cclike-container.fadein {
+	animation: .25s swal-fadein linear;
 }
 
-.swal2-confirm.swal2-styled {
-	/* Style like cc */
-	transition: background-color .25s ease;
-	box-shadow: none !important;
-	background: var(--cc-btn-primary-bg);
-	color: var(--cc-btn-primary-text);
-	font-weight: 600;
-	font-size: .82em;
-	padding: 1em 1.7em;
+.cclike-container.fadeout {
+	animation: .25s swal-fadeout linear;
+}
+
+.cclike-popup {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol !important;
+	display: flex;
+	flex-direction: column;
+	max-height: min(37.5em, calc(100vh - 2.5em));
+	width: 100%;
+	max-width: 45em;
+	padding: 0;
+	background: var(--cc-bg) !important;
+	border-radius: var(--cc-border-radius);
+}
+
+.cclike-title {
+	padding: 28.5px 25.8px;
+	font-size: 1.3em;
+	text-align: left;
+	color: var(--cc-text) !important;
+}
+
+.cclike-closebutton {
+	position: absolute;
+	width: 39.44px;
+	height: 39.44px;
+	right: 28px;
+	top: 18.28px;
+	font-size: 1.6em;
+	font-weight: 400;
+	background: var(--cc-btn-secondary-bg) !important;
+	border-radius: var(--cc-btn-border-radius);
+	color: var(--cc-btn-secondary-text) !important;
+	transition: background-color .25s ease !important;
 }
 
 @media (hover: hover) {
 
-	.swal2-confirm.swal2-styled:hover,
-	.swal2-confirm.swal2-styled:active,
-	.swal2-confirm.swal2-styled:focus-visible {
-		/* Style like cc */
+	.cclike-closebutton:hover,
+	.cclike-closebutton:active {
+		background: var(--cc-btn-secondary-hover-bg) !important;
+		color: var(--cc-btn-secondary-hover-text) !important;
+	}
+}
+
+@media (hover: none) {
+
+	.cclike-closebutton:active {
+		background: var(--cc-btn-secondary-hover-bg) !important;
+		color: var(--cc-btn-secondary-hover-text) !important;
+	}
+}
+
+.cclike-htmlcontainer {
+	margin: 0 !important;
+	padding: 0 25.8px 1.06em 25.8px !important;
+	overflow-y: overlay !important;
+	font-size: 1em !important;
+	text-align: initial !important;
+	color: var(--cc-block-text) !important;
+}
+
+.cclike-htmlcontainer ul.prettier {
+	font-size: 1.1em;
+}
+
+@media screen and (min-width: 688px) {
+	.cclike-htmlcontainer::-webkit-scrollbar {
+		height: 100%;
+		width: .7em;
+		background: transparent;
+		border-radius: 0 .25em .25em 0;
+	}
+
+	.cclike-htmlcontainer::-webkit-scrollbar-thumb {
+		background: var(--cc-webkit-scrollbar-bg);
+		border: .25em solid var(--cc-bg);
+		border-radius: 100em;
+	}
+
+	.cclike-htmlcontainer::-webkit-scrollbar-thumb:hover {
+		background: var(--cc-webkit-scrollbar-bg-hover);
+	}
+
+	.cclike-htmlcontainer::-webkit-scrollbar-button,
+	#s-bl::-webkit-scrollbar-button {
+		height: 0 !important;
+		width: 0 !important;
+	}
+}
+
+.cclike-actions {
+	width: 100%;
+	height: 4.75em;
+	padding: 0 1.8em 1.06em 1.8em;
+	margin: 0;
+	justify-content: end;
+}
+
+.cclike-confirmbutton {
+	margin: 0;
+	padding: 1em 1.7em;
+	font-size: .82em !important;
+	font-weight: 600;
+	box-shadow: none !important;
+	border-radius: var(--cc-btn-border-radius) !important;
+	background: var(--cc-btn-primary-bg) !important;
+	color: var(--cc-btn-primary-text) !important;
+	transition: background-color .25s ease;
+}
+
+@media (hover: hover) {
+
+	.cclike-confirmbutton:hover,
+	.cclike-confirmbutton:active,
+	.cclike-confirmbutton:focus-visible {
 		background: var(--cc-btn-primary-hover-bg) !important;
 		color: var(--cc-btn-primary-hover-text) !important;
 	}
@@ -704,27 +837,18 @@ html.swal2-height-auto {
 
 @media (hover: none) {
 
-	.swal2-confirm.swal2-styled:active,
-	.swal2-confirm.swal2-styled:focus-visible {
-		/* Style like cc */
+	.cclike-confirmbutton:active,
+	.cclike-confirmbutton:focus-visible {
 		background: var(--cc-btn-primary-hover-bg) !important;
 		color: var(--cc-btn-primary-hover-text) !important;
 	}
 }
 
-.swal2-container.fadein {
-	animation: .25s swal-fadein linear;
-}
-
-.swal2-container.fadeout {
-	animation: .25s swal-fadeout linear;
-}
-
-.swal2-popup.zoomin {
+.cclike-popup.zoomin {
 	animation: .25s swal-zoomin ease;
 }
 
-.swal2-popup.zoomout {
+.cclike-popup.zoomout {
 	animation: .25s swal-zoomout ease;
 }
 
@@ -773,31 +897,6 @@ html.swal2-height-auto {
 	100% {
 		opacity: 0;
 		transform: scale(0.96);
-	}
-}
-
-/********************************************************************************
-****************************** cookieconsent styles *****************************
-/********************************************************************************/
-.show--settings {
-	height: auto;
-	overflow-y: hidden;
-}
-
-.c-bn:focus-visible,
-.b-tl.exp:focus-visible,
-.c-tgl:focus-visible,
-.cc-link:focus-visible {
-	outline: 2px solid #2196F3;
-}
-
-@media (prefers-color-scheme: dark) {
-
-	.c-bn:focus-visible,
-	.b-tl.exp:focus-visible,
-	.c-tgl:focus-visible,
-	.cc-link:focus-visible {
-		outline: 2px solid #1E88E5;
 	}
 }
 
