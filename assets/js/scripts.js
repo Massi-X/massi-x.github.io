@@ -488,12 +488,14 @@ if ('navigation' in window) {
 			//extract arrow from new page to determine if it should be visible or not
 			slideArrow(!newPageContent.querySelector('[data-insert-navigation="true"]'));
 
-			//find any dynamically added script and remove it (it was part of the previous page)
-			document.querySelectorAll('script[dynamic]').forEach(elem => elem.remove());
+			//replace the main content
+			newPageContent.getElementById('navigation').classList.add('ready');
+			navigationContainer.innerHTML = newPageContent.getElementById('navigation').innerHTML;
+			navigationContainer.style = '';
 
-			//find any script in the new page then save it and remove it to load it correctly then
+			//find any script in the new page then save and remove it to load it correctly after
 			var newScripts = [];
-			newPageContent.querySelectorAll('script:not([no-dynamic])').forEach(elem => {
+			navigationContainer.querySelectorAll('script').forEach(elem => {
 				newScripts.push(elem);
 				elem.remove();
 			});
@@ -501,16 +503,10 @@ if ('navigation' in window) {
 			//finally inject back the scripts so that they will be loaded correctly
 			newScripts.forEach(js => {
 				var script = document.createElement("script"); //create a new element
-				script.setAttribute('dynamic', ''); //set the 'dynamic' attribute so that the script will be removed on new page load
 				Array.from(js.attributes).forEach(attr => script.setAttribute(attr.nodeName, attr.nodeValue)); //copy back all attributes
 				if (!js.src) script.text = js.text; //copy innerText only if the script is inline
-				document.head.appendChild(script); //append the child back and load it
+				navigationContainer.appendChild(script); //append the child back and load it
 			});
-
-			//replace the main content
-			newPageContent.getElementById('navigation').classList.add('ready');
-			navigationContainer.innerHTML = newPageContent.getElementById('navigation').innerHTML;
-			navigationContainer.style = '';
 
 			//scroll to the top while it's hidden to allow the animation to look more natural (in addition to scroll: manual in intercept)
 			scrollTo({
