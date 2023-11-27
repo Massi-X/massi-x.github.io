@@ -718,7 +718,7 @@ html.swal2-height-auto {
 }
 
 .cclike-popup {
-	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol !important;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 	display: flex !important;
 	flex-direction: column;
 	max-height: min(37.5em, calc(100vh - 2.5em));
@@ -729,14 +729,7 @@ html.swal2-height-auto {
 	border-radius: var(--cc-border-radius);
 }
 
-.cclike-title {
-	padding: 28.5px 25.8px;
-	font-size: 1.3em;
-	text-align: left;
-	color: var(--cc-text) !important;
-}
-
-.cclike-closebutton {
+.swal2-close.cclike-closebutton {
 	position: absolute;
 	width: 39.44px;
 	height: 39.44px;
@@ -744,36 +737,44 @@ html.swal2-height-auto {
 	top: 18.28px;
 	font-size: 1.6em;
 	font-weight: 400;
-	background: var(--cc-btn-secondary-bg) !important;
+	background: var(--cc-btn-secondary-bg);
 	border-radius: var(--cc-btn-border-radius);
-	color: var(--cc-btn-secondary-text) !important;
-	transition: background-color .25s ease !important;
+	color: var(--cc-btn-secondary-text);
+	transition: background-color .25s ease;
+}
+
+
+.cclike-title {
+	padding: 28.5px 25.8px;
+	font-size: 1.3em;
+	text-align: left;
+	color: var(--cc-text);
 }
 
 @media (hover: hover) {
 
-	.cclike-closebutton:hover,
-	.cclike-closebutton:active {
-		background: var(--cc-btn-secondary-hover-bg) !important;
-		color: var(--cc-btn-secondary-hover-text) !important;
+	.swal2-close.cclike-closebutton:hover,
+	.swal2-close.cclike-closebutton:active {
+		background: var(--cc-btn-secondary-hover-bg);
+		color: var(--cc-btn-secondary-hover-text);
 	}
 }
 
 @media (hover: none) {
 
-	.cclike-closebutton:active {
-		background: var(--cc-btn-secondary-hover-bg) !important;
-		color: var(--cc-btn-secondary-hover-text) !important;
+	.swal2-close.cclike-closebutton:active {
+		background: var(--cc-btn-secondary-hover-bg);
+		color: var(--cc-btn-secondary-hover-text);
 	}
 }
 
-.cclike-htmlcontainer {
-	margin: 0 !important;
-	padding: 0 25.8px 1.06em 25.8px !important;
-	overflow-y: overlay !important;
-	font-size: 1em !important;
-	text-align: initial !important;
-	color: var(--cc-block-text) !important;
+.swal2-html-container.cclike-htmlcontainer {
+	margin: 0;
+	padding: 0 25.8px 1.06em 25.8px;
+	overflow-y: overlay;
+	font-size: 1em;
+	text-align: initial;
+	color: var(--cc-block-text);
 }
 
 .cclike-htmlcontainer ul.prettier {
@@ -813,34 +814,33 @@ html.swal2-height-auto {
 	justify-content: end;
 }
 
-.cclike-confirmbutton {
+.swal2-confirm.cclike-confirmbutton {
 	margin: 0;
 	padding: 1em 1.7em;
-	font-size: .82em !important;
+	font-size: .82em;
 	font-weight: 600;
-	box-shadow: none !important;
-	border-radius: var(--cc-btn-border-radius) !important;
-	background: var(--cc-btn-primary-bg) !important;
-	color: var(--cc-btn-primary-text) !important;
+	border-radius: var(--cc-btn-border-radius);
+	background: var(--cc-btn-primary-bg);
+	color: var(--cc-btn-primary-text);
 	transition: background-color .25s ease;
 }
 
 @media (hover: hover) {
 
-	.cclike-confirmbutton:hover,
-	.cclike-confirmbutton:active,
-	.cclike-confirmbutton:focus-visible {
-		background: var(--cc-btn-primary-hover-bg) !important;
-		color: var(--cc-btn-primary-hover-text) !important;
+	.swal2-confirm.cclike-confirmbutton:hover,
+	.swal2-confirm.cclike-confirmbutton:active,
+	.swal2-confirm.cclike-confirmbutton:focus-visible {
+		background: var(--cc-btn-primary-hover-bg);
+		color: var(--cc-btn-primary-hover-text);
 	}
 }
 
 @media (hover: none) {
 
-	.cclike-confirmbutton:active,
-	.cclike-confirmbutton:focus-visible {
-		background: var(--cc-btn-primary-hover-bg) !important;
-		color: var(--cc-btn-primary-hover-text) !important;
+	.swal2-confirm.cclike-confirmbutton:active,
+	.swal2-confirm.cclike-confirmbutton:focus-visible {
+		background: var(--cc-btn-primary-hover-bg);
+		color: var(--cc-btn-primary-hover-text);
 	}
 }
 
