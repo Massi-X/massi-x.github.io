@@ -723,7 +723,7 @@ html.swal2-height-auto {
 	flex-direction: column;
 	max-height: min(37.5em, calc(100vh - 2.5em));
 	width: 100%;
-	max-width: 45em;
+	max-width: min(92vw, 45em);
 	padding: 0;
 	background: var(--cc-bg) !important;
 	border-radius: var(--cc-border-radius);
