@@ -742,7 +742,7 @@ html.swal2-height-auto {
 
 .swal2-html-container.cclike-htmlcontainer {
 	margin: 0;
-	padding: 0 25.6px 1.06em 25.6px;
+	padding: 0 25.6px 18.28px 25.6px;
 	overflow-y: overlay;
 	font-size: 1em;
 	text-align: initial;
@@ -756,7 +756,7 @@ html.swal2-height-auto {
 .cclike-actions {
 	width: 100%;
 	height: 4.75em;
-	padding: 0 25.6px 1.06em 25.6px;
+	padding: 0 25.6px 18.28px 25.6px;
 	margin: 0;
 	justify-content: end;
 }
@@ -807,7 +807,7 @@ html.swal2-height-auto {
 	}
 
 	.cclike-actions {
-		padding: 0 20.8px 1.06em 20.8px;
+		padding: 0 20.8px 18.28px 20.8px;
 	}
 
 	.swal2-confirm.cclike-confirmbutton {
