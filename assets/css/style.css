@@ -674,17 +674,6 @@ html.swal2-height-auto {
 	outline: 2px solid #2196F3;
 }
 
-@media (prefers-color-scheme: dark) {
-
-	.c-bn:focus-visible,
-	.b-tl.exp:focus-visible,
-	.c-tgl:focus-visible,
-	.cc-link:focus-visible,
-	[class^=swal2] button:focus-visible {
-		outline: 2px solid #1E88E5;
-	}
-}
-
 #s-ttl {
 	font-size: 1.3em !important;
 }
@@ -723,7 +712,7 @@ html.swal2-height-auto {
 	flex-direction: column;
 	max-height: min(37.5em, calc(100vh - 2.5em));
 	width: 100%;
-	max-width: min(92vw, 45em);
+	max-width: min(95vw, 45em);
 	padding: 0;
 	background: var(--cc-bg) !important;
 	border-radius: var(--cc-border-radius);
@@ -733,7 +722,7 @@ html.swal2-height-auto {
 	position: absolute;
 	width: 39.44px;
 	height: 39.44px;
-	right: 28px;
+	right: 28.8px;
 	top: 18.28px;
 	font-size: 1.6em;
 	font-weight: 400;
@@ -745,32 +734,15 @@ html.swal2-height-auto {
 
 
 .cclike-title {
-	padding: 28.5px 25.8px;
+	padding: 28.5px 28.8px;
 	font-size: 1.3em;
 	text-align: left;
 	color: var(--cc-text);
 }
 
-@media (hover: hover) {
-
-	.swal2-close.cclike-closebutton:hover,
-	.swal2-close.cclike-closebutton:active {
-		background: var(--cc-btn-secondary-hover-bg);
-		color: var(--cc-btn-secondary-hover-text);
-	}
-}
-
-@media (hover: none) {
-
-	.swal2-close.cclike-closebutton:active {
-		background: var(--cc-btn-secondary-hover-bg);
-		color: var(--cc-btn-secondary-hover-text);
-	}
-}
-
 .swal2-html-container.cclike-htmlcontainer {
 	margin: 0;
-	padding: 0 25.8px 1.06em 25.8px;
+	padding: 0 25.6px 1.06em 25.6px;
 	overflow-y: overlay;
 	font-size: 1em;
 	text-align: initial;
@@ -779,6 +751,25 @@ html.swal2-height-auto {
 
 .cclike-htmlcontainer ul.prettier {
 	font-size: 1.1em;
+}
+
+.cclike-actions {
+	width: 100%;
+	height: 4.75em;
+	padding: 0 25.6px 1.06em 25.6px;
+	margin: 0;
+	justify-content: end;
+}
+
+.swal2-confirm.cclike-confirmbutton {
+	margin: 0;
+	padding: 1em 1.7em;
+	font-size: .82em;
+	font-weight: 600;
+	border-radius: var(--cc-btn-border-radius);
+	background: var(--cc-btn-primary-bg);
+	color: var(--cc-btn-primary-text);
+	transition: background-color .25s ease;
 }
 
 @media screen and (min-width: 688px) {
@@ -806,26 +797,43 @@ html.swal2-height-auto {
 	}
 }
 
-.cclike-actions {
-	width: 100%;
-	height: 4.75em;
-	padding: 0 1.8em 1.06em 1.8em;
-	margin: 0;
-	justify-content: end;
+@media screen and (max-width: 688px) {
+	.swal2-close.cclike-closebutton {
+		right: 19.2px;
+	}
+
+	.cclike-title {
+		padding: 28.5px 19.2px;
+	}
+
+	.cclike-actions {
+		padding: 0 20.8px 1.06em 20.8px;
+	}
+
+	.swal2-confirm.cclike-confirmbutton {
+		width: 100%;
+		padding: 0.9em 1.6em;
+	}
 }
 
-.swal2-confirm.cclike-confirmbutton {
-	margin: 0;
-	padding: 1em 1.7em;
-	font-size: .82em;
-	font-weight: 600;
-	border-radius: var(--cc-btn-border-radius);
-	background: var(--cc-btn-primary-bg);
-	color: var(--cc-btn-primary-text);
-	transition: background-color .25s ease;
+@media (prefers-color-scheme: dark) {
+
+	.c-bn:focus-visible,
+	.b-tl.exp:focus-visible,
+	.c-tgl:focus-visible,
+	.cc-link:focus-visible,
+	[class^=swal2] button:focus-visible {
+		outline: 2px solid #1E88E5;
+	}
 }
 
 @media (hover: hover) {
+
+	.swal2-close.cclike-closebutton:hover,
+	.swal2-close.cclike-closebutton:active {
+		background: var(--cc-btn-secondary-hover-bg);
+		color: var(--cc-btn-secondary-hover-text);
+	}
 
 	.swal2-confirm.cclike-confirmbutton:hover,
 	.swal2-confirm.cclike-confirmbutton:active,
@@ -836,6 +844,11 @@ html.swal2-height-auto {
 }
 
 @media (hover: none) {
+
+	.swal2-close.cclike-closebutton:active {
+		background: var(--cc-btn-secondary-hover-bg);
+		color: var(--cc-btn-secondary-hover-text);
+	}
 
 	.swal2-confirm.cclike-confirmbutton:active,
 	.swal2-confirm.cclike-confirmbutton:focus-visible {
