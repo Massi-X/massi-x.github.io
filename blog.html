@@ -17,7 +17,7 @@ description: All of my posts and thoughts.
 				<span>Welcome to my (blog) house! Navigate trough this section to find some interesting stories and
 					facts.</span>
 			</div>
-			{% for post in site.posts reversed %}
+			{% for post in site.posts %}
 			<a href="{{ post.url }}" class="blog-card hoverable">
 				<div class="flex">
 					<img src="{{ post.thumbnail }}" class="thumbnail">

@@ -43,7 +43,7 @@ description: Who am I, My Apps, Projects & Contributions.
 					<!-- version used to loop through the available colors for blog cards -->
 					{% assign version = 1 %}
 
-					{% for post in site.posts reversed limit:6 %}
+					{% for post in site.posts limit:6 %}
 					<a href="{{ post.url }}" class="blog-card v{{ version }} hoverable">
 						<p>
 							{{ post.title }}
