@@ -6,6 +6,19 @@
 	"background_color": "#fafafa",
 	"theme_color": "#fafafa",
 	"display": "standalone",
+	"shortcuts": [
+		{
+			"name": "Blog",
+			"description": "Have a look at the blog posts",
+			"url": "/blog",
+			"icons": [
+				{
+					"src": "/assets/images/shortcut-blog-192x192.png",
+					"sizes": "192x192"
+				}
+			]
+		}
+	],
 	"icons": [
 		{
 			"src": "/assets/images/manifest-192x192.png",
@@ -33,41 +46,41 @@
 		}
 	],
 	"screenshots": [
-	  {
-		"src": "/assets/images/manifest-adv_wide_1.png",
-		"type": "image/png",
-		"sizes": "2000x1499",
-		"form_factor": "wide"
-	  },
-	  {
-		"src": "/assets/images/manifest-adv_wide_2.png",
-		"type": "image/png",
-		"sizes": "2000x1499",
-		"form_factor": "wide"
-	  },
-	  {
-		"src": "/assets/images/manifest-adv_wide_3.png",
-		"type": "image/png",
-		"sizes": "2000x1499",
-		"form_factor": "wide"
-	  },
-	  {
-		"src": "/assets/images/manifest-adv_mobile_1.png",
-		"type": "image/png",
-		"sizes": "832x1800",
-		"form_factor": "narrow"
-	  },
-	  {
-		"src": "/assets/images/manifest-adv_mobile_2.png",
-		"type": "image/png",
-		"sizes": "832x1800",
-		"form_factor": "narrow"
-	  },
-	  {
-		"src": "/assets/images/manifest-adv_mobile_3.png",
-		"type": "image/png",
-		"sizes": "832x1800",
-		"form_factor": "narrow"
-	  }
+		{
+			"src": "/assets/images/manifest-adv_wide_1.png",
+			"type": "image/png",
+			"sizes": "2000x1499",
+			"form_factor": "wide"
+		},
+		{
+			"src": "/assets/images/manifest-adv_wide_2.png",
+			"type": "image/png",
+			"sizes": "2000x1499",
+			"form_factor": "wide"
+		},
+		{
+			"src": "/assets/images/manifest-adv_wide_3.png",
+			"type": "image/png",
+			"sizes": "2000x1499",
+			"form_factor": "wide"
+		},
+		{
+			"src": "/assets/images/manifest-adv_mobile_1.png",
+			"type": "image/png",
+			"sizes": "832x1800",
+			"form_factor": "narrow"
+		},
+		{
+			"src": "/assets/images/manifest-adv_mobile_2.png",
+			"type": "image/png",
+			"sizes": "832x1800",
+			"form_factor": "narrow"
+		},
+		{
+			"src": "/assets/images/manifest-adv_mobile_3.png",
+			"type": "image/png",
+			"sizes": "832x1800",
+			"form_factor": "narrow"
+		}
 	]
 }
