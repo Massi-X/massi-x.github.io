@@ -10,6 +10,14 @@
 			<h1 class="heading">{{ page.title }}</h1>
 
 			<div class="article">
+				{% if page.thumbnail != null %}
+				<div class="post-img">
+					<img src="{{ page.thumbnail }}" loading="lazy" alt="{{ page.thumbnail-alt }}" class="lazy-img"
+						width="{{ page.thumbnail-size['width'] }}" height="{{ page.thumbnail-size['height'] }}">
+					<p>{{ page.thumbnail-copy | markdownify }}</p>
+				</div>
+				{% endif %}
+
 				{{ content }}
 			</div>
 		</div>

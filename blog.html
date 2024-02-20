@@ -20,7 +20,7 @@ description: All of my posts and thoughts.
 			{% for post in site.posts %}
 			<a href="{{ post.url }}" class="blog-card hoverable">
 				<div class="flex">
-					<img src="{{ post.thumbnail }}" class="thumbnail">
+					<img src="{{ post.thumbnail }}" loading="lazy" class="thumbnail lazy-img" width="300">
 					<div class="text">
 						<p>{{ post.title }}</p>
 						<span>{{ post.description }}</span>

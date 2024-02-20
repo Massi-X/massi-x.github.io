@@ -8,8 +8,12 @@
 	<div id="navigation">
 		<div id="privacy" class="content">
 			<div class="heading">
-				<img src="/assets/images/{{ page.privacy_img }}">
-				<span>{{ page.privacy_header }}</span>
+				{% if page.thumbnail != null %}
+				<img src="{{ page.thumbnail }}" loading="lazy"
+					alt="{% if page.thumbnail-alt == null %}Product icon{% else %}{{page.thumbnail-alt}}{% endif %}"
+					class="lazy-img" width="{{ page.thumbnail-size['width'] }}">
+				{% endif %}
+				<span>{{ page.header-title }}</span>
 			</div>
 
 			<div class="paper">
