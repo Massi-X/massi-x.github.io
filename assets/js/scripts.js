@@ -42,6 +42,9 @@ slideArrow(breadcumbArrow.getAttribute('data-insert-navigation') !== 'true');
 applyTheme();
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => applyTheme());
 
+//add load-complete class for images after they have loaded
+lazyImgListener();
+
 //update copyright (well done maestro!)
 document.getElementById('year').innerText = new Date().getFullYear();
 
@@ -480,6 +483,7 @@ if ('navigation' in window) {
 			//loadPage is already processing this request. Prevent multiple calls
 			if (window.loadProcessing)
 				return;
+
 			window.loadProcessing = true;
 
 			//remove any highlight to the text
@@ -507,6 +511,9 @@ if ('navigation' in window) {
 				if (!js.src) script.text = js.text; //copy innerText only if the script is inline
 				navigationContainer.appendChild(script); //append the child back and load it
 			});
+
+			//execute image load handler
+			lazyImgListener();
 
 			//scroll to the top while it's hidden to allow the animation to look more natural (in addition to scroll: manual in intercept)
 			scrollTo({
@@ -635,6 +642,21 @@ function buildiOSSplash(dark) {
 	const icon = dark ? 'avatar-dark.png' : 'avatar.png';
 
 	iosPWASplash('/assets/images/' + icon, color); //generate new ones
+}
+
+/**
+* Listen for lazy images load (or search existing ones) and add the correct class when fully loaded
+*/
+function lazyImgListener() {
+	document.querySelectorAll('img.lazy-img').forEach(elem => {
+		if (elem.complete)
+			elem.classList.add('lazy-complete');
+		else
+			elem.addEventListener('load', event => {
+				event.target.classList.add('lazy-complete');
+				removeEventListener('load', this);
+			});
+	});
 }
 
 /********************************************************************************
