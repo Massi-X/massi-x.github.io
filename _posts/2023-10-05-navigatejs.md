@@ -4,13 +4,14 @@ layout: post
 title: The JS Navigate Event API
 navtitle: Navigate!
 description: "Alternative title: Click me to see the beautiful transition (Only Chrome M102+ currently)"
-thumbnail: /public/growtika-firefox.jpg
----
 
-<div class="post-img">
-<img src="/public/growtika-firefox.jpg" alt="Main superfluous image">
-<p>Photo by <a target="_blank" href="https://unsplash.com/@growtika">Growtika</a></p>
-</div>
+thumbnail: /public/growtika-firefox.jpg
+thumbnail-alt: Main superfluous image
+thumbnail-size: 
+    width: 450
+    height: 253
+thumbnail-copy: Photo by [Growtika](https://unsplash.com/@growtika){:target="_blank"}
+---
 
 During the creation of this site I faced many challenges regarding mainly the design/animation and what I should expect as a result.
 
