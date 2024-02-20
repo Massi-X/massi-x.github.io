@@ -51,6 +51,7 @@
 		--text: #212121;
 		--background: #fafafa;
 		--link-highlight: rgba(0, 0, 0, 0.1);
+		--outline: #2196F3;
 
 		--theme-color: #fafafa;
 
@@ -66,6 +67,12 @@
 		--navbar-border: rgba(0 0 0 / 5%);
 
 		--img-border: #bdbdbd;
+
+		--lazy-load-background: #ececec;
+		--lazy-load-shine: #f5f5f5;
+
+		--blog-header-from: #B39DDB;
+		--blog-header-to: #E1BEE7;
 	}
 }
 
@@ -74,6 +81,7 @@
 		--text: #fafafa;
 		--background: #212121;
 		--link-highlight: rgba(255, 255, 255, 0.2);
+		--outline: #1E88E5;
 
 		--theme-color: #191919;
 
@@ -89,6 +97,12 @@
 		--navbar-border: rgba(0 0 0 / 5%);
 
 		--img-border: #424242;
+
+		--lazy-load-background: #424242;
+		--lazy-load-shine: #5a5a5a;
+
+		--blog-header-from: #673AB7;
+		--blog-header-to: #9C27B0;
 	}
 }
 
@@ -373,6 +387,25 @@ p {
 	.cookie-settings:active,
 	.cookie-settings:focus-visible {
 		color: var(--cookieconsent-link-active);
+	}
+}
+
+/********************************************************************************
+************** Lazy load (ps. suggest to use on solid images only) **************
+/********************************************************************************/
+img.lazy-img {
+	background: linear-gradient(110deg, var(--lazy-load-background) 12%, var(--lazy-load-shine) 21%, var(--lazy-load-background) 30%);
+	background-size: 200% 100%;
+	animation: 1.5s shine linear infinite;
+}
+
+img.lazy-img.lazy-complete {
+	background: none;
+}
+
+@keyframes shine {
+	100% {
+		background-position-x: -200%;
 	}
 }
 
@@ -672,7 +705,7 @@ html.swal2-height-auto {
 .c-tgl:focus-visible,
 .cc-link:focus-visible,
 [class^=swal2] button:focus-visible {
-	outline: 2px solid #2196F3;
+	outline: 2px solid var(--outline);
 }
 
 #s-ttl {
@@ -814,17 +847,6 @@ html.swal2-height-auto {
 	.swal2-confirm.cclike-confirmbutton {
 		width: 100%;
 		padding: 0.9em 1.6em;
-	}
-}
-
-@media (prefers-color-scheme: dark) {
-
-	.c-bn:focus-visible,
-	.b-tl.exp:focus-visible,
-	.c-tgl:focus-visible,
-	.cc-link:focus-visible,
-	[class^=swal2] button:focus-visible {
-		outline: 2px solid #1E88E5;
 	}
 }
 
@@ -1229,7 +1251,7 @@ html.swal2-height-auto {
 	user-select: none;
 	border-radius: 2em;
 	color: #fafafa;
-	/* harcoded cause it's the same for light/dark */
+	/* harcoded cause it's the same for light/dark (it goes with v1/v2...) */
 }
 
 #index .blog-card span {
@@ -1383,6 +1405,8 @@ html.swal2-height-auto {
 
 .project-image {
 	height: 100%;
+	width: auto;
+	aspect-ratio: 1/1;
 	border-radius: 3em;
 	border: 1px solid var(--img-border);
 }
@@ -1429,9 +1453,11 @@ html.swal2-height-auto {
 }
 
 #privacy .heading>img {
+	height: 100px;
+	width: auto;
+	aspect-ratio: 1/1;
 	border-radius: 25%;
 	border: 1px solid var(--img-border);
-	height: 100px;
 }
 
 #privacy .heading>span {
@@ -1494,6 +1520,7 @@ html.swal2-height-auto {
 
 #post .post-img {
 	position: relative;
+	display: inline-flex;
 }
 
 #post .post-img img {
@@ -1507,13 +1534,14 @@ html.swal2-height-auto {
 	right: 0;
 	margin: 9px 25px;
 	font-size: 11px;
-	mix-blend-mode: difference;
 	user-select: none;
-	color: #fff;
 }
 
+#post .post-img>p,
 #post .post-img>p a {
 	color: #fff;
+	mix-blend-mode: difference;
+	/* color hardcoded cause needed only for mix-blend-mode */
 }
 
 @media only screen and (min-width: 1024px) {
@@ -1588,7 +1616,7 @@ html.swal2-height-auto {
 
 #blog .heading {
 	padding: 60px 20px;
-	background: linear-gradient(45deg, #B39DDB, transparent);
+	background: linear-gradient(180deg, var(--blog-header-from), var(--blog-header-to));
 	border: 1px solid var(--img-border);
 	border-bottom: none;
 	border-top-right-radius: 2em;
@@ -1606,7 +1634,8 @@ html.swal2-height-auto {
 
 #blog .blog-card .thumbnail {
 	width: 100px;
-	height: 100px;
+	height: auto;
+	aspect-ratio: 1/1;
 	object-fit: cover;
 	border-radius: 1em;
 }
@@ -1641,12 +1670,6 @@ html.swal2-height-auto {
 #blog>:last-child {
 	border-bottom-right-radius: 2em;
 	border-bottom-left-radius: 2em;
-}
-
-@media (prefers-color-scheme: dark) {
-	#blog .heading {
-		background: linear-gradient(45deg, #673AB7, transparent);
-	}
 }
 
 @media only screen and (max-width: 600px) {
