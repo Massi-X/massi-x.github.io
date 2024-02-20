@@ -5,8 +5,11 @@ title: Pixel Mods - Privacy Policy
 navtitle: Privacy Policy
 description: Discover more about the data we collect.
 
-privacy_header: Pixel Mods
-privacy_img: pixelmods_icon.png
+header-title: Pixel Mods
+thumbnail: /assets/images/pixelmods_icon.png
+thumbnail-size: 
+    width: 300
+    height: 300
 ---
 
 <p class="title">Scope:</p>

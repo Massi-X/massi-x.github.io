@@ -5,8 +5,11 @@ title: Bluetooth ToolKit - Privacy Policy
 navtitle: Privacy Policy
 description: Discover more about the data we collect.
 
-privacy_header: Bluetooth ToolKit
-privacy_img: bttoolkit_icon.png
+header-title: Bluetooth ToolKit
+thumbnail: /assets/images/bttoolkit_icon.png
+thumbnail-size: 
+    width: 300
+    height: 300
 ---
 
 <p class="title">Scope:</p>

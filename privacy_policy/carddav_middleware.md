@@ -5,8 +5,11 @@ title: CardDAV Middleware - Privacy Policy
 navtitle: Privacy Policy
 description: Discover more about the data we collect.
 
-privacy_header: CardDAV Middleware
-privacy_img: carddavmiddleware_icon.png
+header-title: CardDAV Middleware
+thumbnail: /assets/images/carddavmiddleware_icon.png
+thumbnail-size: 
+    width: 300
+    height: 300
 ---
 
 <p class="title">Scope:</p>
