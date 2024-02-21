@@ -205,8 +205,8 @@ description: Who am I, My Apps, Projects & Contributions.
 								some were fixes and some entirely new features. Check them out here.</div>
 						</div>
 						<a class="button" href="javascript:;" onclick="openPopup(jira_temp_details)">
-							<span class="button-text">See on Jira</span>
-							<i class="fas fa-arrow-up-right-from-square rotate"></i>
+							<span class="button-text">See List</span>
+							<i class="fas fa-window-restore zoom"></i>
 						</a>
 					</div>
 					<div class="project-card">
@@ -215,8 +215,7 @@ description: Who am I, My Apps, Projects & Contributions.
 						<div class="project-card-text-container">
 							<div class="subheader-text project-title">Misc Github PRs</div>
 							<div class="body-text project-card-text">You can find some of my other contributions to
-								various
-								projects on GitHub.</div>
+								various projects on GitHub.</div>
 						</div>
 						<a class="button" target="_blank" href="https://github.com/stars/Massi-X/lists/contributions">
 							<span class="button-text">See on GitHub</span>
@@ -232,9 +231,18 @@ description: Who am I, My Apps, Projects & Contributions.
 		<script>
 			//temp popup details till switch to GitHub is completed (therefore no translation used)
 			var jira_temp_details = {
-				title: 'Temporarily Unavailable',
+				title: 'FreePBX Contributions',
 				html:
-					'The content you are looking for is currently unavailable because of Sangoma decision to replace Jira with GitHub. As soon as this is completed the link will be restored. More info <a target="_blank" href="https://community.freepbx.org/t/issues-moving-to-github/92860">here</a>.',
+					'<ul class="prettier">' +
+					'<li><b>Calendar: </b>Fix multiple categories not considered. <a target="_blank" href="https://github.com/FreePBX/calendar/commit/2ae0783a3aa881b77908ebd0c1cc705f3ae5a676">GitHub - 02/22</a></li>' +
+					'<li><b>Superfecta: </b>New and improved regex source. <a target="_blank" href="https://github.com/FreePBX/superfecta/pull/338/commits/ee2a34e52aac52f1d2c2a9e46ebf039bab80aff8">GitHub - 01/23</a></li>' +
+					'<li><b>Calendar: </b>Fix editing entry when server is not reachable. <a target="_blank" href="https://github.com/FreePBX/calendar/commit/e2e3ed46a8034955b2fb15552239a540652fa651">GitHub - 02/23</a></li>' +
+					'<li><b>Calendar: </b>New code to improve speed of matching by over 100x. <a target="_blank" href="https://github.com/FreePBX/calendar/commit/5e525da6856f4c7f5b01c2f28261dedad8b66315">GitHub - 06/23</a></li>' +
+					'<li><b>Calendar: </b>Fix loading of calendars inside the admin interface. <a target="_blank" href="https://github.com/FreePBX/calendar/commit/eaf2e2f04324ae09db032ed4b32dba2c51710644">GitHub - 06/23</a></li>' +
+					'<li><b>Time Conditions: </b>Generate debug info only when requested. <a target="_blank" href="https://github.com/FreePBX/timeconditions/commit/2c597beae76cfbbba9b1d71b0aafd3d7bacc88cb">GitHub - 07/23</a></li>' +
+					'<li><b>Calendar: </b>Fix fwconsole process hang. <a target="_blank" href="https://github.com/FreePBX/calendar/pull/6/commits/4cee4413e8d96bfc4c6009979a5d17833f82fd13">GitHub</a></li>' +
+					'<li><b>Calendar: </b>Code improvements. <a target="_blank" href="https://github.com/FreePBX/calendar/pull/6/commits/b012987fd3356515fdcc281c1f061fc207dfb95f">GitHub</a></li>' +
+					'</ul>',
 			};
 		</script>
 	</div>
