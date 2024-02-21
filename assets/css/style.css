@@ -512,7 +512,7 @@ a.hoverable {
 
 .button,
 .button * {
-	transition: background-color .15s ease, filter .15s ease, translate .3s ease, transform .3s ease;
+	transition: background-color .15s ease, filter .15s ease, transform .3s ease;
 }
 
 .button>.button-text {
@@ -573,12 +573,18 @@ a.hoverable {
 
 	.button:hover>i.move,
 	.button:focus-visible>i.move {
-		translate: 5px;
+		transform: translateX(5px);
 	}
 
 	.button:hover>i.rotate,
 	.button:focus-visible>i.rotate {
 		transform: rotateZ(45deg);
+	}
+
+	.button:hover>i.zoom,
+	.button:focus-visible>i.zoom {
+		transform: scale(1.2);
+		transform-origin: center left;
 	}
 
 	.button:hover>*,
@@ -593,7 +599,7 @@ a.hoverable {
 
 	.button.mini:hover>i.move,
 	.button.mini:focus-visible>i.move {
-		translate: 2px;
+		transform: translateX(2px);
 	}
 }
 
@@ -606,12 +612,18 @@ a.hoverable {
 
 	.button:active>i.move,
 	.button:focus-visible>i.move {
-		translate: 5px;
+		transform: translateX(5px);
 	}
 
 	.button:active>i.rotate,
 	.button:focus-visible>i.rotate {
 		transform: rotateZ(45deg);
+	}
+
+	.button:active>i.zoom,
+	.button:focus-visible>i.zoom {
+		transform: scale(1.2);
+		transform-origin: center left;
 	}
 
 	.button:active>*,
@@ -626,7 +638,7 @@ a.hoverable {
 
 	.button.mini:active>i.move,
 	.button.mini:focus-visible>i.move {
-		translate: 2px;
+		transform: translateX(2px);
 	}
 }
 
