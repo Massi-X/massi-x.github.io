@@ -10,9 +10,9 @@ if ('serviceWorker' in navigator) {
 	//register the worker for PWA
 	navigator.serviceWorker.register('/worker.js').catch(err => console.warn('Error whilst registering service worker', err));
 
-	//send a message to purge the cache. Note that this wil not work on first install but it is fine
+	//send a message to purge the cache. Note that this will not work on first install but it is fine
 	navigator.serviceWorker.ready.then(registration => {
-		registration.active.postMessage('purge');
+		registration.active.postMessage({ 'command': 'purge' });
 	});
 }
 
@@ -44,6 +44,9 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => appl
 
 //add load-complete class for images after they have loaded
 lazyImgListener();
+
+//init badges if needed
+initDownloadBadges();
 
 //update copyright (well done maestro!)
 document.getElementById('year').innerText = new Date().getFullYear();
@@ -515,6 +518,9 @@ if ('navigation' in window) {
 			//execute image load handler
 			lazyImgListener();
 
+			//init badges if needed
+			initDownloadBadges();
+
 			//scroll to the top while it's hidden to allow the animation to look more natural (in addition to scroll: manual in intercept)
 			scrollTo({
 				top: 0,
@@ -838,4 +844,55 @@ async function injectHomepage() {
 	}
 
 	return currentIndex; //return currentIndex, whatever the result
+}
+
+/**
+ * Init the download count badges on any page if set in html.
+ * Sends a request to the service worker that itself sends a request to the web worker and then handle cache and everything.
+ * 
+ * BE CAREFUL! This only works if the client supports service workers because it totally relies on it.
+ * 
+ * @example
+ * <span class="download-badge">
+ * 		<i class="fas fa-arrow-alt-circle-down"></i>
+ * 		<span class="download-count" data-item="optional|required" data-type="optional|required"></span>
+ * </span>
+ */
+function initDownloadBadges() {
+	document.querySelectorAll('.download-count').forEach(elem => {
+		let item = elem.getAttribute('data-item');
+		let type = elem.getAttribute('data-type');
+
+		if (item != null || type != null) {
+			sendMessage({
+				command: 'download_count',
+				request: globals.base_url + '/workers/download_count.php?' + (item != null ? 'item=' + item : '') + (type != null ? '&type=' + type : '')
+			})
+				.then(json => {
+					elem.innerHTML = json.downloads_readable;
+					elem.parentElement.classList.add('load');
+				})
+				.catch(error => { }); //ignored
+		}
+	});
+}
+
+/**
+ * Convenient method to send a message to the service worker and get back a response via a Promise.
+ * See https://googlechrome.github.io/samples/service-worker/post-message/
+ * @param {*} message	the command to send 
+ * @returns {Promise}	a Promise that will resolve if the call completes successfully with the result, if any
+ */
+function sendMessage(message) {
+	return new Promise((resolve, reject) => {
+		navigator.serviceWorker.ready.then(registration => { //wait for register if this is first install
+			var messageChannel = new MessageChannel();
+			messageChannel.port1.onmessage = event => {
+				if (event.data.error) reject(event.data.error);
+				else resolve(event.data);
+			};
+
+			registration.active.postMessage(message, [messageChannel.port2]);
+		});
+	});
 }
