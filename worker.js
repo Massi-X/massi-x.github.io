@@ -29,23 +29,47 @@ self.addEventListener('activate', event => {
 });
 
 //global message receiver
-self.addEventListener('message', (event) => {
-	//Purge old caches. Requirements are: the page is expired and the client is online.
-	if (event.data == 'purge') {
-		caches.open('cache').then(cache => cache.keys()
-			.then(keyList =>
-				Promise.all(
-					keyList.map(key => {
-						caches.match(key).then(res => {
-							if (res.url == notfound) return; //do not delete notfound.html!
+self.addEventListener('message', event => {
+	switch (event.data.command) {
+		case 'purge': //Purge old caches. Requirements are: the page is expired and the client is online.
+			caches.open('cache').then(cache => cache.keys()
+				.then(keyList =>
+					Promise.all(
+						keyList.map(key => {
+							caches.match(key).then(res => {
+								if (res.url == notfound) return; //do not delete notfound.html!
 
-							const date = new Date(res.headers.get('date')) //calculate expiration date and
-							if (Date.now() >= date.getTime() + cacheTime && navigator.onLine) cache.delete(res.url); //delete file if expired
-						});
-					}),
+								const date = new Date(res.headers.get('date')) //calculate expiration date and
+								if (Date.now() >= date.getTime() + cacheTime && navigator.onLine) cache.delete(res.url); //delete file if expired
+							});
+						}),
+					),
 				),
-			),
-		);
+			);
+			break;
+		case 'download_count':
+			checkCache(event.data.request, 1000 * 60 * 60 * 24 * 1).then(cache => { //1 day of cache for this
+				let answer = false;
+
+				if (cache.cache != null) { //always answer fast if any cache is available
+					cache.cache.json().then(json => event.ports[0].postMessage(json));
+					answer = true;
+				}
+
+				if (cache.expired) { //then check if we need to refresh/build the cache
+					fetch(event.data.request).then(res => {
+						if (res.ok) { //if the response is 2xx then we can proceed and cache the page + return result
+							caches.open('cache').then(cache => {
+								cache.put(event.data.request, res.clone());
+								if (!answer) //only return if not already posted back
+									res.json().then(json => event.ports[0].postMessage(json));
+							});
+						}
+						else throw new Error("Network response was not OK");
+					});
+				}
+			});
+			break;
 	}
 });
 
@@ -57,7 +81,7 @@ self.addEventListener('fetch', event => {
 		//first thing to check: is this an URL that we always need to serve from cache? If so skip fetch
 		for (entry of keepInCache) {
 			if (event.request.url.startsWith(this.origin + entry)) {
-				const res = await checkCache(caches, event.request, event.request.url);
+				const res = await checkCache(event.request.url);
 
 				//return cache if valid -or- if expired but navigator is offline
 				if (res.cache != null && (!res.expired || res.expired && !navigator.onLine))
@@ -80,7 +104,7 @@ self.addEventListener('fetch', event => {
 			return res; //in any case, return the response
 		}
 		catch (error) { //this should only happen if we are offline (or on Promise error). We check for a cached version of the file
-			if (!skipCache) return await checkCache(caches, event.request, event.request.url);
+			if (!skipCache) return await checkCache(event.request.url).cache;
 		}
 
 		return await fetch(notfound); //as last resort
@@ -88,9 +112,10 @@ self.addEventListener('fetch', event => {
 });
 
 //convenient method to check for match of given URL in cache
-async function checkCache(caches, request, url) {
+async function checkCache(url, time) {
+	if (time === undefined) time = cacheTime;
 	const cache = await caches.open('cache');
-	const cached = await cache.match(request);
+	const cached = await cache.match(url);
 
 	if (url == notfound) //never delete notfound!
 		return {
@@ -102,7 +127,7 @@ async function checkCache(caches, request, url) {
 		const date = new Date(cached.headers.get('date'));
 		let expired = false;
 
-		if (Date.now() >= date.getTime() + cacheTime)
+		if (Date.now() >= date.getTime() + time)
 			expired = true;
 
 		return {
