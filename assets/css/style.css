@@ -53,6 +53,9 @@
 		--link-highlight: rgba(0, 0, 0, 0.1);
 		--outline: #2196F3;
 
+		--red: #E91E63;
+		--red-dark: #B71C1C;
+
 		--theme-color: #fafafa;
 
 		--circle: #eee;
@@ -82,6 +85,9 @@
 		--background: #212121;
 		--link-highlight: rgba(255, 255, 255, 0.2);
 		--outline: #1E88E5;
+
+		--red: #E91E63;
+		--red-dark: #B71C1C;
 
 		--theme-color: #191919;
 
@@ -564,6 +570,12 @@ a.hoverable {
 	font-size: 13px;
 }
 
+.button>i.zoom {
+	/* fixes chrome glitch */
+	transform-origin: center left;
+	transform: scale3d(1, 1, 1);
+}
+
 @media (hover: hover) {
 
 	.button:hover,
@@ -583,8 +595,7 @@ a.hoverable {
 
 	.button:hover>i.zoom,
 	.button:focus-visible>i.zoom {
-		transform: scale(1.2);
-		transform-origin: center left;
+		transform: scale3d(1.2, 1.2, 1.2);
 	}
 
 	.button:hover>*,
@@ -622,8 +633,7 @@ a.hoverable {
 
 	.button:active>i.zoom,
 	.button:focus-visible>i.zoom {
-		transform: scale(1.2);
-		transform-origin: center left;
+		transform: scale3d(1.2, 1.2, 1.2);
 	}
 
 	.button:active>*,
@@ -1424,11 +1434,30 @@ html.swal2-height-auto {
 }
 
 .card-image {
-	width: 100%;
+	position: relative;
 	height: 200px;
-	object-fit: contain;
-	display: inline-flex;
-	justify-content: center;
+	margin: 0 auto;
+}
+
+/* Download count badge */
+.download-badge {
+	position: absolute;
+	right: -7px;
+	top: 5px;
+	transition: .15s ease transform;
+	transform: scale(0);
+	padding: 2px 7px 3px;
+	border-radius: 1em;
+	user-select: none;
+	font-weight: bold;
+	background: var(--red);
+	border: 1px solid var(--red-dark);
+	color: #fafafa;
+	/* harcoded cause it's the same for light/dark */
+}
+
+.download-badge.load {
+	transform: none;
 }
 
 /* Blog cards */
@@ -1578,6 +1607,7 @@ html.swal2-height-auto {
 
 	#post .post-img img {
 		max-width: 90vw;
+		height: auto;
 	}
 }
 
