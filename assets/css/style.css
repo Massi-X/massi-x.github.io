@@ -121,6 +121,13 @@
 	scroll-behavior: smooth;
 }
 
+@media all and (display-mode: standalone) {
+	* {
+		/* prevent the text to be selected everywhere in PWA */
+		user-select: none;
+	}
+}
+
 html {
 	overscroll-behavior-y: none;
 	text-size-adjust: none;
