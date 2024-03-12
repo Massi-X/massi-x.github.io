@@ -104,7 +104,10 @@ self.addEventListener('fetch', event => {
 			return res; //in any case, return the response
 		}
 		catch (error) { //this should only happen if we are offline (or on Promise error). We check for a cached version of the file
-			if (!skipCache) return await checkCache(event.request.url).cache;
+			if (!skipCache) {
+				let cache = await checkCache(event.request.url);
+				return cache.cache;
+			}
 		}
 
 		return await fetch(notfound); //as last resort
