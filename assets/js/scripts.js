@@ -465,7 +465,7 @@ if ('navigation' in window) {
 					if (navigateEvent.signal.aborted)
 						return;
 					else
-						response = await fetch('/notfound.html'); //this is cached when the worker is installed, always present
+						response = await fetch('/404.html'); //this is cached when the worker is installed, always present
 				}
 
 				newPageContent = new DOMParser().parseFromString(await response.text(), "text/html");

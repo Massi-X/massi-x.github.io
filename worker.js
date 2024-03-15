@@ -1,6 +1,6 @@
 //array of folders (or files for that matter) to always serve from cache. This still follows the max-age of cache currently set to 1 month in func checkCache()
 const keepInCache = [
-	'/notfound.html',
+	'/404.html',
 	'/assets/css',
 	'/assets/fontawesome',
 	'/assets/images',
@@ -8,7 +8,7 @@ const keepInCache = [
 	'/public'
 ];
 const cacheTime = 1000 * 60 * 60 * 24 * 30; //how much time to keep things in cache (30 days)
-const notfound = '/notfound.html';
+const page404 = '/404.html';
 
 //took from https://googlechrome.github.io/samples/service-worker/fallback-response/
 self.addEventListener('install', event => {
@@ -23,8 +23,8 @@ self.addEventListener('activate', event => {
 	event.waitUntil(self.clients.claim());
 
 	//cache the error page for use with navigate JS. If an update is needed put a versioning number there
-	fetch(notfound + '?v=1.0.1').then(res => {
-		if (res.ok) caches.open('cache').then(cache => cache.put(notfound, res.clone()));
+	fetch(page404 + '?v=1.0.1').then(res => {
+		if (res.ok) caches.open('cache').then(cache => cache.put(page404, res.clone()));
 	});
 });
 
@@ -37,7 +37,7 @@ self.addEventListener('message', event => {
 					Promise.all(
 						keyList.map(key => {
 							caches.match(key).then(res => {
-								if (res.url == notfound) return; //do not delete notfound.html!
+								if (res.url == page404) return; //do not delete 404.html!
 
 								const date = new Date(res.headers.get('date')) //calculate expiration date and
 								if (Date.now() >= date.getTime() + cacheTime && navigator.onLine) cache.delete(res.url); //delete file if expired
@@ -110,7 +110,7 @@ self.addEventListener('fetch', event => {
 			}
 		}
 
-		return await fetch(notfound); //as last resort
+		return await fetch(page404); //as last resort
 	}());
 });
 
@@ -120,7 +120,7 @@ async function checkCache(url, time) {
 	const cache = await caches.open('cache');
 	const cached = await cache.match(url);
 
-	if (url == notfound) //never delete notfound!
+	if (url == page404) //never delete 404!
 		return {
 			cache: cached,
 			expired: false
