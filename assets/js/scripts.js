@@ -49,7 +49,8 @@ lazyImgListener();
 initDownloadBadges();
 
 //update copyright (well done maestro!)
-document.getElementById('year').innerText = new Date().getFullYear();
+let footerCC = document.getElementById('year');
+if (footerCC != null) footerCC.innerText = new Date().getFullYear();
 
 //stop JavaScript-based animations in various places
 const mediaQuery = matchMedia('(prefers-reduced-motion: reduce)');
