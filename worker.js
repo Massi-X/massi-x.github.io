@@ -1,13 +1,4 @@
-//array of folders (or files for that matter) to always serve from cache. This still follows the max-age of cache currently set to 1 month in func checkCache()
-const keepInCache = [
-	'/404.html',
-	'/assets/css',
-	'/assets/fontawesome',
-	'/assets/images',
-	'/assets/js',
-	'/public'
-];
-const cacheTime = 1000 * 60 * 60 * 24 * 30; //how much time to keep things in cache (30 days)
+const cacheTime = 1000 * 60 * 60 * 24 * 7; //how much time to keep things in cache (7 days)
 const page404 = '/404.html';
 
 //took from https://googlechrome.github.io/samples/service-worker/fallback-response/
@@ -76,24 +67,26 @@ self.addEventListener('message', event => {
 //cache the pages for offline usage
 self.addEventListener('fetch', event => {
 	event.respondWith(async function () {
-		let skipCache = false;
+		//check if the content is in cache
+		const res = await checkCache(event.request.url);
 
-		//first thing to check: is this an URL that we always need to serve from cache? If so skip fetch
-		for (entry of keepInCache) {
-			if (event.request.url.startsWith(this.origin + entry)) {
-				const res = await checkCache(event.request.url);
-
-				//return cache if valid -or- if expired but navigator is offline
-				if (res.cache != null && (!res.expired || res.expired && !navigator.onLine))
-					return res.cache;
-				else {
-					skipCache = true; //skip another check in cache in case this page does not exist or you're offline and is not cached in the next steps
-					break;
-				}
+		//return the cache immediately if existent and update the content async if expired
+		if (res.cache != null) {
+			if (res.expired) {
+				fetch(event.request).then(res => {
+					if (res.ok) { //if the response is 2xx then we can proceed and cache the page
+						caches.open('cache').then(cache => {
+							cache.put(event.request.url, res.clone());
+						});
+					}
+				});
 			}
-		};
 
-		try { //try to check if there is a live version of the url
+			return res.cache;
+		}
+
+		//seems we have no cache available, fetch it live
+		try {
 			let res = await fetch(event.request);
 
 			if (res.ok) { //if the response is 2xx then we can proceed and cache the page
@@ -103,14 +96,9 @@ self.addEventListener('fetch', event => {
 
 			return res; //in any case, return the response
 		}
-		catch (error) { //this should only happen if we are offline (or on Promise error). We check for a cached version of the file
-			if (!skipCache) {
-				let cache = await checkCache(event.request.url);
-				return cache.cache;
-			}
-		}
+		catch (error) { /* ignored */ }
 
-		return await fetch(page404); //as last resort
+		return await fetch(page404); //all went wrong.
 	}());
 });
 
