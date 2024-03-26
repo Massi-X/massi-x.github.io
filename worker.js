@@ -98,7 +98,11 @@ self.addEventListener('fetch', event => {
 		}
 		catch (error) { /* ignored */ }
 
-		return await fetch(page404); //all went wrong.
+		//all went wrong. return 404
+		let c404 = await checkCache(page404);
+		if (c404.cache != null) return c404.cache;
+
+		//oh well did you reach there? You must have messed up with the cache then
 	}());
 });
 
