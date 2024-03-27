@@ -1,5 +1,15 @@
-const cacheTime = 1000 * 60 * 60 * 24 * 7; //how much time to keep things in cache (7 days)
+const cacheTimeShort = 1000 * 60 * 60 * 24 * 1;
+const cacheTimeLong = 1000 * 60 * 60 * 24 * 30;
 const page404 = '/404.html';
+
+//array of folders and files to cache for a longer time (cacheTimeLong)
+const longCache = [
+	'/assets/css',
+	'/assets/fontawesome',
+	'/assets/images',
+	'/assets/js',
+	'/public'
+];
 
 //took from https://googlechrome.github.io/samples/service-worker/fallback-response/
 self.addEventListener('install', event => {
@@ -31,7 +41,7 @@ self.addEventListener('message', event => {
 								if (res.url == page404) return; //do not delete 404.html!
 
 								const date = new Date(res.headers.get('date')) //calculate expiration date and
-								if (Date.now() >= date.getTime() + cacheTime && navigator.onLine) cache.delete(res.url); //delete file if expired
+								if (Date.now() >= date.getTime() + cacheTimeShort && navigator.onLine) cache.delete(res.url); //delete file if expired
 							});
 						}),
 					),
@@ -39,7 +49,7 @@ self.addEventListener('message', event => {
 			);
 			break;
 		case 'download_count':
-			checkCache(event.data.request, 1000 * 60 * 60 * 24 * 1).then(cache => { //1 day of cache for this
+			checkCache(event.data.request, cacheTimeShort).then(cache => {
 				let answer = false;
 
 				if (cache.cache != null) { //always answer fast if any cache is available
@@ -67,8 +77,18 @@ self.addEventListener('message', event => {
 //cache the pages for offline usage
 self.addEventListener('fetch', event => {
 	event.respondWith(async function () {
+		let cacheTime = cacheTimeShort;
+
+		//switch to long cache if the case
+		for (entry of longCache) {
+			if (event.request.url.startsWith(this.origin + entry)) {
+				cacheTime = cacheTimeLong;
+				break;
+			}
+		}
+
 		//check if the content is in cache
-		const res = await checkCache(event.request.url);
+		const res = await checkCache(event.request.url, cacheTime);
 
 		//return the cache immediately if existent and update the content async if expired
 		if (res.cache != null) {
@@ -108,7 +128,8 @@ self.addEventListener('fetch', event => {
 
 //convenient method to check for match of given URL in cache
 async function checkCache(url, time) {
-	if (time === undefined) time = cacheTime;
+	if (time === undefined) time = cacheTimeShort;
+
 	const cache = await caches.open('cache');
 	const cached = await cache.match(url);
 
