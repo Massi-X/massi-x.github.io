@@ -273,7 +273,7 @@ p {
 	opacity: 0 !important;
 }
 
-#navigation {
+#navigation_container {
 	width: 100vw;
 	min-height: 100vh;
 	/* Firefox still does not support that*/
@@ -284,25 +284,25 @@ p {
 	transition: opacity .1s ease, transform .4s ease;
 }
 
-#navigation.ready {
+#navigation_container.ready {
 	opacity: 1;
 	transform: none;
 }
 
-#navigation.navigate-back.inverse {
+#navigation_container.navigate-back.inverse {
 	transform: translateX(-200px);
 }
 
-#navigation.navigate-forward.inverse {
+#navigation_container.navigate-forward.inverse {
 	transform: translateX(200px);
 }
 
-#navigation.navigate-forward {
+#navigation_container.navigate-forward {
 	opacity: 0;
 	transform: translateX(-200px);
 }
 
-#navigation.navigate-back {
+#navigation_container.navigate-back {
 	opacity: 0;
 	transform: translateX(200px);
 }
@@ -1741,7 +1741,7 @@ html.swal2-height-auto {
 	}
 
 	#circle-reveal,
-	#navigation,
+	#navigation_container,
 	a:not([class]),
 	a.hoverable,
 	.button,

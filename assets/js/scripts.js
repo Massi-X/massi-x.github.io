@@ -17,7 +17,7 @@ if ('serviceWorker' in navigator) {
 }
 
 //show page as soon as possible
-navigationContainer = document.getElementById('navigation');
+navigationContainer = document.getElementById('navigation_container');
 navigationContainer.classList.add('ready');
 
 //set global variables (be careful! only of elements that will not be replaced!)
@@ -323,14 +323,7 @@ if ('navigation' in window) {
 
 				if (target != undefined) {
 					navigateEvent.preventDefault();
-
-					closeAllPopups();
-					scrollTo({
-						top: //distance of the target element + scrolling position - navbar shrinked height - 20 (so it's not sticky at the top)
-							target.getBoundingClientRect().top +
-							window.scrollY - breadcumb.offsetHeight -
-							20,
-					});
+					scrollToAnchor(target);
 				}
 
 				return;
@@ -497,8 +490,8 @@ if ('navigation' in window) {
 			slideArrow(!newPageContent.querySelector('[data-insert-navigation="true"]'));
 
 			//replace the main content
-			newPageContent.getElementById('navigation').classList.add('ready');
-			navigationContainer.innerHTML = newPageContent.getElementById('navigation').innerHTML;
+			newPageContent.getElementById('navigation_container').classList.add('ready');
+			navigationContainer.innerHTML = newPageContent.getElementById('navigation_container').innerHTML;
 			navigationContainer.style = '';
 
 			//find any script in the new page then save and remove it to load it correctly after
@@ -563,6 +556,16 @@ if ('navigation' in window) {
 			window.alterNavigation = NAVIGATION_UNSET; //reset after the handling is complete
 		}
 	});
+} else {
+	//basic only implementation of important methods for browsers incompatible with Navigation API
+
+	//smooth scroll to anchor with correct padding
+	window.addEventListener('click', event => {
+		if (!event.target.hash) return;
+
+		event.preventDefault();
+		scrollToAnchor(document.querySelector(event.target.hash));
+	});
 }
 
 /********************************************************************************
@@ -585,6 +588,21 @@ function applyTheme() {
 	} else { //set the color if the element already exists
 		meta.setAttribute('content', color);
 	}
+}
+
+/**
+ * Scroll to the given DOM element
+ * @param {Element} target the target element
+ */
+function scrollToAnchor(target) {
+	closeAllPopups();
+
+	scrollTo({
+		top: //distance of the target element + scrolling position - navbar shrinked height - 20 (so it's not sticky at the top)
+			target.getBoundingClientRect().top +
+			window.scrollY - breadcumb.offsetHeight -
+			20,
+	});
 }
 
 window.scrollingExec = SCROLL_UNSET;
