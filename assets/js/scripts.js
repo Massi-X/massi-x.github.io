@@ -156,11 +156,11 @@ cc.run({
 
 //apply the correct light/dark theme to cookieconsent and iOS splash screen (+ generate it)
 ccColorScheme(matchMedia("(prefers-color-scheme: dark)").matches);
-buildiOSSplash(matchMedia("(prefers-color-scheme: dark)").matches);
+//buildiOSSplash(matchMedia("(prefers-color-scheme: dark)").matches); disabled because of https://github.com/elegantapp/pwa-asset-generator/issues/93
 
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
 	ccColorScheme(e.matches);
-	buildiOSSplash(e.matches);
+	//buildiOSSplash(e.matches); disabled because of https://github.com/elegantapp/pwa-asset-generator/issues/93
 });
 
 //show cookieconsent if needed only outside of privacy policy page
