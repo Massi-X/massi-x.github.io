@@ -1,5 +1,6 @@
 const cacheTimeShort = 1000 * 60 * 60 * 24 * 1;
 const cacheTimeLong = 1000 * 60 * 60 * 24 * 30;
+const cacheForceRefresh = 1000 * 60 * 60 * 24 * 60;
 const page404 = '/404.html';
 
 //array of folders and files to cache for a longer time (cacheTimeLong)
@@ -40,8 +41,9 @@ self.addEventListener('message', event => {
 							caches.match(key).then(res => {
 								if (res.url == page404) return; //do not delete 404.html!
 
-								const date = new Date(res.headers.get('date')) //calculate expiration date and
-								if (Date.now() >= date.getTime() + cacheTimeShort && navigator.onLine) cache.delete(res.url); //delete file if expired
+								//now the cache is really too old! Force delete it
+								const date = new Date(res.headers.get('date'))
+								if (Date.now() >= date.getTime() + cacheForceRefresh) cache.delete(res.url);
 							});
 						}),
 					),
