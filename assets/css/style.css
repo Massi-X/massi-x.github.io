@@ -1436,7 +1436,7 @@ html.swal2-height-auto {
 	height: 100%;
 	width: auto;
 	aspect-ratio: 1/1;
-	border-radius: 3em;
+	border-radius: 51px;
 	border: 1px solid var(--img-border);
 }
 
@@ -1504,7 +1504,7 @@ html.swal2-height-auto {
 	height: 100px;
 	width: auto;
 	aspect-ratio: 1/1;
-	border-radius: 25%;
+	border-radius: 26px;
 	border: 1px solid var(--img-border);
 }
 
