@@ -82,7 +82,7 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		--text: #fafafa;
-		--background: #212121;
+		--background: #161616;
 		--link-highlight: rgba(255, 255, 255, 0.2);
 		--outline: #1E88E5;
 
