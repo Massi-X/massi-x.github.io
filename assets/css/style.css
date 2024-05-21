@@ -1130,9 +1130,8 @@ html.swal2-height-auto {
 
 @media only screen and (min-width: 2101px) {
 	#navbar {
-		width: calc(100% - 40vw);
-		margin-left: 20vw;
-		padding: 0;
+		width: 100%;
+		padding: 0 20vw;
 	}
 }
 
