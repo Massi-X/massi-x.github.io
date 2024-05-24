@@ -480,7 +480,7 @@ h1.heading {
 *********************************************************************************/
 a:not([class]),
 a.hoverable {
-	transition: box-shadow .1s ease;
+	transition: background-color .1s ease;
 }
 
 @media (hover: hover) {
@@ -489,7 +489,7 @@ a.hoverable {
 	a.hoverable:hover,
 	a:not([class]):focus-visible,
 	a.hoverable:focus-visible {
-		box-shadow: 100vw 0 var(--link-highlight) inset;
+		background-color: var(--link-highlight);
 	}
 }
 
@@ -499,7 +499,7 @@ a.hoverable {
 	a.hoverable:active,
 	a:not([class]):focus-visible,
 	a.hoverable:focus-visible {
-		box-shadow: 100vw 0 var(--link-highlight) inset;
+		background-color: var(--link-highlight);
 	}
 }
 
