@@ -1338,8 +1338,8 @@ html.swal2-height-auto {
 }
 
 .portfolio-header-image {
-	width: 100%;
 	height: auto;
+	max-width: 100%;
 }
 
 #portfolio-header-text-container {
@@ -1347,6 +1347,12 @@ html.swal2-height-auto {
 	flex-direction: column;
 	gap: 34px;
 	flex-basis: 50%;
+}
+
+@media only screen and (min-width: 801px) {
+	.portfolio-header-image {
+		width: 100%;
+	}
 }
 
 @media only screen and (max-width: 800px) {
