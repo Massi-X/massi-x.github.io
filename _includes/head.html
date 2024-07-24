@@ -15,24 +15,30 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
 	<link rel="mask-icon" href="/assets/images/safari-pinned-tab.svg" color="#5199e5">
 
-	<link rel="stylesheet" href="/assets/css/style.css?v=1.2.4">
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.3.0">
 	<link rel="stylesheet" href="/assets/fontawesome/css/fontawesome.min.css">
 	<link rel="stylesheet" href="/assets/fontawesome/css/brands.min.css">
 	<link rel="stylesheet" href="/assets/fontawesome/css/solid.min.css">
 	<link rel="stylesheet" href="/assets/css/sweetalert2.min.css">
-	<link rel="stylesheet" href="/assets/css/cookieconsent.css">
+
+	<!-- files in public folder are guaranteed to stay there -->
+	<link rel="stylesheet" href="/public/assets/css/cookieconsent.css">
+	<link rel="stylesheet" href="/public/assets/css/cookieconsent_extra.css">
 
 	<!-- global js variables -->
 	<script>
 		var globals = { base_url: '{% if site.environment == "development" %}{{ site.base_url }}{% endif %}' };
 	</script>
 
-	<script defer src="/assets/js/cookieconsent.js"></script>
+	<!-- files in public folder are guaranteed to stay there -->
+	<script defer src="/public/assets/js/strings.js?v=1.0.5"></script>
+	<script defer src="/public/assets/js/cookieconsent.umd.js"></script>
+	<script defer src="/public/assets/js/cookieconsent_init.js"></script>
+
 	<script defer src="/assets/js/sweetalert2.min.js"></script>
 	<!-- thanks to https://github.com/avadhesh18/iosPWASplash -->
 	<script defer src="/assets/js/iosPWASplash.js"></script>
-	<script defer src="/assets/js/strings.js?v=1.0.4"></script>
-	<script defer src="/assets/js/scripts.js?v=1.1.0"></script>
+	<script defer src="/assets/js/scripts.js?v=1.2.0"></script>
 	<script async type="text/plain" data-cookiecategory="analytics"
 		src="https://www.googletagmanager.com/gtag/js?id=G-H8RP322KHJ"></script>
 
