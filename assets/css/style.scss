@@ -1,129 +1,19 @@
-/********************************************************************************
-************************************* Fonts *************************************
-/********************************************************************************/
-@font-face {
-	font-family: HelveticaNeue;
-	font-weight: normal;
-	src: url("/assets/fonts/HelveticaNeue-Regular.ttf");
-}
-
-@font-face {
-	font-family: HelveticaNeue;
-	font-weight: 500;
-	src: url("/assets/fonts/HelveticaNeue-Medium.ttf");
-}
-
-@font-face {
-	font-family: HelveticaNeue;
-	font-weight: bold;
-	src: url("/assets/fonts/HelveticaNeue-Bold.ttf");
-}
-
-/********************************************************************************
-****************************** Colors and measures ******************************
-/********************************************************************************/
-
-:root {
-	--back-width: 26px;
-
-	--navbar-h-noshrink: 100px;
-	--nav-buttons-h: 71px;
-
-	--cookieconsent-link: #A1887F;
-	--cookieconsent-link-active: #FFCC80;
-
-	/* standardize swal and cookieconsent */
-	--cc-overlay-opacity: 0.8 !important;
-	--cc-overlay-bg: #000 !important;
-
-	/* give cc a reasonable z-index (same as swal default one) */
-	--cc-z-index: 1060 !important;
-}
-
-@media only screen and (max-width: 1023px) {
-	:root {
-		--navbar-h-noshrink: 80px;
-	}
-}
-
-@media (prefers-color-scheme: light) {
-	:root {
-		--text: #212121;
-		--background: #fafafa;
-		--link-highlight: rgba(0, 0, 0, 0.1);
-		--outline: #2196F3;
-
-		--red: #E91E63;
-		--red-dark: #B71C1C;
-
-		--theme-color: #fafafa;
-
-		--circle: #eee;
-
-		--button-border: #141414;
-		--button-bg-hover: #212121;
-		--button-bg-hover-inverted: #fafafa;
-		--button-filled-bg: #757575;
-		--button-filled-bg-hover: #424242;
-
-		--navbar-bg: rgba(255 255 255 / 50%);
-		--navbar-border: rgba(0 0 0 / 5%);
-
-		--img-border: #bdbdbd;
-
-		--lazy-load-background: #ececec;
-		--lazy-load-shine: #f5f5f5;
-
-		--blog-header-from: #B39DDB;
-		--blog-header-to: #E1BEE7;
-	}
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--text: #fafafa;
-		--background: #161616;
-		--link-highlight: rgba(255, 255, 255, 0.2);
-		--outline: #1E88E5;
-
-		--red: #E91E63;
-		--red-dark: #B71C1C;
-
-		--theme-color: #191919;
-
-		--circle: #333;
-
-		--button-border: #fafafa;
-		--button-bg-hover: #fafafa;
-		--button-bg-hover-inverted: #212121;
-		--button-filled-bg: #E0E0E0;
-		--button-filled-bg-hover: #FAFAFA;
-
-		--navbar-bg: rgba(0 0 0 / 20%);
-		--navbar-border: rgba(0 0 0 / 5%);
-
-		--img-border: #424242;
-
-		--lazy-load-background: #424242;
-		--lazy-load-shine: #5a5a5a;
-
-		--blog-header-from: #673AB7;
-		--blog-header-to: #9C27B0;
-	}
-}
+---
+---
+@import "common";
 
 /********************************************************************************
 ************************************ General ************************************
 /********************************************************************************/
 * {
 	box-sizing: border-box;
-	-webkit-tap-highlight-color: transparent;
+	-webkit-tap-highlight-color: transparent !important;
 	scroll-behavior: smooth;
 }
 
 @media all and (display-mode: standalone) {
 	* {
-		/* prevent the text to be selected everywhere in PWA */
+		//prevent the text to be selected everywhere in PWA
 		user-select: none;
 	}
 }
@@ -136,7 +26,7 @@ html {
 	-ms-text-size-adjust: none;
 	overflow-x: hidden;
 	background: var(--background);
-	/* leave background here for smooth opacity transition */
+	//leave background here for smooth opacity transition
 }
 
 body {
@@ -146,7 +36,7 @@ body {
 	margin: 0;
 	width: 100vw;
 	min-height: 100vh;
-	/* Firefox still does not support that*/
+	//Firefox still does not support that
 	min-height: 100dvh;
 	overflow: hidden;
 	background: var(--background);
@@ -265,7 +155,7 @@ p {
 	transform: scale(1);
 	transition: transform .5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity .3s ease;
 	opacity: 0.5;
-	/* z-index must be set accordingly to navbar and popups */
+	//z-index must be set accordingly to navbar and popups
 	z-index: 500;
 }
 
@@ -276,7 +166,7 @@ p {
 #navigation_container {
 	width: 100vw;
 	min-height: 100vh;
-	/* Firefox still does not support that*/
+	//Firefox still does not support that
 	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;
@@ -367,14 +257,14 @@ p {
 	position: relative;
 	margin-top: auto !important;
 	text-align: center;
-	padding: 30px 20px;
+	padding: 20px 0;
 	font-size: 15px;
+	line-height: 20px;
 }
 
 .cookie-settings {
-	display: inline-block;
+	display: ruby;
 	color: var(--cookieconsent-link);
-	transition: color .15s ease;
 }
 
 .cookie-settings>i {
@@ -383,23 +273,7 @@ p {
 
 @media only screen and (max-width: 1023px) {
 	#footer {
-		padding: 30px 20px 100px;
-	}
-}
-
-@media (hover: hover) {
-
-	.cookie-settings:hover,
-	.cookie-settings:focus-visible {
-		color: var(--cookieconsent-link-active);
-	}
-}
-
-@media (hover: none) {
-
-	.cookie-settings:active,
-	.cookie-settings:focus-visible {
-		color: var(--cookieconsent-link-active);
+		padding: 25px 0 95px;
 	}
 }
 
@@ -480,29 +354,29 @@ h1.heading {
 *********************************************************************************/
 a:not([class]),
 a.hoverable {
-	transition: background-color .1s ease;
+	@include link-animate;
+}
+
+a:not([class]):focus-visible,
+a.hoverable:focus-visible {
+	@extend %link-focusable;
+}
+
+@mixin link-hover($hover_or_active) {
+
+	a:not([class]):#{$hover_or_active},
+	a.hoverable:#{$hover_or_active} {
+		@include link-hoverable;
+	}
 }
 
 @media (hover: hover) {
-
-	a:not([class]):hover,
-	a.hoverable:hover,
-	a:not([class]):focus-visible,
-	a.hoverable:focus-visible {
-		background-color: var(--link-highlight);
-	}
+	@include link-hover("hover");
 }
 
 @media (hover: none) {
-
-	a:not([class]):active,
-	a.hoverable:active,
-	a:not([class]):focus-visible,
-	a.hoverable:focus-visible {
-		background-color: var(--link-highlight);
-	}
+	@include link-hover("active");
 }
-
 
 /********************************************************************************
 ********************************* Button styles *********************************
@@ -559,6 +433,10 @@ a.hoverable {
 	border: none;
 }
 
+.button.filled:focus-visible {
+	@extend %link-focusable;
+}
+
 .button.filled>.button-text,
 .button.filled>i {
 	filter: invert(1);
@@ -578,85 +456,54 @@ a.hoverable {
 }
 
 .button>i.zoom {
-	/* fixes chrome glitch */
+	//fixes chrome glitch
 	transform-origin: center left;
 	transform: scale3d(1, 1, 1);
 }
 
-@media (hover: hover) {
+@mixin button-hover($hover_or_active) {
 
-	.button:hover,
+	.button:#{$hover_or_active},
 	.button:focus-visible {
 		background: var(--button-bg-hover);
 	}
 
-	.button:hover>i.move,
+	.button:#{$hover_or_active}>i.move,
 	.button:focus-visible>i.move {
 		transform: translateX(5px);
 	}
 
-	.button:hover>i.rotate,
+	.button:#{$hover_or_active}>i.rotate,
 	.button:focus-visible>i.rotate {
 		transform: rotateZ(45deg);
 	}
 
-	.button:hover>i.zoom,
+	.button:#{$hover_or_active}>i.zoom,
 	.button:focus-visible>i.zoom {
 		transform: scale3d(1.2, 1.2, 1.2);
 	}
 
-	.button:hover>*,
+	.button:#{$hover_or_active}>*,
 	.button:focus-visible>* {
 		filter: invert(1);
 	}
 
-	.button.filled:hover,
-	.button.filled:focus-visible {
+	.button.filled:#{$hover_or_active} {
 		background: var(--button-filled-bg-hover);
 	}
 
-	.button.mini:hover>i.move,
+	.button.mini:#{$hover_or_active}>i.move,
 	.button.mini:focus-visible>i.move {
 		transform: translateX(2px);
 	}
 }
 
+@media (hover: hover) {
+	@include button-hover("hover");
+}
+
 @media (hover: none) {
-
-	.button:active,
-	.button:focus-visible {
-		background: var(--button-bg-hover);
-	}
-
-	.button:active>i.move,
-	.button:focus-visible>i.move {
-		transform: translateX(5px);
-	}
-
-	.button:active>i.rotate,
-	.button:focus-visible>i.rotate {
-		transform: rotateZ(45deg);
-	}
-
-	.button:active>i.zoom,
-	.button:focus-visible>i.zoom {
-		transform: scale3d(1.2, 1.2, 1.2);
-	}
-
-	.button:active>*,
-	.button:focus-visible>* {
-		filter: invert(1);
-	}
-
-	.button.filled:active,
-	.button.filled:focus-visible {
-		background: var(--button-filled-bg-hover);
-	}
-
-	.button.mini:active>i.move,
-	.button.mini:focus-visible>i.move {
-		transform: translateX(2px);
-	}
+	@include button-hover("active");
 }
 
 /********************************************************************************
@@ -685,9 +532,12 @@ ul.prettier li::marker {
 ul.prettier li::before {
 	content: '\f054';
 	font-family: 'Font Awesome 6 Free';
-	font-size: inherit;
-	color: inherit;
-	margin-right: 7px;
+	font-size: .8em;
+	margin-right: 9px;
+	margin-top: -.2em;
+	display: inline-block;
+	vertical-align: middle;
+	color: var(--text);
 }
 
 /********************************************************************************
@@ -706,10 +556,36 @@ ul.prettier li::before {
 }
 
 /********************************************************************************
-**************************** Sweetalert + CC styles *****************************
+************************* CC specific to massi-x domain *************************
 /********************************************************************************/
-#cc--main {
-	user-select: none;
+
+.cc-link {
+	@include link-animate(true);
+	color: var(--text) !important;
+	background-size: 0 0 !important;
+}
+
+@mixin cc-link-hover($hover_or_active) {
+	.cc-link:#{$hover_or_active} {
+		@include link-hoverable(true);
+	}
+}
+
+@media (hover: hover) {
+	@include cc-link-hover("hover");
+}
+
+@media (hover: none) {
+	@include cc-link-hover("active");
+}
+
+/********************************************************************************
+********************************** Sweetalert ***********************************
+/********************************************************************************/
+
+.swal2-html-container.cclike-htmlcontainer,
+.swal2-html-container.cclike-htmlcontainer * {
+	@extend %cc-text;
 }
 
 html.swal2-shown {
@@ -720,53 +596,18 @@ html.swal2-height-auto {
 	height: auto;
 }
 
-.show--settings {
-	height: auto;
-	overflow-y: hidden;
-}
-
 [class^=swal2] {
 	box-shadow: none !important;
-}
-
-.c-bn:focus-visible,
-.b-tl.exp:focus-visible,
-.c-tgl:focus-visible,
-.cc-link:focus-visible,
-[class^=swal2] button:focus-visible {
-	outline: 2px solid var(--outline);
-}
-
-#s-ttl {
-	font-size: 1.3em !important;
-}
-
-#s-hdr,
-#s-bns {
-	border: none !important;
-}
-
-#s-bl {
-	padding: 0 1.6em !important;
-}
-
-#s-cnt .p:first-child {
-	margin-top: 0;
 }
 
 .cclike-container {
 	user-select: none;
 	padding: 0;
-	background-color: var(--cc-overlay-bg);
-	background: rgba(0, 0, 0, var(--cc-overlay-opacity));
+	background: rgba(0, 0, 0, var(--overlay-opacity));
 }
 
-.cclike-container.fadein {
-	animation: .25s swal-fadein linear;
-}
-
-.cclike-container.fadeout {
-	animation: .25s swal-fadeout linear;
+.cclike-container *:not(a) {
+	outline-offset: 2px;
 }
 
 .cclike-popup {
@@ -775,45 +616,48 @@ html.swal2-height-auto {
 	flex-direction: column;
 	max-height: min(37.5em, calc(100vh - 2.5em));
 	width: 100%;
-	max-width: min(95vw, 45em);
+	max-width: min(95vw, 43em);
 	padding: 0;
 	background: var(--cc-bg) !important;
-	border-radius: var(--cc-border-radius);
+	border-radius: var(--cc-modal-border-radius);
 }
 
 .swal2-close.cclike-closebutton {
 	position: absolute;
 	width: 39.44px;
 	height: 39.44px;
-	right: 28.8px;
+	right: 22.4px;
 	top: 18.28px;
-	font-size: 1.6em;
-	font-weight: 400;
-	background: var(--cc-btn-secondary-bg);
+	font-size: 0;
 	border-radius: var(--cc-btn-border-radius);
-	color: var(--cc-btn-secondary-text);
-	transition: background-color .25s ease;
+	background: var(--cc-btn-secondary-bg);
 }
 
+.swal2-close.cclike-closebutton:before {
+	content: '';
+	width: 19px;
+	height: 19px;
+	background-color: var(--cc-primary-color);
+	background-repeat: no-repeat;
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath id='rect1' style='stroke-width:1.5;stroke:%23fffff8;' d='M 19.5 4.5 L 4.5 19.5 M 4.5 4.501 L 19.5 19.5' /%3E%3C/svg%3E%0A");
+}
 
 .cclike-title {
-	padding: 28.5px 28.8px;
+	padding: 24.2px 22.4px 0 22.4px;
 	font-size: 1.3em;
 	text-align: left;
-	color: var(--cc-text);
+	color: var(--cc-primary-color);
 }
 
 .swal2-html-container.cclike-htmlcontainer {
 	margin: 0;
-	padding: 0 25.6px 18.28px 25.6px;
+	padding: 24.2px 25.6px 18.28px 25.6px;
+	margin-bottom: 10px;
 	overflow-y: overlay;
 	font-size: 1em;
 	text-align: initial;
-	color: var(--cc-block-text);
-}
-
-.cclike-htmlcontainer ul.prettier {
-	font-size: 1.1em;
+	background-color: inherit;
+	border-radius: inherit;
 }
 
 .cclike-actions {
@@ -826,38 +670,15 @@ html.swal2-height-auto {
 
 .swal2-confirm.cclike-confirmbutton {
 	margin: 0;
-	padding: 1em 1.7em;
+	min-height: 42px;
+	min-width: 110px;
+	padding: 12.5px 19.7px;
 	font-size: .82em;
 	font-weight: 600;
 	border-radius: var(--cc-btn-border-radius);
 	background: var(--cc-btn-primary-bg);
-	color: var(--cc-btn-primary-text);
+	color: var(--cc-btn-primary-color);
 	transition: background-color .25s ease;
-}
-
-@media screen and (min-width: 688px) {
-	.cclike-htmlcontainer::-webkit-scrollbar {
-		height: 100%;
-		width: .7em;
-		background: transparent;
-		border-radius: 0 .25em .25em 0;
-	}
-
-	.cclike-htmlcontainer::-webkit-scrollbar-thumb {
-		background: var(--cc-webkit-scrollbar-bg);
-		border: .25em solid var(--cc-bg);
-		border-radius: 100em;
-	}
-
-	.cclike-htmlcontainer::-webkit-scrollbar-thumb:hover {
-		background: var(--cc-webkit-scrollbar-bg-hover);
-	}
-
-	.cclike-htmlcontainer::-webkit-scrollbar-button,
-	#s-bl::-webkit-scrollbar-button {
-		height: 0 !important;
-		width: 0 !important;
-	}
 }
 
 @media screen and (max-width: 688px) {
@@ -870,51 +691,57 @@ html.swal2-height-auto {
 	}
 
 	.cclike-actions {
-		padding: 0 20.8px 18.28px 20.8px;
+		padding: 18.28px 20.8px;
 	}
 
 	.swal2-confirm.cclike-confirmbutton {
 		width: 100%;
-		padding: 0.9em 1.6em;
+		padding: 6.5px 19.7px;
+	}
+}
+
+.swal2-confirm.cclike-confirmbutton,
+.swal2-close.cclike-closebutton {
+	@extend %cc-button;
+}
+
+[class^=swal2] button:focus-visible {
+	@extend %link-focusable;
+}
+
+@mixin swal-button-hover($hover_or_active) {
+
+	.swal2-confirm.cclike-confirmbutton:#{$hover_or_active} {
+		@include cc-button_primary-hover;
+	}
+
+	.swal2-close.cclike-closebutton:#{$hover_or_active} {
+		@include cc-button_secondary-hover;
 	}
 }
 
 @media (hover: hover) {
-
-	.swal2-close.cclike-closebutton:hover,
-	.swal2-close.cclike-closebutton:active {
-		background: var(--cc-btn-secondary-hover-bg);
-		color: var(--cc-btn-secondary-hover-text);
-	}
-
-	.swal2-confirm.cclike-confirmbutton:hover,
-	.swal2-confirm.cclike-confirmbutton:active,
-	.swal2-confirm.cclike-confirmbutton:focus-visible {
-		background: var(--cc-btn-primary-hover-bg);
-		color: var(--cc-btn-primary-hover-text);
-	}
+	@include swal-button-hover('hover');
 }
 
 @media (hover: none) {
-
-	.swal2-close.cclike-closebutton:active {
-		background: var(--cc-btn-secondary-hover-bg);
-		color: var(--cc-btn-secondary-hover-text);
-	}
-
-	.swal2-confirm.cclike-confirmbutton:active,
-	.swal2-confirm.cclike-confirmbutton:focus-visible {
-		background: var(--cc-btn-primary-hover-bg);
-		color: var(--cc-btn-primary-hover-text);
-	}
+	@include swal-button-hover('active');
 }
 
-.cclike-popup.zoomin {
-	animation: .25s swal-zoomin ease;
+.cclike-container.fadein {
+	animation: var(--cc-modal-transition-duration) swal-fadein ease;
 }
 
-.cclike-popup.zoomout {
-	animation: .25s swal-zoomout ease;
+.cclike-container.fadeout {
+	animation: var(--cc-modal-transition-duration) swal-fadeout ease;
+}
+
+.cclike-popup.slidein {
+	animation: var(--cc-modal-transition-duration) swal-slidein ease;
+}
+
+.cclike-popup.slideout {
+	animation: var(--cc-modal-transition-duration) swal-slideout ease;
 }
 
 @keyframes swal-fadein {
@@ -922,18 +749,14 @@ html.swal2-height-auto {
 		background: transparent;
 	}
 
-	10% {
-		background: transparent;
-	}
-
 	100% {
-		background: rgba(0, 0, 0, var(--cc-overlay-opacity));
+		background: rgba(0, 0, 0, var(--overlay-opacity));
 	}
 }
 
 @keyframes swal-fadeout {
 	0% {
-		background: rgba(0, 0, 0, var(--cc-overlay-opacity));
+		background: rgba(0, 0, 0, var(--overlay-opacity));
 	}
 
 	100% {
@@ -941,27 +764,27 @@ html.swal2-height-auto {
 	}
 }
 
-@keyframes swal-zoomin {
+@keyframes swal-slidein {
 	0% {
 		opacity: 0;
-		transform: scale(0.96);
+		transform: translateY(1.6em);
 	}
 
 	100% {
 		opacity: 1;
-		transform: scale(1);
+		transform: translateY(0);
 	}
 }
 
-@keyframes swal-zoomout {
+@keyframes swal-slideout {
 	0% {
 		opacity: 1;
-		transform: scale(1);
+		transform: translateY(0);
 	}
 
 	100% {
 		opacity: 0;
-		transform: scale(0.96);
+		transform: translateY(1.6em);
 	}
 }
 
@@ -970,17 +793,21 @@ html.swal2-height-auto {
 /********************************************************************************/
 #navbar {
 	position: relative;
-	/* according to circle and popups */
+	//according to circle and popups
 	z-index: 800;
 }
 
 #navbar>#breadcumb {
 	overflow: hidden;
+	height: var(--navbar-shrinked);
+}
+
+#navbar>#breadcumb>.link:focus-visible {
+	@extend %link-focusable;
 }
 
 #navbar,
 #navbar>#breadcumb {
-	/* The transition is glitched rigth now on Chrome. Keep an eye on chromium bug #1463779 too see when it will be fixed. */
 	transition: height .15s ease, background-color .15s ease, backdrop-filter .4s ease, -webkit-backdrop-filter .4s ease;
 }
 
@@ -1011,7 +838,7 @@ html.swal2-height-auto {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: 17px;
+	font-size: 16px;
 	border-radius: 50%;
 	height: var(--back-width);
 	width: var(--back-width);
@@ -1046,7 +873,7 @@ html.swal2-height-auto {
 #navbar>#breadcumb>.link,
 #navbar>#breadcumb>#title-container,
 #navbar>#breadcumb>#title-container>* {
-	transition: background-color .15s ease, filter .15s ease, transform .2s ease-in-out, opacity .2s ease;
+	transition: background-color .15s ease, filter .15s ease, outline 0s ease, transform .2s ease-in-out, opacity .2s ease;
 }
 
 #navbar>#breadcumb>.link,
@@ -1054,39 +881,37 @@ html.swal2-height-auto {
 	transform: none;
 }
 
-@media (hover: hover) {
+@mixin breadcumb_link-hover($hover_or_active) {
 
-	#navbar>#breadcumb>.link:hover,
-	#navbar>#breadcumb>.link:focus-visible {
+	#navbar>#breadcumb>.link:#{$hover_or_active} {
 		background: var(--button-bg-hover-inverted);
 		filter: invert(1);
+		outline-color: var(--button-bg-hover-inverted) !important;
 	}
 }
 
-@media (hover: none) {
+@media (hover: hover) {
+	@include breadcumb_link-hover('hover');
+}
 
-	#navbar>#breadcumb>.link:active,
-	#navbar>#breadcumb>.link:focus-visible {
-		background: var(--button-bg-hover-inverted);
-		filter: invert(1);
-	}
+@media (hover: none) {
+	@include breadcumb_link-hover('active');
 }
 
 @media only screen and (min-width: 1024px) {
 	#navbar {
 		position: fixed;
-		height: 65px;
 		width: 100%;
 		left: 0;
 		top: 0;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0 50px;
+		padding: 0 50px 0 46px;
 	}
 
 	#navbar:not([class*="shrinked"]) {
-		height: var(--navbar-h-noshrink);
+		height: var(--navbar-noshrink);
 	}
 
 	#navbar.shrinked {
@@ -1108,6 +933,7 @@ html.swal2-height-auto {
 	#navbar>#breadcumb {
 		display: inline-flex;
 		min-width: 0;
+		padding-left: 4px;
 	}
 
 	#navbar>#breadcumb>#title-container,
@@ -1116,7 +942,7 @@ html.swal2-height-auto {
 	}
 
 	#navbar>#breadcumb>#title-container {
-		/* do not use padding for absolute positioned elements */
+		//do not use padding for absolute positioned elements
 		border: 10px solid transparent;
 		border-top: none;
 		border-bottom: none;
@@ -1131,14 +957,13 @@ html.swal2-height-auto {
 @media only screen and (min-width: 2101px) {
 	#navbar {
 		width: 100%;
-		padding: 0 20vw;
+		padding: 0 20vw 0 calc(20vw - 4px);
 	}
 }
 
 @media only screen and (max-width: 1023px) {
 	#navbar>#breadcumb {
 		top: 0;
-		height: 58px;
 		font-size: 20px;
 	}
 
@@ -1152,7 +977,7 @@ html.swal2-height-auto {
 	}
 
 	#navbar:not([class*="shrinked"])>#breadcumb {
-		height: var(--navbar-h-noshrink);
+		height: var(--navbar-noshrink);
 	}
 
 	#navbar.shrinked>#breadcumb {
@@ -1220,32 +1045,26 @@ html.swal2-height-auto {
 		margin-left: 10px;
 	}
 
-	@media (hover: hover) {
+	@mixin navbar_buttons-hover($hover_or_active) {
 
-		#navbar>.buttons>.button:hover>*,
+		#navbar>.buttons>.button:#{$hover_or_active}>*,
 		#navbar>.buttons>.button:focus-visible>* {
 			filter: none;
 		}
 
-		#navbar>.buttons>.button:hover>.icon,
+		#navbar>.buttons>.button:#{$hover_or_active}>.icon,
 		#navbar>.buttons>.button:focus-visible>.icon {
 			background: var(--button-bg-hover-inverted);
 			filter: invert(1);
 		}
 	}
 
+	@media (hover: hover) {
+		@include navbar_buttons-hover('hover');
+	}
+
 	@media (hover: none) {
-
-		#navbar>.buttons>.button:active>*,
-		#navbar>.buttons>.button:focus-visible>* {
-			filter: none;
-		}
-
-		#navbar>.buttons>.button:active>.icon,
-		#navbar>.buttons>.button:focus-visible>.icon {
-			background: var(--button-bg-hover-inverted);
-			filter: invert(1);
-		}
+		@include navbar_buttons-hover('active');
 	}
 }
 
@@ -1278,8 +1097,8 @@ html.swal2-height-auto {
 #index .blog-card {
 	user-select: none;
 	border-radius: 2em;
+	//harcoded cause it's the same for light/dark (it goes with v1/v2...)
 	color: #fafafa;
-	/* harcoded cause it's the same for light/dark (it goes with v1/v2...) */
 }
 
 #index .blog-card span {
@@ -1323,7 +1142,7 @@ html.swal2-height-auto {
 	}
 }
 
-/* Portfolio Header */
+//Portfolio Header
 #portfolio-header {
 	display: flex;
 	gap: 20px;
@@ -1361,7 +1180,7 @@ html.swal2-height-auto {
 	}
 }
 
-/* About Section */
+//About Section
 #about-section {
 	display: flex;
 	flex-direction: column;
@@ -1374,7 +1193,7 @@ html.swal2-height-auto {
 	gap: 34px;
 }
 
-/* Project Section */
+//Project Section
 .projects-section {
 	display: flex;
 	flex-direction: column;
@@ -1404,7 +1223,7 @@ html.swal2-height-auto {
 	}
 }
 
-/* Project Cards */
+//Project Cards
 .project-card {
 	display: flex;
 	flex-direction: column;
@@ -1425,6 +1244,7 @@ html.swal2-height-auto {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
+	line-clamp: 4;
 	-webkit-line-clamp: 4;
 	-webkit-box-orient: vertical;
 }
@@ -1433,6 +1253,7 @@ html.swal2-height-auto {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
+	line-clamp: 1;
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
 }
@@ -1451,7 +1272,7 @@ html.swal2-height-auto {
 	margin: 0 auto;
 }
 
-/* Download count badge */
+//Download count badge
 .download-badge {
 	position: absolute;
 	right: -7px;
@@ -1464,15 +1285,15 @@ html.swal2-height-auto {
 	font-weight: bold;
 	background: var(--red);
 	border: 1px solid var(--red-dark);
+	//harcoded cause it's the same for light/dark
 	color: #fafafa;
-	/* harcoded cause it's the same for light/dark */
 }
 
 .download-badge.load {
 	transform: none;
 }
 
-/* Blog cards */
+//Blog cards
 .blog-card {
 	display: flex;
 	flex-direction: column;
@@ -1592,9 +1413,9 @@ html.swal2-height-auto {
 
 #post .post-img>p,
 #post .post-img>p a {
+	//color hardcoded cause needed only for mix-blend-mode
 	color: #fff;
 	mix-blend-mode: difference;
-	/* color hardcoded cause needed only for mix-blend-mode */
 }
 
 @media only screen and (min-width: 1024px) {
@@ -1635,7 +1456,7 @@ html.swal2-height-auto {
 	align-items: center;
 	text-align: center;
 	user-select: none;
-	padding-top: calc(var(--navbar-h-noshrink) + 20px);
+	padding-top: calc(var(--navbar-noshrink) + 20px);
 	padding-bottom: 20px;
 }
 
@@ -1741,31 +1562,14 @@ html.swal2-height-auto {
 ********** REDUCED MOTION SPECIFIC CODE (need to be at the very end!) ***********
 /********************************************************************************/
 @media(prefers-reduced-motion: reduce) {
+
 	* {
 		scroll-behavior: auto;
 	}
 
-	#circle-reveal,
-	#navigation_container,
-	a:not([class]),
-	a.hoverable,
-	.button,
-	.button *,
-	.button.icon-link,
-	#navbar,
-	#navbar>#breadcumb,
-	#navbar>#breadcumb>.link,
-	#navbar>#breadcumb>#title-container,
-	#navbar>#breadcumb>#title-container>* {
-		transition: none;
-	}
-
-	.swal2-overlay--show-modal,
-	.swal2-modal {
-		animation: none !important;
-	}
-
-	.swal2-overlay {
-		transition: none !important;
+	*,
+	.swal2-confirm.cclike-confirmbutton,
+	.swal2-close.cclike-closebutton {
+		@include no-anim;
 	}
 }
