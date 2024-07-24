@@ -1,0 +1,131 @@
+---
+---
+@import "common";
+
+html.show--preferences {
+	height: auto;
+	overflow-y: hidden;
+}
+
+#cc-main * {
+	user-select: none !important;
+}
+
+.pm__title {
+	font-size: 1.3em !important;
+}
+
+.pm__header,
+.pm__footer {
+	border: none !important;
+}
+
+.pm__body {
+	padding: 0 1.6em !important;
+}
+
+.pm__section:not(:first-child) {
+	transition: none !important;
+	background: var(--cc-bg) !important;
+	border: 1px solid var(--cc-separator-border-color) !important;
+}
+
+.pm__section-arrow {
+	transition: none;
+}
+
+.pm__section-arrow svg {
+	transition: transform .25s ease;
+}
+
+.section__toggle:disabled~.toggle__icon {
+	transition: none !important;
+}
+
+.section__toggle-wrapper .toggle__icon-circle {
+	transition: transform .25s ease !important;
+}
+
+.section__toggle-wrapper .toggle__icon {
+	transition: background-color .25s ease, transform .25s ease !important;
+}
+
+#cc-main .pm__section-desc-wrapper,
+#cc-main .cm__desc {
+	@extend %cc-text;
+}
+
+.pm__btn,
+.cm__btn,
+.pm__close-btn,
+.pm__section-title {
+	@extend %cc-button;
+}
+
+.cm__btn:focus-visible,
+.pm__close-btn:focus-visible,
+.pm__btn:focus-visible,
+.pm__section-title:focus-visible,
+.section__toggle:focus-visible,
+.cc-link:focus-visible {
+	@extend %link-focusable;
+}
+
+button.pm__section-title {
+	border: 1px solid var(--cc-cookie-category-block-border) !important;
+}
+
+.pm__btn:not(.pm__btn--secondary):hover,
+.cm__btn:not(.cm__btn--secondary):hover {
+	@extend %cc-button_primary-hover_override;
+}
+
+.pm__btn.pm__btn--secondary:hover,
+.cm__btn.cm__btn--secondary:hover,
+.pm__close-btn:hover {
+	@extend %cc-button_secondary-hover_override;
+}
+
+button.pm__section-title:hover {
+	background: var(--cc-cookie-category-block-bg) !important;
+}
+
+@mixin cc-button-hover($hover_or_active) {
+
+	.pm__btn:not(.pm__btn--secondary):#{$hover_or_active},
+	.cm__btn:not(.cm__btn--secondary):#{$hover_or_active} {
+		@include cc-button_primary-hover;
+	}
+
+	.pm__btn.pm__btn--secondary:#{$hover_or_active},
+	.cm__btn.cm__btn--secondary:#{$hover_or_active},
+	.pm__close-btn:#{$hover_or_active} {
+		@include cc-button_secondary-hover;
+	}
+
+	button.pm__section-title:#{$hover_or_active} {
+		box-shadow: 0 0 0 100vh var(--cc-btn-category-shadow) inset !important;
+	}
+}
+
+@media (hover: hover) {
+	@include cc-button-hover('hover');
+}
+
+@media (hover: none) {
+	@include cc-button-hover('active');
+}
+
+@media(prefers-reduced-motion: reduce) {
+
+	.cclike-container,
+	.cclike-container>*,
+	.pm__btn,
+	.cm__btn,
+	.pm__close-btn,
+	.pm__section-title,
+	#cc-main .toggle__icon,
+	#cc-main .toggle__icon>* {
+		@include no-anim;
+	}
+}
