@@ -3,3 +3,8 @@ title: "Massi-X, Your favorite developer!"
 
 # My name for use throughout the site
 author: "Massi-X"
+
+# SASS settings
+sass:
+  style: compressed
+  sourcemap: development
