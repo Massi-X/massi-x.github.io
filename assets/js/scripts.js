@@ -57,119 +57,6 @@ const mediaQuery = matchMedia('(prefers-reduced-motion: reduce)');
 window.reduceanimation = mediaQuery.matches;
 mediaQuery.addEventListener('change', () => window.reduceanimation = mediaQuery.matches);
 
-//create cookieconsent object and show it to the user if necessary
-window.cc = initCookieConsent();
-
-//configure the plugin
-cc.run({
-	autorun: false,
-	current_lang: 'en', //defined languages
-	auto_language: 'document', //language to display if available
-	page_scripts: true, //block scripts until confirm
-	autoclear_cookies: true, //clear cookies when changing prefs
-	force_consent: true, //must consent on first visit before anything else
-	gui_options: {
-		consent_modal: { //consent layout
-			layout: 'cloud',
-			position: 'middle center',
-			transition: 'zoom',
-		},
-		settings_modal: { //settngs layout
-			layout: 'box',
-			transition: 'zoom'
-		}
-	},
-	onChange: (cookie, changed_preferences) => {
-		// If analytics category is disabled => disable google analytics https://github.com/orestbida/cookieconsent/issues/249#issuecomment-1048675791
-		togglegtag(cc.allowedCategory('analytics'));
-	},
-
-	languages: { //define language(s)
-		'en': {
-			consent_modal: { //main modal title, description, buttons
-				title: strings.en.cookiemodaltitle,
-				description: strings.en.cookiemodaldesc + ' <button type="button" data-cc="c-settings" class="cc-link">' + strings.en.cookiemodalbtn + '</button>',
-				primary_btn: {
-					text: strings.en.acceptall,
-					role: 'accept_all'
-				},
-				secondary_btn: {
-					text: strings.en.rejectall,
-					role: 'accept_necessary'
-				}
-			},
-			settings_modal: { //more settings modal
-				title: strings.en.cookiesettingstitle,
-				save_settings_btn: strings.en.savesettings,
-				accept_all_btn: strings.en.acceptall,
-				reject_all_btn: strings.en.rejectall,
-				close_btn_label: strings.en.close,
-				cookie_table_headers: [
-					{ col1: strings.en.name },
-					{ col2: strings.en.domain },
-					{ col3: strings.en.expiration },
-					{ col4: strings.en.description }
-				],
-				blocks: [ //the expandable blocks that contains singular elements that can be enabled or disabled
-					{
-						description: strings.en.cookiesettingsdesc
-					}, {
-						title: strings.en.cookiesettings_blockstricttitle,
-						description: strings.en.cookiesettings_blockstrictdesc,
-						toggle: {
-							value: 'necessary',
-							enabled: true,
-							readonly: true
-						}
-					}, {
-						title: strings.en.cookiesettings_blockanalyticstitle,
-						description: strings.en.cookiesettings_blockanalyticsdesc,
-						toggle: {
-							value: 'analytics',
-							enabled: true,
-							readonly: false
-						},
-						cookie_table: [
-							{
-								col1: '^_ga', //col1 must match the cookie name for correct handling of auto deletion!
-								col2: 'google.com',
-								col3: '2 ' + strings.en.years,
-								col4: strings.en.cookiesettings_blockanalyticsgacookiedesc,
-								is_regex: true
-							},
-							{
-								col1: '_gid',
-								col2: 'google.com',
-								col3: '1 ' + strings.en.day,
-								col4: strings.en.cookiesettings_blockanalyticsgidcookiedesc,
-							}
-						]
-					}, {
-						title: strings.en.moreinfo,
-						description: strings.en.cookiesettingsmoreinfo + ' <a href="/privacy_policy/website.html" class="cc-link">' + strings.en.privacypolicy + '</a>.',
-					}
-				]
-			}
-		}
-	}
-});
-
-//apply the correct light/dark theme to cookieconsent and iOS splash screen (+ generate it)
-ccColorScheme(matchMedia("(prefers-color-scheme: dark)").matches);
-//buildiOSSplash(matchMedia("(prefers-color-scheme: dark)").matches); disabled because of https://github.com/elegantapp/pwa-asset-generator/issues/93
-
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
-	ccColorScheme(e.matches);
-	//buildiOSSplash(e.matches); disabled because of https://github.com/elegantapp/pwa-asset-generator/issues/93
-});
-
-//show cookieconsent if needed only outside of privacy policy page
-ccShowHideDinamic();
-
-//for Analytics
-window.dataLayer = window.dataLayer || [];
-togglegtag(cc.allowedCategory('analytics'));
-
 //global 'esc' handler
 onkeydown = e => {
 	if (e.key === "Escape") {
@@ -213,6 +100,9 @@ onresize = () => {
 		document.body.classList.remove("noanim-all");
 	}, 100);
 };
+
+//init cookieconsent
+cc_init(ccShowHideDinamic);
 
 //custom navigation handling (transitions and errors)
 if ('navigation' in window) {
@@ -649,12 +539,6 @@ function slideArrow(out) {
 }
 
 /**
- * Correctly apply cookieconsent dark/light theme
- * @param {boolean} dark we are in dark mode
- */
-function ccColorScheme(dark) { dark ? document.body.classList.add('c_darkmode') : document.body.classList.remove('c_darkmode'); }
-
-/**
 * Generate and attach iOS Splash screen
 * thanks to https://github.com/avadhesh18/iosPWASplash !
 * see also https://github.com/elegantapp/pwa-asset-generator/issues/93 (could things just work?)
@@ -701,11 +585,11 @@ function openPopup(details) {
 		showCloseButton: true,
 		showClass: {
 			backdrop: 'fadein',
-			popup: 'zoomin'
+			popup: 'slidein'
 		},
 		hideClass: {
 			backdrop: 'fadeout',
-			popup: 'zoomout'
+			popup: 'slideout'
 		},
 		customClass: {
 			container: 'cclike-container',
@@ -726,7 +610,7 @@ function openPopup(details) {
  */
 function closeAllPopups() {
 	swal.close();
-	cc.hideSettings();
+	CookieConsent.hidePreferences();
 }
 
 /**
@@ -741,31 +625,17 @@ function isAnyPopupOpen() {
  * Shows the cc popup only if outside of the privacy policy page and only if needed
  */
 function ccShowHideDinamic() {
-	if (location.pathname !== '/privacy_policy/website.html' && !cc.validConsent())
-		cc.show();
-	else if (location.pathname === '/privacy_policy/website.html' || cc.validConsent()) {
-		cc.hide();
-		cc.hideSettings();
+	if (location.pathname !== '/privacy_policy/website.html' && !CookieConsent.validConsent())
+		CookieConsent.show();
+	else if (location.pathname === '/privacy_policy/website.html' || CookieConsent.validConsent()) {
+		CookieConsent.hide();
+		CookieConsent.hidePreferences();
 	}
 }
 
 /********************************************************************************
 ********************************* Misc functions ********************************
 /********************************************************************************/
-
-//Analytics as provided by google
-function gtag() { dataLayer.push(arguments); }
-
-//Analytics as provided by Google
-function togglegtag(enable) {
-	if (enable) {
-		gtag('consent', 'update', { 'analytics_storage': 'granted' });
-		gtag('js', new Date());
-		gtag('config', 'G-H8RP322KHJ');
-	} else
-		gtag('consent', 'update', { 'analytics_storage': 'denied' });
-}
-
 /**
  * Check if the current window is running in standalone mode (read: is a PWA)
  * @returns {Boolean} true if the window is standalone, false otherwise
