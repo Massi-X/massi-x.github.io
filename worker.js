@@ -1,4 +1,4 @@
-const cacheTimeShort = 1000 * 60 * 60 * 24 * 1;
+const cacheTimeShort = 1000 * 60 * 60 * 2;
 const cacheTimeLong = 1000 * 60 * 60 * 24 * 30;
 const cacheForceRefresh = 1000 * 60 * 60 * 24 * 60;
 const page404 = '/404.html';
