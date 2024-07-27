@@ -791,6 +791,7 @@ html.swal2-height-auto {
 	position: relative;
 	//according to circle and popups
 	z-index: 800;
+	height: var(--navbar-shrinked);
 }
 
 #navbar>#breadcumb {
