@@ -50,9 +50,21 @@ html.show--preferences {
 	transition: background-color .25s ease, transform .25s ease !important;
 }
 
+#cc-main .cm__btns {
+	border-top: none !important;
+}
+
+#cc-main .cm__desc {
+	padding-bottom: 0 !important;
+}
+
 #cc-main .pm__section-desc-wrapper,
 #cc-main .cm__desc {
 	@extend %cc-text;
+}
+
+#cc-main .cm__link-group {
+	justify-content: right !important;
 }
 
 .pm__btn,
