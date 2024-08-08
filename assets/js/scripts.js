@@ -618,7 +618,7 @@ function closeAllPopups() {
  * @returns {Boolean}
  */
 function isAnyPopupOpen() {
-	return document.documentElement.classList.contains('show--settings') || swal.isVisible();
+	return document.documentElement.classList.contains('show--preferences') || swal.isVisible();
 }
 
 /**
