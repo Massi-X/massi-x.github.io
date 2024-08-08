@@ -170,6 +170,8 @@ p {
 	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;
+	//Move up the same height as navbar
+	margin-top: calc(var(--navbar-noshrink) * -1);
 	opacity: 0;
 	transition: opacity .1s ease, transform .4s ease;
 }
