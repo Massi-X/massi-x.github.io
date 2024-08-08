@@ -124,12 +124,12 @@ if ('navigation' in window) {
 
 			if (window.htmlClasses != currentClasses) { //a popup is being shown
 				if (!window.htmlClasses.includes('swal2-shown') && currentClasses.includes('swal2-shown')
-					|| !window.htmlClasses.includes('show--settings') && currentClasses.includes('show--settings')) {
+					|| !window.htmlClasses.includes('show--preferences') && currentClasses.includes('show--preferences')) {
 					if (isStandalone())
 						navigation.navigate('', { history: 'push', state: { handle: NAVIGATION_POPUP } });
 				}
 				else if (window.htmlClasses.includes('swal2-shown') && !currentClasses.includes('swal2-shown') ||
-					window.htmlClasses.includes('show--settings') && !currentClasses.includes('show--settings')) { //a popup is being closed
+					window.htmlClasses.includes('show--preferences') && !currentClasses.includes('show--preferences')) { //a popup is being closed
 					//only if this is a dummy state execute the hook
 					if (isStandalone() && navigation.currentEntry.getState() !== undefined && navigation.currentEntry.getState().handle == NAVIGATION_POPUP)
 						//settimeout needed to correctly handle navigate event combined with popup close
