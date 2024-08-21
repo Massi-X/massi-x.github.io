@@ -2,6 +2,17 @@
 ---
 @import "common";
 
+//custom button for preferences
+.cookie-settings {
+	display: ruby;
+	color: var(--cookieconsent-link);
+}
+
+.cookie-settings>i {
+	padding-right: 3px;
+}
+
+//preferences and main popups
 html.show--preferences {
 	height: auto;
 	overflow-y: hidden;
