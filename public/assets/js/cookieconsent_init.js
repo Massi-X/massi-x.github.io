@@ -15,13 +15,21 @@ function cc_init(show_func) {
 	//dinamically load the cookie button description (mainly for subdomain where strings is only a js object)
 	document.querySelector('a.cookie-settings>span').innerHTML = strings.en.managecookie;
 
+	let domain = 'massi-x.dev';
 	let cookie_ga = /^(_ga)/;
 	let cookie_gid = '_gid';
-	let privacy_link = '<a href="https://massi-x.dev/privacy_policy/website.html" class="cc-link">' + strings.en.privacypolicy + '</a>';
+	let privacy_link = '<a href="https://' + domain + '/privacy_policy/website.html" class="cc-link">' + strings.en.privacypolicy + '</a>';
 
 	CookieConsent.run({ //FIXME transition bug https://github.com/orestbida/cookieconsent/issues/697
 		autoShow: false,
 		disablePageInteraction: true, //must consent on first visit before anything else
+
+		cookie: {
+			name: 'cc_pref',
+			domain: domain,
+			expiresAfterDays: acceptType => { return acceptType === 'all' ? 365 : 182; },
+		},
+
 		guiOptions: {
 			consentModal: { //consent layout
 				layout: 'cloud',
@@ -33,26 +41,25 @@ function cc_init(show_func) {
 				equalWeightButtons: false
 			}
 		},
-		onChange: ({ cookie, changedCategories, changedServices }) => {
-			// If analytics category is disabled => disable google analytics https://github.com/orestbida/cookieconsent/issues/249#issuecomment-1048675791
-			togglegtag(CookieConsent.acceptedCategory('analytics'));
-		},
-		onModalReady: ({ modalName, modal }) => {
-			//show cookieconsent if needed only outside of privacy policy page
-			show_func();
-		},
 
 		categories: {
 			necessary: {
 				enabled: true,
 				readOnly: true
 			},
+
 			analytics: {
 				readOnly: false,
 				autoClear: {
 					cookies: [
-						{ name: cookie_ga },
-						{ name: cookie_gid }
+						{
+							name: cookie_ga,
+							domain: domain
+						},
+						{
+							name: cookie_gid,
+							domain: domain
+						}
 					]
 				}
 			}
@@ -63,6 +70,7 @@ function cc_init(show_func) {
 			autoDetect: 'document',
 			translations: {
 				en: {
+
 					consentModal: { //main modal title, description, buttons
 						title: strings.en.cookiemodaltitle,
 						description: strings.en.cookiemodaldesc,
@@ -71,6 +79,7 @@ function cc_init(show_func) {
 						showPreferencesBtn: strings.en.cookiesettingstitle,
 						footer: privacy_link
 					},
+
 					preferencesModal: { //more settings modal
 						title: strings.en.cookiesettingstitle,
 						savePreferencesBtn: strings.en.savesettings,
@@ -118,6 +127,16 @@ function cc_init(show_func) {
 					}
 				}
 			}
+		},
+
+		onChange: ({ cookie, changedCategories, changedServices }) => {
+			// If analytics category is disabled => disable google analytics https://github.com/orestbida/cookieconsent/issues/249#issuecomment-1048675791
+			togglegtag(CookieConsent.acceptedCategory('analytics'));
+		},
+
+		onModalReady: ({ modalName, modal }) => {
+			//show cookieconsent if needed only outside of privacy policy page
+			show_func();
 		}
 	});
 
