@@ -193,7 +193,7 @@ p {
 	display: flex;
 	flex-direction: column;
 	//Move up the same height as navbar
-	margin-top: calc(var(--navbar-noshrink) * -1);
+	padding-top: var(--navbar-noshrink);
 	opacity: 0;
 	transition: opacity .1s ease, transform .4s ease;
 }
@@ -230,14 +230,14 @@ p {
 
 #footer,
 .content {
-	margin: 120px 20vw 0;
+	margin: 0 20vw 0;
 }
 
 @media only screen and (max-width: 2100px) {
 
 	#footer,
 	.content {
-		margin: 120px 16vw 0;
+		margin: 0 16vw 0;
 	}
 }
 
@@ -245,7 +245,7 @@ p {
 
 	#footer,
 	.content {
-		margin: 120px 175px 0;
+		margin: 0 175px 0;
 	}
 }
 
@@ -253,7 +253,7 @@ p {
 
 	#footer,
 	.content {
-		margin: 92px 75px 0;
+		margin: 0 75px 0;
 	}
 }
 
@@ -261,7 +261,7 @@ p {
 
 	#footer,
 	.content {
-		margin: 92px 50px 0;
+		margin: 0 50px 0;
 	}
 }
 
@@ -269,7 +269,7 @@ p {
 
 	#footer,
 	.content {
-		margin: 92px 20px 0;
+		margin: 0 20px 0;
 	}
 }
 
@@ -812,14 +812,17 @@ html.swal2-height-auto {
 ************************************ Header *************************************
 /********************************************************************************/
 #navbar {
-	position: relative;
+	position: fixed;
 	//according to circle and popups
 	z-index: 800;
-	height: var(--navbar-shrinked);
+	height: var(--navbar-noshrink);
 }
 
 #navbar>#breadcumb {
 	overflow: hidden;
+}
+
+#navbar[class*="shrinked"]>#breadcumb {
 	height: var(--navbar-shrinked);
 }
 
@@ -921,7 +924,6 @@ html.swal2-height-auto {
 
 @media only screen and (min-width: 1024px) {
 	#navbar {
-		position: fixed;
 		width: 100%;
 		left: 0;
 		top: 0;
@@ -936,6 +938,7 @@ html.swal2-height-auto {
 	}
 
 	#navbar.shrinked {
+		height: var(--navbar-shrinked);
 		border-bottom: 1px solid var(--navbar-border);
 		background-color: var(--navbar-bg);
 		backdrop-filter: blur(10px);
@@ -984,6 +987,7 @@ html.swal2-height-auto {
 
 @media only screen and (max-width: 1023px) {
 	#navbar>#breadcumb {
+		height: var(--navbar-noshrink);
 		top: 0;
 		font-size: 20px;
 	}
@@ -995,10 +999,6 @@ html.swal2-height-auto {
 		left: 0;
 		display: flex;
 		align-items: center;
-	}
-
-	#navbar:not([class*="shrinked"])>#breadcumb {
-		height: var(--navbar-noshrink);
 	}
 
 	#navbar.shrinked>#breadcumb {
@@ -1111,10 +1111,6 @@ html.swal2-height-auto {
 	gap: 60px;
 }
 
-#index.content {
-	margin-top: 225px;
-}
-
 #index .blog-card {
 	user-select: none;
 	border-radius: 2em;
@@ -1146,17 +1142,7 @@ html.swal2-height-auto {
 	background-image: linear-gradient(43deg, #FAD961 0%, #ffb388 50%, #fff5d3 100%);
 }
 
-@media only screen and (max-width: 1600px) {
-	#index.content {
-		margin-top: 225px;
-	}
-}
-
 @media only screen and (max-width: 1023px) {
-	#index.content {
-		margin-top: 100px;
-	}
-
 	#index .blog-card {
 		text-align: center;
 		justify-content: center;
