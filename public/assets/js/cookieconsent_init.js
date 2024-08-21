@@ -12,9 +12,12 @@ function cc_init(show_func) {
 		return;
 	}
 
+	//dinamically load the cookie button description (mainly for subdomain where strings is only a js object)
+	document.querySelector('a.cookie-settings>span').innerHTML = strings.en.managecookie;
+
 	let cookie_ga = /^(_ga)/;
 	let cookie_gid = '_gid';
-	let privacy_link = '<a href="/privacy_policy/website.html" class="cc-link">' + strings.en.privacypolicy + '</a>';
+	let privacy_link = '<a href="https://massi-x.dev/privacy_policy/website.html" class="cc-link">' + strings.en.privacypolicy + '</a>';
 
 	CookieConsent.run({ //FIXME transition bug https://github.com/orestbida/cookieconsent/issues/697
 		autoShow: false,
