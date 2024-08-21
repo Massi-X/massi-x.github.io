@@ -8,7 +8,7 @@
 //configure cookieconsent
 function cc_init(show_func) {
 	if (typeof strings === 'undefined') {
-		console.error('No strings object found! Please load the mmain string file separately.');
+		console.error('No strings object found! Please load the main string file separately.');
 		return;
 	}
 
