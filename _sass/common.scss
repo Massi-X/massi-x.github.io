@@ -48,6 +48,7 @@
 
 @media (prefers-color-scheme: light) {
 	:root {
+		--pure: #000;
 		--text: #212121;
 		--background: #fafafa;
 		--link-highlight: rgba(0, 0, 0, 0.1);
@@ -85,6 +86,7 @@
 
 @media (prefers-color-scheme: dark) {
 	:root {
+		--pure: #fff;
 		--text: #fafafa;
 		--background: #161616;
 		--link-highlight: rgba(255, 255, 255, 0.2);
