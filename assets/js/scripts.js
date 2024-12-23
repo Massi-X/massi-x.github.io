@@ -755,7 +755,7 @@ function initDownloadBadges() {
 		if (item != null || type != null) {
 			sendMessage({
 				command: 'download_count',
-				request: globals.base_url + '/workers/download_count.php?' + (item != null ? 'item=' + item : '') + (type != null ? '&type=' + type : '')
+				request: globals.optional_base_url + '/workers/download_count.php?' + (item != null ? 'item=' + item : '') + (type != null ? '&type=' + type : '')
 			})
 				.then(json => {
 					elem.innerHTML = json.downloads_readable;

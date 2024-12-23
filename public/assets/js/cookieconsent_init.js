@@ -1,6 +1,6 @@
 /**
  * Load the unified cc dialog containing standard information reusable on more subdomains.
- * You MUST preventively load the strings array separately (from public/assets/js/strings.js)
+ * You MUST preventively load the strings and other useful data separately (from public/assets/js/common.js)
  * @param {*} show_func callable function that contains the logic to show the popup when needed (i.e. outside of the privacy policy page)
  * @returns null
  */
@@ -15,7 +15,7 @@ function cc_init(show_func) {
 	//dinamically load the cookie button description (mainly for subdomain where strings is only a js object)
 	document.querySelector('a.cookie-settings>span').innerHTML = strings.en.managecookie;
 
-	let domain = 'massi-x.dev';
+	let domain = globals.cookie_domain;
 	let cookie_ga = /^(_ga)/;
 	let cookie_gid = '_gid';
 	let privacy_link = '<a href="https://' + domain + '/privacy_policy/website.html" class="cc-link">' + strings.en.privacypolicy + '</a>';

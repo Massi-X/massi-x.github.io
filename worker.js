@@ -1,7 +1,12 @@
+---
+comment: "this file contains jekyll variables"
+---
+
 const cacheTimeShort = 1000 * 60 * 60 * 2;
 const cacheTimeLong = 1000 * 60 * 60 * 24 * 30;
 const cacheForceRefresh = 1000 * 60 * 60 * 24 * 60;
 const page404 = '/404.html';
+const environment = '{% if site.environment == "development" %}development{% else %}production{% endif %}';
 
 //array of folders and files to cache for a longer time (cacheTimeLong)
 const longCache = [
@@ -54,18 +59,22 @@ self.addEventListener('message', event => {
 			checkCache(event.data.request, cacheTimeShort).then(cache => {
 				let answer = false;
 
-				if (cache.cache != null) { //always answer fast if any cache is available
-					cache.cache.json().then(json => event.ports[0].postMessage(json));
+				//always answer fast if any cache is available and no fresh is required
+				if (cache.cache != null && (event.data.options == null || !event.data.options.fresh)) {
+					cache.cache.json().then(json => {
+						if (cache.expired) json._cache_state = 'expired'; //add expire notice to let the client know
+						event.ports[0].postMessage(json);
+					});
 					answer = true;
 				}
 
-				if (cache.expired) { //then check if we need to refresh/build the cache
+				//after answer, check anyway if we need to refresh/build the cache || if fresh is given
+				if (cache.expired || event.data.options != null && event.data.options.fresh) {
 					fetch(event.data.request).then(res => {
 						if (res.ok) { //if the response is 2xx then we can proceed and cache the page + return result
 							caches.open('cache').then(cache => {
 								cache.put(event.data.request, res.clone());
-								if (!answer) //only return if not already posted back
-									res.json().then(json => event.ports[0].postMessage(json));
+								if (!answer) res.json().then(json => event.ports[0].postMessage(json)); //only return if not already posted back
 							});
 						}
 						else throw new Error("Network response was not OK");
@@ -130,32 +139,34 @@ self.addEventListener('fetch', event => {
 
 //convenient method to check for match of given URL in cache
 async function checkCache(url, time) {
-	if (time === undefined) time = cacheTimeShort;
+	if (environment !== 'development') { //always return fresh content when in development mode
+		if (time === undefined) time = cacheTimeShort;
 
-	const cache = await caches.open('cache');
-	const cached = await cache.match(url);
+		const cache = await caches.open('cache');
+		const cached = await cache.match(url);
 
-	if (url == page404) //never delete 404!
-		return {
-			cache: cached,
-			expired: false
-		};
+		if (url == page404) //never delete 404!
+			return {
+				cache: cached,
+				expired: false
+			};
 
-	if (cached) { //if cache is there always return it
-		const date = new Date(cached.headers.get('date'));
-		let expired = false;
+		if (cached) { //if cache is there always return it
+			const date = new Date(cached.headers.get('date'));
+			let expired = false;
 
-		if (Date.now() >= date.getTime() + time)
-			expired = true;
+			if (Date.now() >= date.getTime() + time)
+				expired = true;
 
-		return {
-			cache: cached,
-			expired: expired
-		};
+			return {
+				cache: cached,
+				expired: expired
+			};
+		}
 	}
 
 	return {
 		cache: null,
 		expired: true
-	};;
+	};
 }
