@@ -548,7 +548,7 @@ function buildiOSSplash(dark) {
 	document.head.querySelectorAll('[rel=apple-touch-startup-image]').forEach(elem => elem.remove()); //remove existing splashscreens
 
 	const color = getComputedStyle(document.body).getPropertyValue('--background'); //load the color value from css
-	const icon = dark ? 'avatar-dark.svg' : 'avatar.svg'; //TODO If ever restored try if everything works with svg
+	const icon = dark ? 'avatar-dark.svg' : 'avatar.svg'; //TODO If ever restored try that everything works with svg
 
 	iosPWASplash('/assets/images/' + icon, color); //generate new ones
 }
@@ -737,6 +737,13 @@ async function injectHomepage() {
 
 /**
  * Init the download count badges on any page if set in html.
+ * See also @initDownloadBadge()
+ */
+function initDownloadBadges() {
+	document.querySelectorAll('.download-badge').forEach(elem => initDownloadBadge(elem));
+}
+
+/**
  * Sends a request to the service worker that itself sends a request to the web worker and then handle cache and everything.
  * 
  * BE CAREFUL! This only works if the client supports service workers because it totally relies on it.
@@ -747,23 +754,90 @@ async function injectHomepage() {
  * 		<span class="download-count" data-item="optional|required" data-type="optional|required"></span>
  * </span>
  */
-function initDownloadBadges() {
-	document.querySelectorAll('.download-count').forEach(elem => {
-		let item = elem.getAttribute('data-item');
-		let type = elem.getAttribute('data-type');
+function initDownloadBadge(downloadBadge) {
+	let textContainer = downloadBadge.children[1]; //as the structure is defined, we can rely on simple indexes
+	let item = textContainer.getAttribute('data-item');
+	let type = textContainer.getAttribute('data-type');
+	let fresh = downloadBadge.classList.contains('load');
 
-		if (item != null || type != null) {
-			sendMessage({
-				command: 'download_count',
-				request: globals.optional_base_url + '/workers/download_count.php?' + (item != null ? 'item=' + item : '') + (type != null ? '&type=' + type : '')
-			})
-				.then(json => {
-					elem.innerHTML = json.downloads_readable;
-					elem.parentElement.classList.add('load');
-				})
-				.catch(error => { }); //ignored
-		}
-	});
+	if (item == null && type == null) return; //invalid data from html element
+
+	if (!fresh) { //init counter on page load
+		request(json => {
+			textContainer.innerHTML = '';
+			[...json.downloads_readable].forEach(digit => textContainer.innerHTML += '<span data-type="digit">' + digit + '</span>');
+			downloadBadge.classList.add('load');
+
+			if (json._cache_state == 'expired') initDownloadBadge(downloadBadge); //request a refresh for this counter if expired
+		});
+	} else { //request update and animate counter when the user "sees" the element
+		new IntersectionObserver((entries, observer) => {
+			if (!entries[0].isIntersecting) return; //we only have one entry (thus the [0]) + the callback is called on initialization so we should skip that
+
+			observer.disconnect(); //disconnect as soon as possible
+
+			//request data and animate
+			request(json => {
+				setTimeout(() => {
+					//old counter digit and length
+					let previousDigits = textContainer.childNodes;
+					let previousCount = Object.keys(previousDigits).length;
+
+					//new counter digit and length
+					let newDigits = [...json.downloads_readable];
+					let newCount = Object.keys(newDigits).length;
+
+					//get the longer counter to iterate through
+					let longer = newCount > previousCount ? newCount : previousCount;
+
+					//loop over the longer counter (longer != highest)
+					for (let i = 0; i < longer; ++i) {
+						//get previous digit, if undefined then create a dummy element so that later we can insert the new one
+						let previousDigit = previousDigits[i];
+						if (previousDigit === undefined) {
+							let dummy = document.createElement('span');
+							dummy.innerHTML = '&nbsp;';
+							dummy.setAttribute('data-type', 'digit');
+							dummy.style = 'width: 0px';
+							previousDigit = textContainer.appendChild(dummy);
+						}
+
+						let previousDigitValue = previousDigit.innerText;
+						let newDigitValue = newDigits[i];
+
+						if (previousDigitValue !== newDigitValue) {
+							//inject new digit
+							let innerHTML = '<span class="old">' + previousDigitValue + '</span>';
+							if (newDigitValue !== undefined) innerHTML += '<span class="new">' + newDigitValue + '</span></span>';
+							else innerHTML += '<span class="new"></span></span>';
+
+							previousDigit.innerHTML = innerHTML;
+
+							setTimeout(() => {
+								let previousWidth = previousDigit.childNodes[0].getClientRects()[0].width; //0 is the 'old' span element
+								previousDigit.style.width = `${previousWidth}px`; //temporarily fix old width so that it will animate later
+								previousDigit.classList.add('replace'); //add 'replace' class that will animate the digit
+								previousDigit.style = `width: ${previousDigit.childNodes[1].getClientRects()[0].width}px`; //set new width and animate
+							}, 40 * i); //animate digits one after the other
+						}
+					}
+				}, 250); //insert a little timeout to give time to better see the animation
+			});
+		}, { threshold: 1.0 }).observe(downloadBadge.parentElement); //observe on the card, not badge itself
+	}
+
+	//inner function to get data from worker
+	function request(callback) {
+		sendMessage({
+			command: 'download_count',
+			options: { "fresh": fresh },
+			request: globals.optional_base_url + '/workers/download_count.php?'
+				+ (item != null ? '&item=' + item : '')
+				+ (type != null ? '&type=' + type : '')
+		})
+			.then(json => callback(json))
+			.catch(error => { }); //ignored
+	}
 }
 
 /**

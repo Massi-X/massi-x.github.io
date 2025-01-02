@@ -1271,9 +1271,11 @@ html.swal2-height-auto {
 	margin: 0 auto;
 }
 
-//Download count badge
+//Download count-badge
 .download-badge {
 	position: absolute;
+	display: inline-flex;
+    align-items: baseline;
 	right: -7px;
 	top: 5px;
 	transition: .15s ease transform;
@@ -1290,6 +1292,37 @@ html.swal2-height-auto {
 
 .download-badge.load {
 	transform: none;
+}
+
+.download-count {
+	padding-left: 3px;
+}
+
+.download-count .old {
+	transition: .15s ease transform;
+}
+
+.download-count .new {
+	position: absolute;
+	left: 0;
+	top: 0;
+	transform: translateY(100%);
+	transition: .15s ease transform;
+}
+
+.download-count span[data-type=digit] {
+	position: relative;
+	display: inline-flex;
+	overflow: hidden;
+	transition: .1s ease width;
+}
+
+.download-count span[data-type=digit].replace .new {
+	transform: translateY(0);
+}
+
+.download-count span[data-type=digit].replace .old {
+	transform: translateY(-100%);
 }
 
 //Blog cards
