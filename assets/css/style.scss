@@ -71,6 +71,11 @@ img[alt]:before {
 	border-radius: inherit;
 }
 
+//disable link previews in safari which scramble buttons up
+a {
+	-webkit-touch-callout: none;
+}
+
 .flex {
 	display: flex;
 }
