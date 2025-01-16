@@ -14,6 +14,7 @@
 @media all and (display-mode: standalone) {
 	* {
 		//prevent the text to be selected everywhere in PWA
+		-webkit-user-select: none;
 		user-select: none;
 	}
 }
@@ -44,6 +45,7 @@ body {
 
 img,
 br {
+	-webkit-user-select: none;
 	user-select: none;
 }
 
@@ -277,6 +279,7 @@ p {
 ************************************ Footer *************************************
 /********************************************************************************/
 #footer {
+	-webkit-user-select: none;
 	user-select: none;
 	position: relative;
 	margin-top: auto !important;
@@ -315,6 +318,7 @@ img.lazy-img.lazy-complete {
 ********************************** Text styles **********************************
 /********************************************************************************/
 .main-title {
+	-webkit-user-select: none;
 	user-select: none;
 	margin-top: 0;
 	font-size: 40px;
@@ -322,6 +326,7 @@ img.lazy-img.lazy-complete {
 }
 
 .subheader-text {
+	-webkit-user-select: none;
 	user-select: none;
 	font-size: 24px;
 	font-weight: 700;
@@ -334,6 +339,7 @@ img.lazy-img.lazy-complete {
 }
 
 .heading {
+	-webkit-user-select: none;
 	user-select: none;
 }
 
@@ -398,6 +404,7 @@ a.hoverable:focus-visible {
 /********************************************************************************/
 .button {
 	display: inline-flex;
+	-webkit-user-select: none;
 	user-select: none;
 	font-size: 16px;
 	padding: 8px 16px;
@@ -616,6 +623,7 @@ html.swal2-height-auto {
 }
 
 .cclike-container {
+	-webkit-user-select: none;
 	user-select: none;
 	padding: 0;
 	background: rgba(0, 0, 0, var(--overlay-opacity));
@@ -827,6 +835,7 @@ html.swal2-height-auto {
 }
 
 #navbar>#breadcumb>#title-container {
+	-webkit-user-select: none;
 	user-select: none;
 	position: relative;
 	overflow: hidden;
@@ -1104,6 +1113,7 @@ html.swal2-height-auto {
 }
 
 #index .blog-card {
+	-webkit-user-select: none;
 	user-select: none;
 	border-radius: 2em;
 	//harcoded cause it's the same for light/dark (it goes with v1/v2...)
@@ -1282,6 +1292,7 @@ html.swal2-height-auto {
 	transform: scale(0);
 	padding: 2px 7px 3px;
 	border-radius: 1em;
+	-webkit-user-select: none;
 	user-select: none;
 	font-weight: bold;
 	background: var(--red);
@@ -1440,6 +1451,7 @@ html.swal2-height-auto {
 	right: 0;
 	margin: 9px 25px;
 	font-size: 11px;
+	-webkit-user-select: none;
 	user-select: none;
 }
 
@@ -1487,6 +1499,7 @@ html.swal2-height-auto {
 	justify-content: center;
 	align-items: center;
 	text-align: center;
+	-webkit-user-select: none;
 	user-select: none;
 	padding-top: calc(var(--navbar-noshrink) + 20px);
 	padding-bottom: 20px;
