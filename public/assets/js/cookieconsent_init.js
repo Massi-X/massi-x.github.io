@@ -13,7 +13,8 @@ function cc_init(show_func) {
 	}
 
 	//dinamically load the cookie button description (mainly for subdomain where strings is only a js object)
-	document.querySelector('a.cookie-settings>span').innerHTML = strings.en.managecookie;
+	let settingsButton = document.querySelector('a.cookie-settings>span');
+	if(settingsButton) settingsButton.innerHTML = strings.en.managecookie;
 
 	let domain = globals.cookie_domain;
 	let cookie_ga = /^(_ga)/;
