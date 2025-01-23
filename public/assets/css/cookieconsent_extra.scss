@@ -19,6 +19,7 @@ html.show--preferences {
 }
 
 #cc-main * {
+	-webkit-user-select: none !important;
 	user-select: none !important;
 }
 
