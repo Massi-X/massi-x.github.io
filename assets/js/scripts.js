@@ -86,6 +86,11 @@ onclick = e => {
 	}
 }
 
+//iOS: prevent dragging of links that causes glitches in the UI
+ontouchstart = e => {
+	if(e.target.nodeName == 'A') e.target.setAttribute('draggable', 'false');
+}
+
 //prevent double click to zoom on iOS
 document.ondblclick = e => e.preventDefault();
 
