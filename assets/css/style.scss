@@ -1350,7 +1350,7 @@ html.swal2-height-auto {
 	flex-direction: column;
 	overflow: hidden;
 	padding: 25px 20px;
-	border: 1px solid var(--img-border);
+	outline: 1px solid var(--img-border);
 	text-decoration: none;
 }
 
@@ -1543,13 +1543,15 @@ html.swal2-height-auto {
 
 /***************************** Blog Page Layout ****************************/
 
+#blog {
+	border: 1px solid var(--img-border);
+    border-radius: 2em;
+    overflow: hidden;
+}
+
 #blog .heading {
 	padding: 60px 20px;
 	background: linear-gradient(180deg, var(--blog-header-from), var(--blog-header-to));
-	border: 1px solid var(--img-border);
-	border-bottom: none;
-	border-top-right-radius: 2em;
-	border-top-left-radius: 2em;
 }
 
 #blog .heading h2 {
@@ -1557,7 +1559,8 @@ html.swal2-height-auto {
 }
 
 #blog .blog-card {
-	border-top: none;
+	outline: none;
+	border-top: 1px solid var(--img-border);
 	padding: 29px 20px 9px 20px;
 }
 
@@ -1596,9 +1599,20 @@ html.swal2-height-auto {
 	text-align: right;
 }
 
-#blog>:last-child {
-	border-bottom-right-radius: 2em;
-	border-bottom-left-radius: 2em;
+@mixin blog_card-hover($hover_or_active) {
+
+	#blog .blog-card:#{$hover_or_active} {
+		border-radius: 0;
+		box-shadow: 0 0 0 100vh var(--link-highlight) inset;
+	}
+}
+
+@media (hover: hover) {
+	@include blog_card-hover("hover");
+}
+
+@media (hover: none) {
+	@include blog_card-hover("active");
 }
 
 @media only screen and (max-width: 600px) {
