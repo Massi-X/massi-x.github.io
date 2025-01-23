@@ -626,10 +626,6 @@ html.swal2-height-auto {
 	height: auto;
 }
 
-[class^=swal2] {
-	box-shadow: none !important;
-}
-
 .cclike-container {
 	-webkit-user-select: none;
 	user-select: none;
@@ -651,6 +647,7 @@ html.swal2-height-auto {
 	padding: 0;
 	background: var(--cc-bg) !important;
 	border-radius: var(--cc-modal-border-radius);
+    box-shadow: 0 .625em 1.875em rgba(0, 0, 2, .3);
 }
 
 .swal2-close.cclike-closebutton {
@@ -730,6 +727,10 @@ html.swal2-height-auto {
 .swal2-confirm.cclike-confirmbutton,
 .swal2-close.cclike-closebutton {
 	@extend %cc-button;
+}
+
+[class^=swal2] button:focus {
+	box-shadow: none !important;
 }
 
 [class^=swal2] button:focus-visible {
