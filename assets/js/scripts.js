@@ -65,13 +65,8 @@ onkeydown = e => {
 	}
 }
 
-//PWA: prevent the user from scrolling the page when the touch begin in header/bottom bar
-window.header.ontouchmove = e => {
-	if (isStandalone()) e.preventDefault();
-}
-
-//disable contextual menu and dragging in PWA to make a true native experience
-ondragstart = oncontextmenu = e => {
+//PWA: prevent the user from scrolling the page when the touch begin in header/bottom bar + disable contextual menu and dragging
+window.header.ontouchmove = ondragstart = oncontextmenu = e => {
 	if (isStandalone()) e.preventDefault();
 }
 
@@ -80,7 +75,7 @@ onscroll = scrollingHeader;
 
 //store coordinates mainly for circle navigate animation
 onclick = e => {
-	if (e.pointerType == '') { //if this is a kwyboard click we set the pointer origin to the middle of the element
+	if (e.pointerType == '') { //if this is a keyboard click we set the pointer origin to the middle of the element
 		rect = e.target.getBoundingClientRect();
 		window.cx = rect.x + (rect.width / 2);
 		window.cy = rect.y + (rect.height / 2);
@@ -664,13 +659,6 @@ function linkTo_UnCryptMailto(s, newWindow = true) {
 /**
  * Add the Home Page if missing as first history entry. This only executes whe the site is in "app" mode (standalone).
  * Used to simulate a real app experience, with the back button leading to the home page before exit
- * For future reference there is a bug that appears like a feature: if you open the app on Android following these exact steps ->
- * 1. Open the browser and navigate to a page != home
- * 2. Launch the app from the overflow menu
- * When you go back the app will close, returning to the browser (and not the website home). However injectHome is executed and indeed if you
- * click the home icon everything works fine. I did extensive testing and research on this and it appears to be a nifty bug, because simply
- * interacting with the page (but not scrolling!) restores the correct behavior.
- * Anyway after this digression, I will keep it like that because almost all Android native apps behave the same way.
  * @returns {Promise} a promise containing the new index to be stored (always index + 1 if the homepage was added)
  */
 async function injectHomepage() {
