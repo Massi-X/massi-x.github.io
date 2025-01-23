@@ -44,6 +44,8 @@ body {
 	min-height: 100dvh;
 	overflow: hidden;
 	background: var(--background);
+	//disable zoom on iOS (this doesn't work with the trackpad on iPadOS, but it is a bug)
+	touch-action: pan-x pan-y;
 }
 
 img,

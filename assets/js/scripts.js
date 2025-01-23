@@ -86,6 +86,9 @@ onclick = e => {
 	}
 }
 
+//prevent double click to zoom on iOS
+document.ondblclick = e => e.preventDefault();
+
 //stop animation while resizing for a better experience
 window.resizeTimer;
 onresize = () => {
