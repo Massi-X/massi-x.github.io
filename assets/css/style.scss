@@ -9,6 +9,9 @@
 	box-sizing: border-box;
 	-webkit-tap-highlight-color: transparent !important;
 	scroll-behavior: smooth;
+	//prevent the text to be selected everywhere (previously was only in PWA)
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 @media all and (display-mode: standalone) {
