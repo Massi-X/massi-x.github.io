@@ -601,7 +601,8 @@ function openPopup(details) {
 			confirmButton: 'cclike-confirmbutton',
 			denyButton: 'cclike-denymbutton',
 			cancelButton: 'cclike-cancelmbutton'
-		}
+		},
+		didOpen: popup => popup.focus()
 	});
 }
 
