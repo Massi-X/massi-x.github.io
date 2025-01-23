@@ -630,7 +630,6 @@ html.swal2-height-auto {
 	-webkit-user-select: none;
 	user-select: none;
 	padding: 0;
-	background: rgba(0, 0, 0, var(--overlay-opacity));
 }
 
 .cclike-container *:not(a) {
@@ -757,19 +756,19 @@ html.swal2-height-auto {
 }
 
 .cclike-container.fadein {
-	animation: var(--cc-modal-transition-duration) swal-fadein ease;
+	animation: var(--cc-modal-transition-duration) swal-fadein ease forwards;
 }
 
 .cclike-container.fadeout {
-	animation: var(--cc-modal-transition-duration) swal-fadeout ease;
+	animation: var(--cc-modal-transition-duration) swal-fadeout ease forwards;
 }
 
 .cclike-popup.slidein {
-	animation: var(--cc-modal-transition-duration) swal-slidein ease;
+	animation: var(--cc-modal-transition-duration) swal-slidein ease forwards;
 }
 
 .cclike-popup.slideout {
-	animation: var(--cc-modal-transition-duration) swal-slideout ease;
+	animation: var(--cc-modal-transition-duration) swal-slideout ease forwards;
 }
 
 @keyframes swal-fadein {
