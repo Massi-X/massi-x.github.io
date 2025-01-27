@@ -88,7 +88,8 @@ onclick = e => {
 
 //iOS: prevent dragging of links that causes glitches in the UI
 ontouchstart = e => {
-	if(e.target.nodeName == 'A') e.target.setAttribute('draggable', 'false');
+	let target = e.target.nodeName == 'A' ? e.target : e.target.closest('a'); 
+	if(target) target.setAttribute('draggable', 'false');
 }
 
 //prevent double click to zoom on iOS
@@ -665,7 +666,7 @@ function linkTo_UnCryptMailto(s) {
 		r += String.fromCharCode(n - 1);
 	}
 
-	isStandalone() ? open(r) : location.href = r;
+	isStandalone() ? open(r) : location.href = r; //why? see https://mtsknn.fi/blog/tricky-mailto-links/
 }
 
 /**
