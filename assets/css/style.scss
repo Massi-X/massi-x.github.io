@@ -1295,12 +1295,13 @@ html.swal2-height-auto {
 .download-badge {
 	position: absolute;
 	display: inline-flex;
-    align-items: baseline;
+    align-items: end;
 	right: -7px;
 	top: 5px;
+	line-height: 16px;
 	transition: .15s ease transform;
 	transform: scale(0);
-	padding: 2px 7px 3px;
+	padding: 4px 7px;
 	border-radius: 1em;
 	-webkit-user-select: none;
 	user-select: none;
