@@ -179,6 +179,10 @@ if ('navigation' in window) {
 		const oldHash = oldURL.href.split('#')[1];
 		let navigationType = navigateEvent.navigationType;
 
+		//prevent handling protocols we can't handle (like mailto, tel...)
+		if(newURL.protocol !== 'http:' && newURL.protocol !== 'https:')
+			return;
+
 		//force type to be 'push' even for replace when needed
 		if (window.alterNavigation == NAVIGATION_FORCE_PUSH)
 			navigationType = 'push';
@@ -651,7 +655,7 @@ function isStandalone() {
 /**
  * Thanks spammers! See https://jumk.de/nospam/stopspam.html
  */
-function linkTo_UnCryptMailto(s, newWindow = true) {
+function linkTo_UnCryptMailto(s) {
 	var n = 0;
 	var r = "";
 	for (var i = 0; i < s.length; i++) {
@@ -661,7 +665,7 @@ function linkTo_UnCryptMailto(s, newWindow = true) {
 		r += String.fromCharCode(n - 1);
 	}
 
-	newWindow ? open(r) : location.href = r;
+	isStandalone() ? open(r) : location.href = r;
 }
 
 /**
