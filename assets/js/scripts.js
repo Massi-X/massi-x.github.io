@@ -73,6 +73,11 @@ window.header.ontouchmove = ondragstart = oncontextmenu = e => {
 //register scrollingHeader as the on scroll function
 onscroll = scrollingHeader;
 
+//fix ios scrolling even when it should not (cc-pref popup open)
+window.addEventListener("touchmove", e => {
+	if(document.documentElement.classList.contains('show--preferences')) e.preventDefault()
+}, { passive: false });
+
 //store coordinates mainly for circle navigate animation
 onclick = e => {
 	if (e.pointerType == '') { //if this is a keyboard click we set the pointer origin to the middle of the element
