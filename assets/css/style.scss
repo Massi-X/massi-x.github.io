@@ -1336,6 +1336,7 @@ html.swal2-height-auto {
 	display: inline-flex;
 	overflow: hidden;
 	transition: .1s ease width;
+	will-change: transform;
 }
 
 .download-count span[data-type=digit].replace .new {
