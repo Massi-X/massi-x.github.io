@@ -414,14 +414,15 @@ a.hoverable:focus-visible {
 	display: inline-flex;
 	-webkit-user-select: none;
 	user-select: none;
+	width: fit-content;
+	height: 40px;
 	font-size: 16px;
-    line-height: 1.2;
+    line-height: 16px;
 	padding: 8px 16px;
 	border: 3px solid var(--button-border);
 	background: none;
 	border-radius: 50px;
 	text-decoration: none;
-	width: fit-content;
 	gap: 5px;
 	align-items: center;
 	cursor: pointer;
@@ -431,6 +432,10 @@ a.hoverable:focus-visible {
 .button,
 .button * {
 	transition: background-color .15s ease, filter .15s ease, transform .3s ease;
+}
+
+.button>i {
+	line-height: inherit;
 }
 
 .button>.button-text {
@@ -474,12 +479,10 @@ a.hoverable:focus-visible {
 }
 
 .button.mini {
-	font-size: 13px;
+	height: 26px;
+	font-size: 11px;
+	line-height: 16px;
 	padding: 5px 9px;
-}
-
-.button.mini>i {
-	padding-bottom: 1px;
 }
 
 .button.mini>.button-text {
@@ -575,8 +578,7 @@ ul.prettier li::before {
 ***************** Special case for XDA icon not in fontawesome ******************
 /********************************************************************************/
 .xda-icon {
-	height: 100%;
-	padding-top: 1px;
+	height: 1lh;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -879,10 +881,10 @@ html.swal2-height-auto {
 
 #navbar>.buttons>.button>.icon {
 	pointer-events: none;
-	height: 17px;
 	display: inline-flex;
 	justify-content: center;
 	color: var(--pure);
+	line-height: 1;
 }
 
 #navbar>#breadcumb>#title-container>.loading-title {
