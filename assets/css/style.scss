@@ -415,6 +415,7 @@ a.hoverable:focus-visible {
 	-webkit-user-select: none;
 	user-select: none;
 	font-size: 16px;
+    line-height: 1.2;
 	padding: 8px 16px;
 	border: 3px solid var(--button-border);
 	background: none;
@@ -422,7 +423,7 @@ a.hoverable:focus-visible {
 	text-decoration: none;
 	width: fit-content;
 	gap: 5px;
-	align-items: flex-end;
+	align-items: center;
 	cursor: pointer;
 	vertical-align: bottom;
 }
