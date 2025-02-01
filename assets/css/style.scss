@@ -432,6 +432,7 @@ a.hoverable:focus-visible {
 .button,
 .button * {
 	transition: background-color .15s ease, filter .15s ease, transform .3s ease;
+	will-change: transform;
 }
 
 .button>i {
