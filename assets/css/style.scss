@@ -968,6 +968,10 @@ html.swal2-height-auto {
 		margin-left: 10px;
 	}
 
+	#navbar>.buttons>.button .xda-icon {
+		height: calc(1lh + 1px);
+	}
+
 	#navbar>#breadcumb {
 		display: inline-flex;
 		min-width: 0;
