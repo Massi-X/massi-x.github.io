@@ -293,13 +293,14 @@ p {
 	margin-top: auto !important;
 	text-align: center;
 	padding: 20px 0;
+	padding-bottom: env(safe-area-inset-bottom); //ios navbar padding
 	font-size: 15px;
 	line-height: 20px;
 }
 
 @media only screen and (max-width: 1023px) {
 	#footer {
-		padding: 25px 0 95px;
+		padding: 25px 0 calc(90px + env(safe-area-inset-bottom));
 	}
 }
 
@@ -1058,6 +1059,7 @@ html.swal2-height-auto {
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
 		border-top: 1px solid var(--navbar-border);
+		padding-bottom: env(safe-area-inset-bottom); //ios navbar padding
 	}
 
 	#navbar>.buttons>.button {
