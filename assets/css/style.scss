@@ -824,13 +824,6 @@ html.swal2-height-auto {
 /********************************************************************************
 ************************************ Header *************************************
 /********************************************************************************/
-#navbar {
-	position: fixed;
-	//according to circle and popups
-	z-index: 800;
-	height: var(--navbar-noshrink);
-}
-
 #navbar>#breadcumb {
 	overflow: hidden;
 }
@@ -939,6 +932,9 @@ html.swal2-height-auto {
 
 @media only screen and (min-width: 1024px) {
 	#navbar {
+		position: fixed;
+		z-index: 800; //according to circle and popups
+		height: var(--navbar-noshrink);
 		width: 100%;
 		left: 0;
 		top: 0;
@@ -1014,6 +1010,7 @@ html.swal2-height-auto {
 	#navbar>#breadcumb,
 	#navbar>.buttons {
 		position: fixed;
+		z-index: 800; //according to circle and popups
 		width: 100%;
 		left: 0;
 		display: flex;
