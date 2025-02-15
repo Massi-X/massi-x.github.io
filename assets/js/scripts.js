@@ -70,13 +70,13 @@ window.header.ontouchmove = ondragstart = oncontextmenu = e => {
 	if (isStandalone()) e.preventDefault();
 }
 
-//register scrollingHeader as the on scroll function
+//register scrollingHeader as the unique scroll function
 onscroll = scrollingHeader;
 
-//fix ios scrolling even when it should not (cc-pref popup open)
-window.addEventListener("touchmove", e => {
-	if(document.documentElement.classList.contains('show--preferences')) e.preventDefault()
-}, { passive: false });
+//iOS: completely prevent scrolling of body when a popup is open
+attachPopupObserver((popupElm, bodyElm, showHide) => {
+	showHide ? scrollLock.disablePageScroll(bodyElm) : scrollLock.enablePageScroll();
+});
 
 //store coordinates mainly for circle navigate animation
 onclick = e => {
@@ -120,46 +120,22 @@ if ('navigation' in window) {
 	navigation.updateCurrentEntry({ state: { title: document.title } }); //save the page title in the state for later use
 	injectHomepage().then(index => currentIndex = index); //save initial navigation index
 
-	//listen for configuration changes so that we inject home page when the user switch to PWA from defalt browser view (desktops)
+	//listen for configuration changes so that we inject home page when the user switch to PWA from defalt browser view
 	matchMedia('(display-mode: standalone)').addEventListener('change', async evt => {
 		if (evt.matches) window.currentIndex = await injectHomepage();
 	});
 
 	//observe changes in html classes. Needed to handle popup navigation in standalone mode
-	window.htmlClasses = document.documentElement.classList.toString();
-	const observer = new MutationObserver(mutations => {
-		mutations.forEach(mutation => {
-			const currentClasses = mutation.target.classList.toString();
+	attachPopupObserver((popupElm, bodyElm, showHide) => {
+		if (!isStandalone()) return;
 
-			if (window.htmlClasses != currentClasses) { //a popup is being shown
-				if (!window.htmlClasses.includes('swal2-shown') && currentClasses.includes('swal2-shown')
-					|| !window.htmlClasses.includes('show--preferences') && currentClasses.includes('show--preferences')) {
-					if (isStandalone())
-						navigation.navigate('', { history: 'push', state: { handle: NAVIGATION_POPUP } });
-				}
-				else if (window.htmlClasses.includes('swal2-shown') && !currentClasses.includes('swal2-shown') ||
-					window.htmlClasses.includes('show--preferences') && !currentClasses.includes('show--preferences')) { //a popup is being closed
-					//only if this is a dummy state execute the hook
-					if (isStandalone() && navigation.currentEntry.getState() !== undefined && navigation.currentEntry.getState().handle == NAVIGATION_POPUP)
-						//settimeout needed to correctly handle navigate event combined with popup close
-						setTimeout(() => {
-							if (window.alterNavigation !== NAVIGATION_UNSET)
-								return;
-
-							navigation.back()
-						}, 0);
-				}
-
-				window.htmlClasses = currentClasses;
-			}
-		});
-	});
-
-	observer.observe(document.documentElement, {
-		attributes: true,
-		attributeFilter: ['class'],
-		childList: false,
-		characterData: false
+		if(showHide)
+			navigation.navigate('', { history: 'push', state: { handle: NAVIGATION_POPUP } });
+		else if (navigation.currentEntry.getState() !== undefined && navigation.currentEntry.getState().handle == NAVIGATION_POPUP)
+			setTimeout(() => { //settimeout necessary to correctly handle navigate event combined with popup close
+				if (window.alterNavigation !== NAVIGATION_UNSET) return;
+				navigation.back()
+			}, 0);
 	});
 
 	//register main listener
@@ -645,6 +621,56 @@ function ccShowHideDinamic() {
 		CookieConsent.hide();
 		CookieConsent.hidePreferences();
 	}
+}
+
+/**
+ * Attach an observer for popup open/close events, this currently handles cc and swal popups
+ * You can attach as many listeners as you like
+ * @param {*} func	callback function. Will be called with parameters (popupElm, bodyElm, show/hide [true/false])
+ */
+function attachPopupObserver(func) {
+	if(!window.popupObserverStack) { //initialize observer when first calling the function
+		window.popupObserverStack = new Array();
+
+		window.htmlClasses = document.documentElement.classList.toString();
+
+		const observer = new MutationObserver(mutations => {
+			mutations.forEach(mutation => {
+				const currentClasses = mutation.target.classList.toString();
+
+				if (window.htmlClasses == currentClasses) return;
+
+				let popupElm = null; //target for popup being shown, false for popup being closed
+				let bodyElm = null;
+
+				if (!window.htmlClasses.includes('swal2-shown') && currentClasses.includes('swal2-shown')) { //swal popup is being shown
+					popupElm = document.querySelector('.swal2-container');
+					bodyElm = popupElm.querySelector('.swal2-html-container');
+				}
+				else if(!window.htmlClasses.includes('show--preferences') && currentClasses.includes('show--preferences')) { //cc popup is being shown
+					popupElm = document.querySelector('#cc-main');
+					bodyElm = popupElm.querySelector('.pm__body');
+				}
+				else if (window.htmlClasses.includes('swal2-shown') && !currentClasses.includes('swal2-shown') ||
+					window.htmlClasses.includes('show--preferences') && !currentClasses.includes('show--preferences'))
+					popupElm = false; //a popup is being closed
+
+				//call func only if a change we are interested in has happened
+				if(popupElm !== null && window.popupObserverStack){
+					if(!popupElm)
+						window.popupObserverStack.forEach(func => func(null, null, false));
+					else
+						window.popupObserverStack.forEach(func => func(popupElm, bodyElm, true));
+				}
+
+				window.htmlClasses = currentClasses;
+			});
+		});
+
+		observer.observe(document.documentElement, { attributeFilter: ['class'] });
+	}
+
+	window.popupObserverStack.push(func); //push callback into the callback array
 }
 
 /********************************************************************************
