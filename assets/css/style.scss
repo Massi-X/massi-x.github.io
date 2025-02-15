@@ -292,8 +292,8 @@ p {
 	position: relative;
 	margin-top: auto !important;
 	text-align: center;
-	padding: 20px 0;
-	padding-bottom: env(safe-area-inset-bottom); //ios navbar padding
+	padding-top: 20px;
+	padding-bottom: max(20px, env(safe-area-inset-bottom)); //ios navbar padding
 	font-size: 15px;
 	line-height: 20px;
 }
