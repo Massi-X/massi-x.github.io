@@ -537,7 +537,7 @@ function buildiOSSplash(dark) {
 	document.head.querySelectorAll('[rel=apple-touch-startup-image]').forEach(elem => elem.remove()); //remove existing splashscreens
 
 	const color = getComputedStyle(document.body).getPropertyValue('--background'); //load the color value from css
-	const icon = dark ? 'avatar-dark.svg' : 'avatar.svg'; //TODO If ever restored try that everything works with svg
+	const icon = dark ? 'avatar-dark.svg' : 'avatar.svg'; //TODO If ever restored try that everything works with svg (and restore the script inside head.html)
 
 	iosPWASplash('/assets/images/' + icon, color); //generate new ones
 }
