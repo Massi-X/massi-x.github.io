@@ -1060,6 +1060,7 @@ html.swal2-height-auto {
 		bottom: 0;
 		justify-content: space-evenly;
 		padding: 0 25px;
+    	padding-bottom: env(safe-area-inset-bottom, 0px);
 		background-color: var(--navbar-bg);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
