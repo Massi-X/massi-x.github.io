@@ -28,8 +28,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Pages Minify
-        uses: DrA1ex/pages-minify@v1.0.3
+     # - name: Pages Minify
+     #   uses: DrA1ex/pages-minify@v1.0.3
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
