@@ -6,7 +6,7 @@ navtitle: Privacy Policy
 description: Discover more about the data we collect.
 
 header-title: Pixel Mods
-thumbnail: /assets/images/pixelmods_icon.png
+thumbnail: /assets/images/pixelmods_icon.webp
 thumbnail-size: 
     width: 300
     height: 300

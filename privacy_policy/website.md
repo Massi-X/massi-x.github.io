@@ -6,7 +6,7 @@ navtitle: Privacy Policy
 description: Discover more about the data we collect.
 
 header-title: Massi-X Website
-thumbnail: /assets/images/web_icon.png
+thumbnail: /assets/images/web_icon.webp
 thumbnail-size: 
     width: 300
     height: 300

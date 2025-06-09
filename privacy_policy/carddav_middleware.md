@@ -6,7 +6,7 @@ navtitle: Privacy Policy
 description: Discover more about the data we collect.
 
 header-title: CardDAV Middleware
-thumbnail: /assets/images/carddavmiddleware_icon.png
+thumbnail: /assets/images/carddavmiddleware_icon.webp
 thumbnail-size: 
     width: 300
     height: 300

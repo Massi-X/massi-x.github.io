@@ -5,7 +5,7 @@ title: The JS Navigate Event API
 navtitle: Navigate!
 description: "Alternative title: Click me to see the beautiful transition (Only Chrome M102+ currently)"
 
-thumbnail: /public/images/growtika-firefox.jpg
+thumbnail: /public/images/growtika-firefox.webp
 thumbnail-alt: Main superfluous image
 thumbnail-size: 
     width: 450
