@@ -66,9 +66,12 @@ onkeydown = e => {
 }
 
 //PWA: prevent the user from scrolling the page when the touch begin in header/bottom bar + disable contextual menu and dragging
-window.header.ontouchmove = ondragstart = oncontextmenu = e => {
-	if (isStandalone()) e.preventDefault();
+function preventIfStandalone(event) {
+	if (isStandalone()) event.preventDefault();
 }
+document.addEventListener('touchmove', preventIfStandalone, {passive: false});
+document.addEventListener('dragstart', preventIfStandalone, {passive: false});
+document.addEventListener('contextmenu', preventIfStandalone, {passive: false});
 
 //register scrollingHeader as the unique scroll function
 document.addEventListener('scroll', scrollingHeader, {passive: true});
