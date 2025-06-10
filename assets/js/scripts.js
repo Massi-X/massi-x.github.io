@@ -71,7 +71,7 @@ window.header.ontouchmove = ondragstart = oncontextmenu = e => {
 }
 
 //register scrollingHeader as the unique scroll function
-onscroll = scrollingHeader;
+document.addEventListener('scroll', scrollingHeader, {passive: true});
 
 //iOS: completely prevent scrolling of body when a popup is open
 attachPopupObserver((popupElm, bodyElm, showHide) => {
@@ -92,10 +92,10 @@ onclick = e => {
 }
 
 //iOS: prevent dragging of links that causes glitches in the UI
-ontouchstart = e => {
+document.addEventListener('touchstart', e => {
 	let target = e.target.nodeName == 'A' ? e.target : e.target.closest('a'); 
 	if(target) target.setAttribute('draggable', 'false');
-}
+}, {passive: true});
 
 //prevent double click to zoom on iOS
 document.ondblclick = e => e.preventDefault();
