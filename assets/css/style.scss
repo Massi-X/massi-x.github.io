@@ -974,7 +974,8 @@ html.swal2-height-auto {
 	}
 
 	#navbar>.buttons>.button .xda-icon {
-		height: calc(1lh + 1px);
+		height: 1lh;
+		width: 1lh;
 	}
 
 	#navbar>#breadcumb {
