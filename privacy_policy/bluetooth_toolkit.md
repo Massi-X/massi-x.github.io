@@ -16,7 +16,7 @@ thumbnail-size:
 <p class="text">This page explains which data we collect about you, how it is managed and protected and how
 	you can exert your rights.</p>
 <p class="title">Product interested:</p>
-<p class="text">Bluetooth ToolKit (Android App)</p>
+<p class="text">{{ site.data._strings.en.branding_bttoolkit }} ({{ site.data._strings.en.android_app }})</p>
 <p class="title">Link to Download Page:</p>
 <p class="text"><a target="_blank"
 		href="https://play.google.com/store/apps/details?id=com.metris.xposed.bluetoothToolkitFree">Store</a>

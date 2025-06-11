@@ -16,7 +16,7 @@ thumbnail-size:
 <p class="text">This page explains which data we collect about you, how it is managed and protected and how
 	you can exert your rights.</p>
 <p class="title">Product interested:</p>
-<p class="text">CardDAV Middleware (FreePBX Module)</p>
+<p class="text">{{ site.data._strings.en.branding_carddavmiddleware }} (FreePBX Module)</p>
 <p class="title">Link to Download Page:</p>
 <p class="text"><a target="_blank" href="https://carddavmiddleware.massi-x.dev">Website</a>
 </p>
@@ -42,7 +42,7 @@ thumbnail-size:
 <p class="title">Your Choices:</p>
 <p class="text">You can request the deletion of all of your data (and consequently permanently lose eventual
 	benefits associated with your donation) by writing an email at &#60;support [at] massi-x [dot] dev&#62; with
-	Subject: "GDPR CardDAV Middleware" and indicating in the body of the message your email or purchase ID.
+	Subject: "GDPR {{ site.data._strings.en.branding_carddavmiddleware }}" and indicating in the body of the message your email or purchase ID.
 	Requests will be processed in a meaningful time frame; you will receive a response as soon as the
 	deletion is complete.</p>
 <br>
