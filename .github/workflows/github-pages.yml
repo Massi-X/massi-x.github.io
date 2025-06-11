@@ -35,7 +35,7 @@ jobs:
           source: ./
           destination: ./_site
       - name: Minify
-        uses: Massi-X/minify-gh-pages-action@v1
+        uses: Massi-X/minify-gh-pages-action@v2
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
