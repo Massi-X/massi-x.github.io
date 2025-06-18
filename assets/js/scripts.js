@@ -69,7 +69,7 @@ onkeydown = e => {
 function preventIfStandalone(event) {
 	if (isStandalone()) event.preventDefault();
 }
-document.addEventListener('touchmove', preventIfStandalone, {passive: false});
+window.header.addEventListener('touchmove', preventIfStandalone, {passive: false});
 document.addEventListener('dragstart', preventIfStandalone, {passive: false});
 document.addEventListener('contextmenu', preventIfStandalone, {passive: false});
 
