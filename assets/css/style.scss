@@ -139,12 +139,12 @@ p {
 }
 
 .noanim {
-	transition: none !important;
+	@include no-anim;
 }
 
 .noanim-all,
 .noanim-all * {
-	transition: none !important;
+	@include no-anim;
 }
 
 :focus-visible {
