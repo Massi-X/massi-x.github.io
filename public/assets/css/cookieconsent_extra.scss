@@ -79,6 +79,11 @@ html.show--preferences {
 	justify-content: right !important;
 }
 
+#cc-main .pm__footer {
+	//.9em matches default implementation
+	padding-bottom: calc(env(safe-area-inset-bottom, 0px) + .9em) !important;
+}
+
 .pm__btn,
 .cm__btn,
 .pm__close-btn,
