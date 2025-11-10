@@ -69,12 +69,12 @@ onkeydown = e => {
 function preventIfStandalone(event) {
 	if (isStandalone()) event.preventDefault();
 }
-window.header.addEventListener('touchmove', preventIfStandalone, {passive: false});
-document.addEventListener('dragstart', preventIfStandalone, {passive: false});
-document.addEventListener('contextmenu', preventIfStandalone, {passive: false});
+window.header.addEventListener('touchmove', preventIfStandalone, { passive: false });
+document.addEventListener('dragstart', preventIfStandalone, { passive: false });
+document.addEventListener('contextmenu', preventIfStandalone, { passive: false });
 
 //register scrollingHeader as the unique scroll function
-document.addEventListener('scroll', scrollingHeader, {passive: true});
+document.addEventListener('scroll', scrollingHeader, { passive: true });
 
 //iOS: completely prevent scrolling of body when a popup is open
 attachPopupObserver((popupElm, bodyElm, showHide) => {
@@ -96,9 +96,9 @@ onclick = e => {
 
 //iOS: prevent dragging of links that causes glitches in the UI
 document.addEventListener('touchstart', e => {
-	let target = e.target.nodeName == 'A' ? e.target : e.target.closest('a'); 
-	if(target) target.setAttribute('draggable', 'false');
-}, {passive: true});
+	let target = e.target.nodeName == 'A' ? e.target : e.target.closest('a');
+	if (target) target.setAttribute('draggable', 'false');
+}, { passive: true });
 
 //prevent double click to zoom on iOS
 document.ondblclick = e => e.preventDefault();
@@ -132,16 +132,18 @@ if ('navigation' in window) {
 	attachPopupObserver((popupElm, bodyElm, showHide) => {
 		if (!isStandalone()) return;
 
-		if(showHide)
+		if (showHide)
 			navigation.navigate('', { history: 'push', state: { handle: NAVIGATION_POPUP } });
 		else if (navigation.currentEntry.getState() !== undefined && navigation.currentEntry.getState().handle == NAVIGATION_POPUP)
 			setTimeout(() => { //settimeout necessary to correctly handle navigate event combined with popup close
 				if (window.alterNavigation !== NAVIGATION_UNSET) return;
-				navigation.back()
+
+				navigation.back();
 			}, 0);
 	});
 
 	//register main listener
+	//if the user navigates like crazy it could sometime happen that the current page/url mismatch, really edge case I was able to trigger this only a few times
 	navigation.addEventListener('navigate', navigateEvent => {
 		//0: the home page is missing while in PWA (i.e. the app launched directly to an URL)
 		if (alterNavigation === NAVIGATION_HOME_ADD) {
@@ -163,9 +165,17 @@ if ('navigation' in window) {
 		const oldURL = new URL(navigation.currentEntry.url);
 		const oldHash = oldURL.href.split('#')[1];
 		let navigationType = navigateEvent.navigationType;
+		const circleID = 'circle-reveal'; //id of circle reveal, used for both push and traverse
+
+		//if the browser already provides a visual transition then skip mine
+		if (navigateEvent.hasUAVisualTransition) {
+			window.loadProcessing = false; //reset loadPage processing state
+			intercept({ scroll: 'manual' }, () => { loadPage(true) });
+			return;
+		}
 
 		//prevent handling protocols we can't handle (like mailto, tel...)
-		if(newURL.protocol !== 'http:' && newURL.protocol !== 'https:')
+		if (newURL.protocol !== 'http:' && newURL.protocol !== 'https:')
 			return;
 
 		//force type to be 'push' even for replace when needed
@@ -243,28 +253,27 @@ if ('navigation' in window) {
 		if (window.reduceanimation || (navigationType != 'traverse' && navigationType != 'push'))
 			return;
 
-		//circle animation originating from the link click...
-		if (navigationType == 'push') {
-			const id = 'circle-reveal';
 
-			//this is impossible, but anyway: if the user clicks fast enough one link and then another the page may become stuck because of the transitionend not triggering.
-			//this prevents the behavior by bypassing the result if already animated
-			if (document.getElementById(id))
-				animated = true;
-			else { //... or normally this happens
-				animationTarget = document.createElement('div');
-				animationTarget.id = id;
+		//circle animation could become stuck if the user clicks links or traverse fast enough because of the transitionend not triggering.
+		//the check for existence of animationTarget prevents the behavior by bypassing the result if already animated
+		animationTarget = document.getElementById(circleID);
 
-				let rightWidth = window.innerWidth - window.cx;
-				let bottomHeight = window.innerHeight - window.cy;
-				let factorX = window.cx > rightWidth ? window.cx * 2 : rightWidth * 2;
-				let factorY = window.cy > bottomHeight ? window.cy * 2 : bottomHeight * 2;
-				let factorS = Math.sqrt(factorX ** 2 + factorY ** 2); //calculate pixel perfect circle!
+		//prevents the circle getting stuck by bypassing the result if already animated
+		if (animationTarget)
+			animated = true;
+		else if (navigationType == 'push') { //circle animation originating from the link click...
+			animationTarget = document.createElement('div');
+			animationTarget.id = circleID;
 
-				document.body.appendChild(animationTarget);
-				animationTarget.offsetWidth; //trigger reflow (workaround for no transition)
-				animationTarget.style = 'opacity: 1; left: ' + window.cx + 'px; top: ' + window.cy + 'px; transform: scale(' + factorS + ');';
-			}
+			let rightWidth = window.innerWidth - window.cx;
+			let bottomHeight = window.innerHeight - window.cy;
+			let factorX = window.cx > rightWidth ? window.cx * 2 : rightWidth * 2;
+			let factorY = window.cy > bottomHeight ? window.cy * 2 : bottomHeight * 2;
+			let factorS = Math.sqrt(factorX ** 2 + factorY ** 2); //calculate pixel perfect circle!
+
+			document.body.appendChild(animationTarget);
+			animationTarget.offsetWidth; //trigger reflow (workaround for no transition)
+			animationTarget.style = 'opacity: 1; left: ' + window.cx + 'px; top: ' + window.cy + 'px; transform: scale(' + factorS + ');';
 		}
 		//...or sliding animation for back/forward
 		else if (navigationType == 'traverse') {
@@ -322,41 +331,51 @@ if ('navigation' in window) {
 		}, { once: true });
 
 		//here we load the new content
-		navigateEvent.intercept({
-			scroll: 'manual',
-			async handler() {
-				//head title must be replaced here to not mess up history entries
-				document.title = strings.en.loading;
-				let response;
+		intercept({ scroll: 'manual' }, loadPage);
 
-				try { //try to load the page...
-					response = await fetch(newURL, { signal: navigateEvent.signal });
 
-					if (!response.ok) //throw error in case of server errors (Promise errors goes directly to the catch below)
-						throw new Error();
+		//-----------------------------------------//
+		//------------- inner methods -------------//
+		//-----------------------------------------//
+
+		//common method to load the page
+		function intercept(options, callback) {
+			navigateEvent.intercept({
+				options,
+				async handler() {
+					//head title must be replaced here to not mess up history entries
+					document.title = strings.en.loading;
+					let response;
+
+					try { //try to load the page...
+						response = await fetch(newURL, { signal: navigateEvent.signal });
+
+						if (!response.ok) //throw error in case of server errors (Promise errors goes directly to the catch below)
+							throw new Error();
+					}
+					catch (e) { //or catch the error if something fail, giving back an error page
+						//this prevents loading the error page in the middle of a navigation if the user navigate fast back/forward.
+						//as the side effect of completely blocking the page if the user abort the loading with the browser button, but I see this as intended behavior so it's fine
+						if (navigateEvent.signal.aborted)
+							return;
+						else
+							response = await fetch('/404.html'); //this is cached when the worker is installed, always present
+					}
+
+					newPageContent = new DOMParser().parseFromString(await response.text(), "text/html");
+					callback(); //execute callback after page load
 				}
-				catch (e) { //or catch the error if something fail, giving back an error page
-					//this prevents loading the error page in the middle of a navigation if the user navigate fast back/forward.
-					//as the side effect of completely blocking the page if the user abort the loading with the browser button, but I see this as intended behavior so it's fine
-					if (navigateEvent.signal.aborted)
-						return;
-					else
-						response = await fetch('/404.html'); //this is cached when the worker is installed, always present
-				}
-
-				newPageContent = new DOMParser().parseFromString(await response.text(), "text/html");
-				loadPage();
-			}
-		});
+			});
+		}
 
 		//renders the page given the content is fully loaded
-		function loadPage() {
+		function loadPage(hasUAVisualTransition = false) {
 			//the DOM is not ready. We don't know anything yet and we can't continue
 			if (newPageContent == null)
 				return;
 
 			//even though the DOM is ready we must wait for the animation to complete to continue further
-			if (!animated)
+			if (!hasUAVisualTransition && !animated)
 				return;
 
 			//loadPage is already processing this request. Prevent multiple calls
@@ -364,6 +383,10 @@ if ('navigation' in window) {
 				return;
 
 			window.loadProcessing = true;
+
+			//if browser is providing transition, disable everything that's mine
+			if (hasUAVisualTransition)
+				document.body.classList.add("noanim-all");
 
 			//remove any highlight to the text
 			window.getSelection().removeAllRanges()
@@ -398,28 +421,33 @@ if ('navigation' in window) {
 			initDownloadBadges();
 
 			//scroll to the top while it's hidden to allow the animation to look more natural (in addition to scroll: manual in intercept)
-			scrollTo({
-				top: 0,
-				behavior: "instant"
-			});
+			if (!hasUAVisualTransition) {
+				scrollTo({
+					top: 0,
+					behavior: "instant"
+				});
+			}
 
-			if (navigationType == 'push') { //if push navigation: fade the circle out and then remove it
-				animationTarget.classList.add('fadeout');
+			if (!hasUAVisualTransition) {
+				//fix user navigating too fast by checking for id instead of push/traverse
+				if (animationTarget.id == circleID) { //if push navigation: fade the circle out and then remove it
+					animationTarget.classList.add('fadeout');
 
-				animationTarget.addEventListener('transitionend', () => {
-					animationTarget.remove();
-					navigationContainer.classList.remove('pagefixed');
-				}, { once: true });
-			} else if (navigationType == 'traverse') { //if forward/back navigation: slide in new page
-				document.body.classList.remove('blink');
-				animationTarget.classList.add('inverse', 'noanim');
+					animationTarget.addEventListener('transitionend', () => {
+						animationTarget.remove();
+						navigationContainer.classList.remove('pagefixed');
+					}, { once: true });
+				} else { //if forward/back navigation: slide in new page
+					document.body.classList.remove('blink');
+					animationTarget.classList.add('inverse', 'noanim');
 
-				//artificial delay to prevent issues with 'slow 3g' mode in Chrome. Don't think this applies to real life scenario, anyway it doesn'm atter too much
-				setTimeout(() => animationTarget.classList.remove('noanim', 'navigate-back', 'navigate-forward', 'inverse'), 20);
+					//artificial delay to prevent issues with 'slow 3g' mode in Chrome. Don't think this applies to real life scenario, anyway it doesn't matter too much
+					setTimeout(() => animationTarget.classList.remove('noanim', 'navigate-back', 'navigate-forward', 'inverse'), 20);
 
-				animationTarget.addEventListener('transitionend', () => {
-					document.body.classList.remove('pagefixed');
-				}, { once: true });
+					animationTarget.addEventListener('transitionend', () => {
+						document.body.classList.remove('pagefixed');
+					}, { once: true });
+				}
 			}
 
 			//replace the title in navbar and animate it back into view + replace head title + save the state in history
@@ -427,13 +455,17 @@ if ('navigation' in window) {
 			document.title = newPageContent.title;
 			navigation.updateCurrentEntry({ state: { title: document.title } });
 
-			navTitleContainer.addEventListener('transitionend', () => {
-				navTitleText.style = '';
-			}, { once: true });
+			//remove any style after title gets animated...
+			if (!hasUAVisualTransition) {
+				navTitleContainer.addEventListener('transitionend', () => {
+					navTitleText.style = '';
+				}, { once: true });
 
-			navTitleContainer.classList.remove('loading');
+				navTitleContainer.classList.remove('loading');
+			} else //...or if browser provided transitions, then remove noanim class from body
+				document.body.classList.remove("noanim-all");
 
-			ccShowHideDinamic();
+			ccShowHideDinamic(); //cc popup handler
 
 			window.alterNavigation = NAVIGATION_UNSET; //reset after the handling is complete
 		}
@@ -497,8 +529,8 @@ function scrollingHeader(noanim = false) {
 
 	if (noanim === true) window.header.classList.add('noanim');
 
-	if (window.scrollingExec != SCROLL_SHRINKED && document.documentElement.scrollTop > 35) {
-		window.header.classList.add('shrinked'); //35px is good enough
+	if (window.scrollingExec != SCROLL_SHRINKED && document.documentElement.scrollTop > 35) { //35px is good enough
+		window.header.classList.add('shrinked');
 		window.scrollingExec = SCROLL_SHRINKED;
 	}
 	else if (document.documentElement.scrollTop <= 35 && window.scrollingExec == SCROLL_SHRINKED) {
@@ -632,7 +664,7 @@ function ccShowHideDinamic() {
  * @param {*} func	callback function. Will be called with parameters (popupElm, bodyElm, show/hide [true/false])
  */
 function attachPopupObserver(func) {
-	if(!window.popupObserverStack) { //initialize observer when first calling the function
+	if (!window.popupObserverStack) { //initialize observer when first calling the function
 		window.popupObserverStack = new Array();
 
 		window.htmlClasses = document.documentElement.classList.toString();
@@ -650,7 +682,7 @@ function attachPopupObserver(func) {
 					popupElm = document.querySelector('.swal2-container');
 					bodyElm = popupElm.querySelector('.swal2-html-container');
 				}
-				else if(!window.htmlClasses.includes('show--preferences') && currentClasses.includes('show--preferences')) { //cc popup is being shown
+				else if (!window.htmlClasses.includes('show--preferences') && currentClasses.includes('show--preferences')) { //cc popup is being shown
 					popupElm = document.querySelector('#cc-main');
 					bodyElm = popupElm.querySelector('.pm__body');
 				}
@@ -659,8 +691,8 @@ function attachPopupObserver(func) {
 					popupElm = false; //a popup is being closed
 
 				//call func only if a change we are interested in has happened
-				if(popupElm !== null && window.popupObserverStack){
-					if(!popupElm)
+				if (popupElm !== null && window.popupObserverStack) {
+					if (!popupElm)
 						window.popupObserverStack.forEach(func => func(null, null, false));
 					else
 						window.popupObserverStack.forEach(func => func(popupElm, bodyElm, true));
