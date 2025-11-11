@@ -258,7 +258,6 @@ if ('navigation' in window) {
 		if (window.reduceanimation || (navigationType != 'traverse' && navigationType != 'push'))
 			return;
 
-
 		//circle animation could become stuck if the user clicks links or traverse fast enough because of the transitionend not triggering.
 		//the check for existence of animationTarget prevents the behavior by bypassing the result if already animated
 		animationTarget = document.getElementById(circleID);
@@ -279,6 +278,9 @@ if ('navigation' in window) {
 			document.body.appendChild(animationTarget);
 			animationTarget.offsetWidth; //trigger reflow (workaround for no transition)
 			animationTarget.style = 'opacity: 1; left: ' + window.cx + 'px; top: ' + window.cy + 'px; transform: scale(' + factorS + ');';
+
+			//delay the header blur animation for a better effect
+			window.header.classList.add('delay-anim');
 		}
 		//...or sliding animation for back/forward
 		else if (navigationType == 'traverse') {
@@ -327,6 +329,7 @@ if ('navigation' in window) {
 				navigationContainer.classList.add('pagefixed');
 				navigationContainer.style = 'margin-top: -' + window.scrollY + 'px;';
 				animationTarget.classList.add('blink');
+				window.header.classList.remove('delay-anim');
 			}
 			else if (navigationType == 'traverse')
 				document.body.classList.add('pagefixed', 'blink');
@@ -345,8 +348,10 @@ if ('navigation' in window) {
 
 		//common method to load the page
 		function intercept(options, callback) {
-			navigateEvent.intercept({
-				options,
+			var optsHandler = new Object();
+
+			//add main handler to the optsHandler object
+			optsHandler = {
 				async handler() {
 					//head title must be replaced here to not mess up history entries
 					document.title = strings.en.loading;
@@ -370,7 +375,14 @@ if ('navigation' in window) {
 					newPageContent = new DOMParser().parseFromString(await response.text(), "text/html");
 					callback(); //execute callback after page load
 				}
-			});
+			};
+
+			//add every options passed to the function to optsHandler
+			for (var key in options)
+				optsHandler[key] = options[key];
+
+			//intercept the event
+			navigateEvent.intercept(optsHandler);
 		}
 
 		//renders the page given the content is fully loaded

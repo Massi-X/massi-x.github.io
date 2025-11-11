@@ -185,10 +185,9 @@ p {
 	background: var(--circle);
 	border-radius: 50%;
 	transform: scale(1);
-	transition: transform .5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity .3s ease;
+	transition: transform var(--circle-transform-timing) cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity .3s ease;
 	opacity: 0.5;
-	//z-index must be set accordingly to navbar and popups
-	z-index: 500;
+	z-index: var(--circle-z-index);
 }
 
 #circle-reveal.fadeout {
@@ -836,7 +835,7 @@ html.swal2-height-auto {
 	overflow: hidden;
 }
 
-#navbar[class*="shrinked"]>#breadcumb {
+#navbar.shrinked>#breadcumb {
 	height: var(--navbar-shrinked);
 }
 
@@ -846,7 +845,29 @@ html.swal2-height-auto {
 
 #navbar,
 #navbar>#breadcumb {
-	transition: height .15s ease, background-color .15s ease, backdrop-filter .4s ease, -webkit-backdrop-filter .4s ease;
+	transition: height .15s ease;
+}
+
+#navbar+#fake-background {
+	transition: height .15s ease, background-color .15s ease,
+		backdrop-filter .4s ease, -webkit-backdrop-filter .4s ease;
+    height: var(--navbar-noshrink);
+    width: 100%;
+    position: fixed;
+    left: 0;
+    z-index: var(--circle-z-index);
+}
+
+#navbar.shrinked+#fake-background {
+    height: var(--navbar-shrinked);
+    background-color: var(--navbar-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--navbar-border);
+}
+
+#navbar.delay-anim+#fake-background {
+	transition-delay: var(--circle-transform-timing);
 }
 
 #navbar>#breadcumb>#title-container {
@@ -941,7 +962,7 @@ html.swal2-height-auto {
 @media only screen and (min-width: 1024px) {
 	#navbar {
 		position: fixed;
-		z-index: 800; //according to circle and popups
+		z-index: var(--header-z-index);
 		height: var(--navbar-noshrink);
 		width: 100%;
 		left: 0;
@@ -952,16 +973,8 @@ html.swal2-height-auto {
 		padding: 0 50px 0 46px;
 	}
 
-	#navbar:not([class*="shrinked"]) {
-		height: var(--navbar-noshrink);
-	}
-
 	#navbar.shrinked {
 		height: var(--navbar-shrinked);
-		border-bottom: 1px solid var(--navbar-border);
-		background-color: var(--navbar-bg);
-		backdrop-filter: blur(10px);
-		-webkit-backdrop-filter: blur(10px);
 	}
 
 	#navbar>.buttons {
@@ -1019,18 +1032,11 @@ html.swal2-height-auto {
 	#navbar>#breadcumb,
 	#navbar>.buttons {
 		position: fixed;
-		z-index: 800; //according to circle and popups
+		z-index: var(--header-z-index);
 		width: 100%;
 		left: 0;
 		display: flex;
 		align-items: center;
-	}
-
-	#navbar.shrinked>#breadcumb {
-		background-color: var(--navbar-bg);
-		backdrop-filter: blur(10px);
-		-webkit-backdrop-filter: blur(10px);
-		border-bottom: 1px solid var(--navbar-border);
 	}
 
 	#navbar>#breadcumb>.link[data-insert-navigation="false"] {

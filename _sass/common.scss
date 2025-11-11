@@ -30,14 +30,19 @@
 	--navbar-shrinked: 65px;
 	--nav-buttons-h: 71px;
 
-	--cookieconsent-link: #A1887F;
+	--cookieconsent-link: #a1887f;
 
 	//standardize swal and cookieconsent
 	--overlay-opacity: 0.8;
 	--cc-overlay-bg: rgba(0, 0, 0, var(--overlay-opacity)) !important;
 
-	//give cc a reasonable z-index (same as swal default one)
-	--cc-z-index: 1060 !important;
+	//z-indexes for various elements
+	--circle-z-index: 500;
+	--header-z-index: 800;
+	--cc-z-index: 1060 !important; //give cc a reasonable z-index (same as swal default one)
+
+	//common time for circle and header, for a better UX
+	--circle-transform-timing: 0.5s;
 }
 
 @media only screen and (max-width: 1023px) {
@@ -52,10 +57,10 @@
 		--text: #212121;
 		--background: #fafafa;
 		--link-highlight: rgba(0, 0, 0, 0.1);
-		--outline: #2196F3;
+		--outline: #2196f3;
 
-		--red: #E91E63;
-		--red-dark: #B71C1C;
+		--red: #e91e63;
+		--red-dark: #b71c1c;
 
 		--theme-color: #fafafa;
 
@@ -75,8 +80,8 @@
 		--lazy-load-background: #ececec;
 		--lazy-load-shine: #f5f5f5;
 
-		--blog-header-from: #B39DDB;
-		--blog-header-to: #E1BEE7;
+		--blog-header-from: #b39ddb;
+		--blog-header-to: #e1bee7;
 
 		--cc-btn-primary-shadow: rgba(0, 0, 0, 0.7);
 		--cc-btn-secondary-shadow: rgba(0, 0, 0, 0.08);
@@ -90,10 +95,10 @@
 		--text: #fafafa;
 		--background: #161616;
 		--link-highlight: rgba(255, 255, 255, 0.2);
-		--outline: #1E88E5;
+		--outline: #1e88e5;
 
-		--red: #E91E63;
-		--red-dark: #B71C1C;
+		--red: #e91e63;
+		--red-dark: #b71c1c;
 
 		--theme-color: #191919;
 
@@ -102,8 +107,8 @@
 		--button-border: #fafafa;
 		--button-bg-hover: #fafafa;
 		--button-bg-hover-inverted: #212121;
-		--button-filled-bg: #E0E0E0;
-		--button-filled-bg-hover: #FAFAFA;
+		--button-filled-bg: #e0e0e0;
+		--button-filled-bg-hover: #fafafa;
 
 		--navbar-bg: rgba(0 0 0 / 20%);
 		--navbar-border: rgba(0 0 0 / 5%);
@@ -113,8 +118,8 @@
 		--lazy-load-background: #424242;
 		--lazy-load-shine: #5a5a5a;
 
-		--blog-header-from: #673AB7;
-		--blog-header-to: #9C27B0;
+		--blog-header-from: #673ab7;
+		--blog-header-to: #9c27b0;
 
 		--cc-btn-primary-shadow: rgba(0, 0, 0, 0.2);
 		--cc-btn-secondary-shadow: rgba(255, 255, 255, 0.06);
@@ -135,12 +140,13 @@
 }
 
 @mixin link-animate($important: false) {
-	transition: box-shadow .1s ease if($important, !important, null);
+	transition: box-shadow 0.1s ease if($important, !important, null);
 }
 
 @mixin link-hoverable($important: false) {
 	border-radius: 0.1em if($important, !important, null);
-	box-shadow: 0 0 0 1px var(--link-highlight), 0 0 0 100vh var(--link-highlight) inset if($important, !important, null);
+	box-shadow: 0 0 0 1px var(--link-highlight),
+		0 0 0 100vh var(--link-highlight) inset if($important, !important, null);
 }
 
 %cc-text {
@@ -149,7 +155,7 @@
 
 %cc-button {
 	border: none !important;
-	transition: box-shadow .25s ease !important;
+	transition: box-shadow 0.25s ease !important;
 }
 
 %cc-button_primary-hover_override {
