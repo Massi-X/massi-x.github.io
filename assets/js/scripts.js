@@ -103,14 +103,19 @@ document.addEventListener('touchstart', e => {
 //prevent double click to zoom on iOS
 document.ondblclick = e => e.preventDefault();
 
-//stop animation while resizing for a better experience
+//stop animation while resizing for a better experience. Do not care if resizing along the y-axis only (window.prWidth)
 window.resizeTimer;
+window.prWidth;
 onresize = () => {
-	document.body.classList.add("noanim-all");
-	clearTimeout(window.resizeTimer);
-	window.resizeTimer = setTimeout(() => {
-		document.body.classList.remove("noanim-all");
-	}, 100);
+	if (window.prWidth != window.innerWidth) {
+		document.body.classList.add("noanim-all");
+		clearTimeout(window.resizeTimer);
+		window.resizeTimer = setTimeout(() => {
+			document.body.classList.remove("noanim-all");
+		}, 100);
+	}
+
+	window.prWidth = window.innerWidth;
 };
 
 //init cookieconsent
