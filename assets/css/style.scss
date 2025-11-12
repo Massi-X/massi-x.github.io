@@ -53,9 +53,9 @@ br {
 	user-select: none;
 }
 
-//do not display alt text while loading on firefox
 img {
-	color: transparent;
+	position: relative; //used for alt box correct sizing
+	color: transparent; //do not display alt text while loading on firefox
 }
 
 //broken image alt text
@@ -85,6 +85,7 @@ a {
 }
 
 .pagefixed {
+	height: 100vh;
 	position: fixed;
 	pointer-events: none;
 }
@@ -188,7 +189,7 @@ p {
 	transform: scale(1);
 	transition: transform var(--circle-transform-timing)
 			cubic-bezier(0.25, 0.46, 0.45, 0.94),
-		opacity 0.3s ease;
+		opacity 0.3s ease !important;
 	opacity: 0.5;
 	z-index: var(--circle-z-index);
 }
@@ -1078,7 +1079,6 @@ html.swal2-height-auto {
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
 		border-top: 1px solid var(--navbar-border);
-		padding-bottom: env(safe-area-inset-bottom); //ios navbar padding
 	}
 
 	#navbar > .buttons > .button {
@@ -1221,6 +1221,7 @@ html.swal2-height-auto {
 
 #portfolio-header-image-container {
 	display: flex;
+	max-width: 100%;
 	flex-direction: column;
 	gap: 10px;
 	flex-basis: 50%;
@@ -1229,6 +1230,7 @@ html.swal2-height-auto {
 .portfolio-header-image {
 	height: auto;
 	max-width: 100%;
+	border-radius: 2em;
 }
 
 #portfolio-header-text-container {
@@ -1329,6 +1331,7 @@ html.swal2-height-auto {
 }
 
 .project-image {
+	display: block;
 	height: 100%;
 	width: auto;
 	aspect-ratio: 1/1;
@@ -1625,7 +1628,7 @@ html.swal2-height-auto {
 
 #blog .blog-card .thumbnail {
 	width: 100px;
-	height: auto;
+	height: 100px;
 	aspect-ratio: 1/1;
 	object-fit: cover;
 	border-radius: 1em;
