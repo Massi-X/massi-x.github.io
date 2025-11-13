@@ -277,13 +277,14 @@ if ('navigation' in window) {
 
 			document.body.appendChild(animationTarget);
 			animationTarget.offsetWidth; //trigger reflow (workaround for no transition)
-			animationTarget.style = 'opacity: 1; left: ' + window.cx + 'px; top: ' + window.cy + 'px; transform: scale(' + factorS + ');';
+			animationTarget.style.opacity = 1;
+			animationTarget.style.left = window.cx + 'px';
+			animationTarget.style.top = window.cy + 'px';
+			animationTarget.style.transform = 'scale(' + factorS + ')';
 
 			//delay the header blur animation for a better effect
 			window.header.classList.add('delay-anim');
-		}
-		//...or sliding animation for back/forward
-		else if (navigationType == 'traverse') {
+		} else if (navigationType == 'traverse') { //...or sliding animation for back/forward
 			animationTarget = navigationContainer;
 			animationTarget.classList.remove('inverse');
 
@@ -321,6 +322,7 @@ if ('navigation' in window) {
 		window.header.classList.remove('shrinked');
 
 		//animate the main loading view. This must be kept synced on the longer animation (currently the circle/slide)
+		//it is not necessary here to use setTimeout to prevent bug (user navigating while resizing) beacuse to do this, the user needs to be an acrobat!
 		animationTarget.addEventListener('transitionend', () => {
 			if (window.loadProcessing) //do not continue if loadPage is already processing the request or we will overwrite something!
 				return;
@@ -328,8 +330,12 @@ if ('navigation' in window) {
 			if (navigationType == 'push') {
 				navigationContainer.classList.add('pagefixed');
 				navigationContainer.style = 'margin-top: -' + window.scrollY + 'px;';
-				animationTarget.classList.add('blink');
 				window.header.classList.remove('delay-anim');
+				animationTarget.classList.add('blink');
+
+				//to fix circle size when user resize window. The change is not visible
+				animationTarget.style.width = '100vw';
+				animationTarget.style.height = '100vh';
 			}
 			else if (navigationType == 'traverse')
 				document.body.classList.add('pagefixed', 'blink');
@@ -450,10 +456,11 @@ if ('navigation' in window) {
 				if (animationTarget.id == circleID) { //if push navigation: fade the circle out and then remove it
 					animationTarget.classList.add('fadeout');
 
-					animationTarget.addEventListener('transitionend', () => {
+					//use dynamic setTimeout instead of transitionEnd here so that the callback is called no matter if user is resizing window
+					setTimeout(() => {
 						animationTarget.remove();
 						navigationContainer.classList.remove('pagefixed');
-					}, { once: true });
+					}, getDuration(animationTarget));
 				} else { //if forward/back navigation: slide in new page
 					document.body.classList.remove('blink');
 					animationTarget.classList.add('inverse', 'noanim');
@@ -461,9 +468,8 @@ if ('navigation' in window) {
 					//artificial delay to prevent issues with 'slow 3g' mode in Chrome. Don't think this applies to real life scenario, anyway it doesn't matter too much
 					setTimeout(() => animationTarget.classList.remove('noanim', 'navigate-back', 'navigate-forward', 'inverse'), 20);
 
-					animationTarget.addEventListener('transitionend', () => {
-						document.body.classList.remove('pagefixed');
-					}, { once: true });
+					//use dynamic setTimeout instead of transitionEnd here so that the callback is called no matter if user is resizing window
+					setTimeout(() => document.body.classList.remove('pagefixed'), getDuration(animationTarget) + 20);
 				}
 			}
 
@@ -474,10 +480,8 @@ if ('navigation' in window) {
 
 			//remove any style after title gets animated...
 			if (!hasUAVisualTransition) {
-				navTitleContainer.addEventListener('transitionend', () => {
-					navTitleText.style = '';
-				}, { once: true });
-
+				//use dynamic setTimeout instead of transitionEnd here so that the callback is called no matter if user is resizing window
+				setTimeout(() => navTitleText.style = '', getDuration(navTitleContainer));
 				navTitleContainer.classList.remove('loading');
 			} else //...or if browser provided transitions, then remove noanim class from body
 				document.body.classList.remove("noanim-all");
@@ -728,6 +732,18 @@ function attachPopupObserver(func) {
 /********************************************************************************
 ********************************* Misc functions ********************************
 /********************************************************************************/
+
+/**
+ * Find the (maximum) duration of the transition of an element
+ * @param {HTMLElement} element The element
+ * @returns {integer} The durationd in milliseconds
+ */
+function getDuration(element) {
+	let durations = getComputedStyle(element).transitionDuration.split(',');
+	durations.forEach((value, index) => durations[index] = parseFloat(value));
+	return Math.max(...durations) * 1000;
+}
+
 /**
  * Check if the current window is running in standalone mode (read: is a PWA)
  * @returns {Boolean} true if the window is standalone, false otherwise
