@@ -321,10 +321,19 @@ if ('navigation' in window) {
 		//emulate a scrolling to the top on the navbar (this is fake! the page is stuck to make a better animation)
 		window.header.classList.remove('shrinked');
 
+		//calculate the longest duration on the animation target.
+		//In case of multiple transitions on the target, we should wait for the longest one
+		let duration = getDuration(animationTarget);
+
 		//animate the main loading view. This must be kept synced on the longer animation (currently the circle/slide)
 		//it is not necessary here to use setTimeout to prevent bug (user navigating while resizing) beacuse to do this, the user needs to be an acrobat!
-		animationTarget.addEventListener('transitionend', () => {
-			if (window.loadProcessing) //do not continue if loadPage is already processing the request or we will overwrite something!
+		animationTarget.addEventListener('transitionend', event => {
+			//wait for the longest duration before triggering the load (in case the next page loads very fast)
+			if(duration - (event.elapsedTime * 1000) > 50)
+				return;
+
+			//do not continue if loadPage is already processing the request or we will overwrite something!
+			if (window.loadProcessing)
 				return;
 
 			if (navigationType == 'push') {
@@ -342,7 +351,7 @@ if ('navigation' in window) {
 
 			animated = true;
 			loadPage();
-		}, { once: true });
+		}); //do not use once here!
 
 		//here we load the new content
 		intercept({ scroll: 'manual' }, loadPage);

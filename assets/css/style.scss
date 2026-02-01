@@ -185,7 +185,7 @@ p {
 	width: 1px;
 	height: 1px;
 	background: var(--circle);
-	border-radius: 50%;
+	clip-path: circle(50%);
 	transform: scale(1);
 	transition: transform var(--circle-transform-timing)
 			cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -385,9 +385,21 @@ h1.heading {
 /********************************************************************************
 * link styles (elements without any class -or- with specific "hoverable" class) *
 *********************************************************************************/
-a:not([class]),
-a.hoverable {
-	@include link-animate;
+a {
+	position: relative;
+}
+
+a:not([class])::after,
+a.hoverable::after {
+	content: "";
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background: var(--link-highlight);
+	transition: opacity 0.1s ease;
+	opacity: 0;
 }
 
 a:not([class]):focus-visible,
@@ -395,10 +407,19 @@ a.hoverable:focus-visible {
 	@extend %link-focusable;
 }
 
+@mixin link-hoverable() {
+	opacity: 1;
+}
+
 @mixin link-hover($hover_or_active) {
+	a:not([class]):#{$hover_or_active}::after,
+	a.hoverable:#{$hover_or_active}::after {
+		@include link-hoverable;
+	}
+
 	a:not([class]):#{$hover_or_active},
 	a.hoverable:#{$hover_or_active} {
-		@include link-hoverable;
+		outline: 2px solid var(--link-highlight);
 	}
 }
 
@@ -601,29 +622,6 @@ ul.prettier li::before {
 	html.swal2-shown {
 		overflow-y: auto;
 	}
-}
-
-/********************************************************************************
-************************* CC specific to massi-x domain *************************
-/********************************************************************************/
-.cc-link {
-	@include link-animate(true);
-	color: var(--text) !important;
-	background-size: 0 0 !important;
-}
-
-@mixin cc-link-hover($hover_or_active) {
-	.cc-link:#{$hover_or_active} {
-		@include link-hoverable(true);
-	}
-}
-
-@media (hover: hover) {
-	@include cc-link-hover("hover");
-}
-
-@media (hover: none) {
-	@include cc-link-hover("active");
 }
 
 /********************************************************************************
@@ -1662,19 +1660,10 @@ html.swal2-height-auto {
 	padding-right: 2px;
 }
 
-@mixin blog_card-hover($hover_or_active) {
-	#blog .blog-card:#{$hover_or_active} {
-		border-radius: 0;
-		box-shadow: 0 0 0 100vh var(--link-highlight) inset;
-	}
-}
-
-@media (hover: hover) {
-	@include blog_card-hover("hover");
-}
-
-@media (hover: none) {
-	@include blog_card-hover("active");
+#blog .blog-card:focus-visible,
+#blog .blog-card:focus-visible::after {
+	outline: none !important; //override default oultine implementation
+	@include link-hoverable;
 }
 
 @media only screen and (max-width: 600px) {

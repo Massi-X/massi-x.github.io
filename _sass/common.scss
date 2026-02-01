@@ -136,17 +136,6 @@
 	outline: 2px solid var(--outline) !important;
 	scroll-margin-top: calc(var(--navbar-shrinked) + 20px);
 	scroll-margin-bottom: 20px;
-	box-shadow: none !important;
-}
-
-@mixin link-animate($important: false) {
-	transition: box-shadow 0.1s ease if($important, !important, null);
-}
-
-@mixin link-hoverable($important: false) {
-	border-radius: 0.1em if($important, !important, null);
-	box-shadow: 0 0 0 1px var(--link-highlight),
-		0 0 0 100vh var(--link-highlight) inset if($important, !important, null);
 }
 
 %cc-text {
