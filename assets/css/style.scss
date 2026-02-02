@@ -187,7 +187,8 @@ p {
 	background: var(--circle);
 	clip-path: circle(50%);
 	transform: scale(1);
-	transition: transform var(--circle-transform-timing)
+	transition:
+		transform var(--circle-transform-timing)
 			cubic-bezier(0.25, 0.46, 0.45, 0.94),
 		opacity 0.3s ease !important;
 	opacity: 0.5;
@@ -208,7 +209,9 @@ p {
 	//Move up the same height as navbar
 	padding-top: var(--navbar-noshrink);
 	opacity: 0;
-	transition: opacity 0.1s ease, transform 0.4s ease;
+	transition:
+		opacity 0.1s ease,
+		transform 0.4s ease;
 }
 
 #navigation_container.ready {
@@ -389,6 +392,12 @@ a {
 	position: relative;
 }
 
+a:not([class]),
+a.hoverable {
+	transition: outline 0.1s ease;
+	outline: 2px solid transparent;
+}
+
 a:not([class])::after,
 a.hoverable::after {
 	content: "";
@@ -419,7 +428,7 @@ a.hoverable:focus-visible {
 
 	a:not([class]):#{$hover_or_active},
 	a.hoverable:#{$hover_or_active} {
-		outline: 2px solid var(--link-highlight);
+		outline-color: var(--link-highlight);
 	}
 }
 
@@ -456,7 +465,9 @@ a.hoverable:focus-visible {
 
 .button,
 .button * {
-	transition: background-color 0.15s ease, filter 0.15s ease,
+	transition:
+		background-color 0.15s ease,
+		filter 0.15s ease,
 		transform 0.3s ease;
 	will-change: transform;
 }
@@ -652,8 +663,17 @@ html.swal2-height-auto {
 }
 
 .cclike-popup {
-	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica,
-		Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+	font-family:
+		-apple-system,
+		BlinkMacSystemFont,
+		Segoe UI,
+		Roboto,
+		Helvetica,
+		Arial,
+		sans-serif,
+		Apple Color Emoji,
+		Segoe UI Emoji,
+		Segoe UI Symbol;
 	display: flex !important;
 	flex-direction: column;
 	max-height: min(37.5em, calc(100vh - 2.5em));
@@ -851,8 +871,11 @@ html.swal2-height-auto {
 }
 
 #navbar + #fake-background {
-	transition: height 0.15s ease, background-color 0.15s ease,
-		backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease;
+	transition:
+		height 0.15s ease,
+		background-color 0.15s ease,
+		backdrop-filter 0.4s ease,
+		-webkit-backdrop-filter 0.4s ease;
 	height: var(--navbar-noshrink);
 	width: 100%;
 	position: fixed;
@@ -936,8 +959,12 @@ html.swal2-height-auto {
 #navbar > #breadcumb > .link,
 #navbar > #breadcumb > #title-container,
 #navbar > #breadcumb > #title-container > * {
-	transition: background-color 0.15s ease, filter 0.15s ease, outline 0s ease,
-		transform 0.2s ease-in-out, opacity 0.2s ease;
+	transition:
+		background-color 0.15s ease,
+		filter 0.15s ease,
+		outline 0s ease,
+		transform 0.2s ease-in-out,
+		opacity 0.2s ease;
 }
 
 #navbar > #breadcumb > .link,
