@@ -161,8 +161,8 @@ if ('navigation' in window) {
 			return;
 		}
 
-		let newPageContent;
-		let animationTarget;
+		let newPageContent = null;
+		let animationTarget = null;
 		let animated = false;
 		let newIndex = navigateEvent.destination.index;
 		let newURL = new URL(navigateEvent.destination.url);
@@ -327,10 +327,13 @@ if ('navigation' in window) {
 
 		//animate the main loading view. This must be kept synced on the longer animation (currently the circle/slide)
 		//it is not necessary here to use setTimeout to prevent bug (user navigating while resizing) beacuse to do this, the user needs to be an acrobat!
-		animationTarget.addEventListener('transitionend', event => {
-			//wait for the longest duration before triggering the load (in case the next page loads very fast)
-			if(duration - (event.elapsedTime * 1000) > 50)
+		animationTarget.addEventListener('transitionend', function handler(event) {
+			//wait for the longest duration before triggering the load
+			if (duration - (event.elapsedTime * 1000) > 50)
 				return;
+
+			//must remove listener manually as once cannot be used!
+			this.removeEventListener('transitionend', handler);
 
 			//do not continue if loadPage is already processing the request or we will overwrite something!
 			if (window.loadProcessing)
@@ -351,11 +354,10 @@ if ('navigation' in window) {
 
 			animated = true;
 			loadPage();
-		}); //do not use once here!
+		}, { passive: true }); //do not use once here!
 
 		//here we load the new content
 		intercept({ scroll: 'manual' }, loadPage);
-
 
 		//-----------------------------------------//
 		//------------- inner methods -------------//
