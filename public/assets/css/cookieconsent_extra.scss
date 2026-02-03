@@ -107,7 +107,7 @@ button.pm__section-title {
 	border: 1px solid var(--cc-cookie-category-block-border) !important;
 }
 
-//disable default implementation and override with custom ::after
+//disable default hover implementations and override with custom ::after
 .pm__btn:not(.pm__btn--secondary),
 .cm__btn:not(.cm__btn--secondary) {
 	background: var(--cc-btn-primary-bg) !important;
@@ -121,25 +121,28 @@ button.pm__section-title {
 	color: var(--cc-btn-secondary-color) !important;
 }
 
+button.pm__section-title {
+	background: var(--cc-cookie-category-block-bg) !important;
+}
+
+.pm__btn:not(.pm__btn--secondary)::after,
+.cm__btn:not(.cm__btn--secondary)::after,
+.pm__btn.pm__btn--secondary::after,
+.cm__btn.cm__btn--secondary::after,
+.pm__close-btn::after,
+button.pm__section-title::after {
+	@include common-link-attrs-for-after(true);
+}
+
 .pm__btn:not(.pm__btn--secondary)::after,
 .cm__btn:not(.cm__btn--secondary)::after {
-	@include common-link-attrs-for-after(true);
 	background-color: var(--cc-btn-primary-shadow) !important;
 }
 
 .pm__btn.pm__btn--secondary::after,
-.cm__btn.cm__btn--secondary::after {
-	@include common-link-attrs-for-after(true);
+.cm__btn.cm__btn--secondary::after,
+button.pm__section-title::after {
 	background-color: var(--cc-btn-secondary-shadow) !important;
-}
-
-.pm__close-btn::after {
-	@include common-link-attrs-for-after(true);
-}
-
-//disable default implementation and override with active/hover (below)
-button.pm__section-title:hover {
-	background: var(--cc-cookie-category-block-bg) !important;
 }
 
 @mixin cc-button-hover($hover_or_active) {
@@ -147,13 +150,9 @@ button.pm__section-title:hover {
 	.cm__btn:not(.cm__btn--secondary):#{$hover_or_active}::after,
 	.pm__btn.pm__btn--secondary:#{$hover_or_active}::after,
 	.cm__btn.cm__btn--secondary:#{$hover_or_active}::after,
-	.pm__close-btn:#{$hover_or_active}::after {
+	.pm__close-btn:#{$hover_or_active}::after,
+	button.pm__section-title:#{$hover_or_active}::after {
 		@include link-hoverable(true);
-	}
-
-	//see note above
-	button.pm__section-title:#{$hover_or_active} {
-		box-shadow: 0 0 0 100vh var(--cc-btn-category-shadow) inset !important;
 	}
 }
 
