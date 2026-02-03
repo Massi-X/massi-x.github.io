@@ -131,6 +131,22 @@
 ********************************* SASS variables ********************************
 /********************************************************************************/
 
+@mixin common-link-attrs-for-after($important: false) {
+	content: "" if($important, !important, null);
+	position: absolute if($important, !important, null);
+	height: 100% if($important, !important, null);
+	width: 100% if($important, !important, null);
+	top: 0 if($important, !important, null);
+	left: 0 if($important, !important, null);
+	transition: opacity 0.1s ease if($important, !important, null);
+	background-color: var(--link-highlight) if($important, !important, null);
+	opacity: 0 if($important, !important, null);
+}
+
+@mixin link-hoverable($important: false) {
+	opacity: 1 if($important, !important, null);
+}
+
 %link-focusable {
 	outline-offset: 2px;
 	outline: 2px solid var(--outline) !important;
@@ -142,25 +158,11 @@
 	color: var(--text) !important;
 }
 
-%cc-button {
+@mixin cc-button($relative: false) {
+	@if $relative {
+		position: relative !important;
+	}
 	border: none !important;
-	transition: box-shadow 0.25s ease !important;
-}
-
-%cc-button_primary-hover_override {
-	background: var(--cc-btn-primary-bg) !important;
-}
-
-%cc-button_secondary-hover_override {
-	background: var(--cc-btn-secondary-bg) !important;
-}
-
-@mixin cc-button_primary-hover {
-	box-shadow: 0 0 0 100vh var(--cc-btn-primary-shadow) inset !important;
-}
-
-@mixin cc-button_secondary-hover {
-	box-shadow: 0 0 0 100vh var(--cc-btn-secondary-shadow) inset !important;
 }
 
 @mixin no-anim {

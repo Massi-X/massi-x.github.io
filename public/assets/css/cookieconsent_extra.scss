@@ -1,5 +1,6 @@
 ---
 ---
+
 @import "common";
 
 //custom button for preferences
@@ -8,7 +9,7 @@
 	color: var(--cookieconsent-link);
 }
 
-.cookie-settings>i {
+.cookie-settings > i {
 	padding-right: 3px;
 }
 
@@ -47,19 +48,21 @@ html.show--preferences {
 }
 
 .pm__section-arrow svg {
-	transition: transform .25s ease;
+	transition: transform 0.25s ease;
 }
 
-.section__toggle:disabled~.toggle__icon {
+.section__toggle:disabled ~ .toggle__icon {
 	transition: none !important;
 }
 
 .section__toggle-wrapper .toggle__icon-circle {
-	transition: transform .25s ease !important;
+	transition: transform 0.25s ease !important;
 }
 
 .section__toggle-wrapper .toggle__icon {
-	transition: background-color .25s ease, transform .25s ease !important;
+	transition:
+		background-color 0.25s ease,
+		transform 0.25s ease !important;
 }
 
 #cc-main .cm__btns {
@@ -81,14 +84,14 @@ html.show--preferences {
 
 #cc-main .pm__footer {
 	//.9em matches default implementation
-	padding-bottom: calc(env(safe-area-inset-bottom, 0px) + .9em) !important;
+	padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.9em) !important;
 }
 
 .pm__btn,
 .cm__btn,
 .pm__close-btn,
 .pm__section-title {
-	@extend %cc-button;
+	@include cc-button(true);
 }
 
 .cm__btn:focus-visible,
@@ -104,57 +107,73 @@ button.pm__section-title {
 	border: 1px solid var(--cc-cookie-category-block-border) !important;
 }
 
-.pm__btn:not(.pm__btn--secondary):hover,
-.cm__btn:not(.cm__btn--secondary):hover {
-	@extend %cc-button_primary-hover_override;
+//disable default implementation and override with custom ::after
+.pm__btn:not(.pm__btn--secondary),
+.cm__btn:not(.cm__btn--secondary) {
+	background: var(--cc-btn-primary-bg) !important;
+	color: var(--cc-btn-primary-color) !important;
 }
 
-.pm__btn.pm__btn--secondary:hover,
-.cm__btn.cm__btn--secondary:hover,
-.pm__close-btn:hover {
-	@extend %cc-button_secondary-hover_override;
+.pm__btn.pm__btn--secondary,
+.cm__btn.cm__btn--secondary,
+.pm__close-btn {
+	background: var(--cc-btn-secondary-bg) !important;
+	color: var(--cc-btn-secondary-color) !important;
 }
 
+.pm__btn:not(.pm__btn--secondary)::after,
+.cm__btn:not(.cm__btn--secondary)::after {
+	@include common-link-attrs-for-after(true);
+	background-color: var(--cc-btn-primary-shadow) !important;
+}
+
+.pm__btn.pm__btn--secondary::after,
+.cm__btn.cm__btn--secondary::after {
+	@include common-link-attrs-for-after(true);
+	background-color: var(--cc-btn-secondary-shadow) !important;
+}
+
+.pm__close-btn::after {
+	@include common-link-attrs-for-after(true);
+}
+
+//disable default implementation and override with active/hover (below)
 button.pm__section-title:hover {
 	background: var(--cc-cookie-category-block-bg) !important;
 }
 
 @mixin cc-button-hover($hover_or_active) {
-
-	.pm__btn:not(.pm__btn--secondary):#{$hover_or_active},
-	.cm__btn:not(.cm__btn--secondary):#{$hover_or_active} {
-		@include cc-button_primary-hover;
+	.pm__btn:not(.pm__btn--secondary):#{$hover_or_active}::after,
+	.cm__btn:not(.cm__btn--secondary):#{$hover_or_active}::after,
+	.pm__btn.pm__btn--secondary:#{$hover_or_active}::after,
+	.cm__btn.cm__btn--secondary:#{$hover_or_active}::after,
+	.pm__close-btn:#{$hover_or_active}::after {
+		@include link-hoverable(true);
 	}
 
-	.pm__btn.pm__btn--secondary:#{$hover_or_active},
-	.cm__btn.cm__btn--secondary:#{$hover_or_active},
-	.pm__close-btn:#{$hover_or_active} {
-		@include cc-button_secondary-hover;
-	}
-
+	//see note above
 	button.pm__section-title:#{$hover_or_active} {
 		box-shadow: 0 0 0 100vh var(--cc-btn-category-shadow) inset !important;
 	}
 }
 
 @media (hover: hover) {
-	@include cc-button-hover('hover');
+	@include cc-button-hover("hover");
 }
 
 @media (hover: none) {
-	@include cc-button-hover('active');
+	@include cc-button-hover("active");
 }
 
-@media(prefers-reduced-motion: reduce) {
-
+@media (prefers-reduced-motion: reduce) {
 	.cclike-container,
-	.cclike-container>*,
+	.cclike-container > *,
 	.pm__btn,
 	.cm__btn,
 	.pm__close-btn,
 	.pm__section-title,
 	#cc-main .toggle__icon,
-	#cc-main .toggle__icon>* {
+	#cc-main .toggle__icon > * {
 		@include no-anim;
 	}
 }

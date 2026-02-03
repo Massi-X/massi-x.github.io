@@ -400,24 +400,12 @@ a.hoverable {
 
 a:not([class])::after,
 a.hoverable::after {
-	content: "";
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	top: 0;
-	left: 0;
-	background: var(--link-highlight);
-	transition: opacity 0.1s ease;
-	opacity: 0;
+	@include common-link-attrs-for-after;
 }
 
 a:not([class]):focus-visible,
 a.hoverable:focus-visible {
 	@extend %link-focusable;
-}
-
-@mixin link-hoverable() {
-	opacity: 1;
 }
 
 @mixin link-hover($hover_or_active) {
@@ -698,8 +686,8 @@ html.swal2-height-auto {
 
 .swal2-close.cclike-closebutton:before {
 	content: "";
-	width: 19px;
-	height: 19px;
+	width: 21px;
+	height: 21px;
 	background-color: var(--cc-primary-color);
 	background-repeat: no-repeat;
 	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath id='rect1' style='stroke-width:1.5;stroke:%23fffff8;' d='M 19.5 4.5 L 4.5 19.5 M 4.5 4.501 L 19.5 19.5' /%3E%3C/svg%3E%0A");
@@ -761,7 +749,7 @@ html.swal2-height-auto {
 
 .swal2-confirm.cclike-confirmbutton,
 .swal2-close.cclike-closebutton {
-	@extend %cc-button;
+	@include cc-button;
 }
 
 [class^="swal2"] button:focus {
@@ -772,13 +760,21 @@ html.swal2-height-auto {
 	@extend %link-focusable;
 }
 
+.swal2-confirm.cclike-confirmbutton::after {
+	@include common-link-attrs-for-after;
+}
+
+.swal2-close.cclike-closebutton::after {
+	@include common-link-attrs-for-after;
+}
+
 @mixin swal-button-hover($hover_or_active) {
-	.swal2-confirm.cclike-confirmbutton:#{$hover_or_active} {
-		@include cc-button_primary-hover;
+	.swal2-confirm.cclike-confirmbutton:#{$hover_or_active}::after {
+		@include link-hoverable;
 	}
 
-	.swal2-close.cclike-closebutton:#{$hover_or_active} {
-		@include cc-button_secondary-hover;
+	.swal2-close.cclike-closebutton:#{$hover_or_active}::after {
+		@include link-hoverable;
 	}
 }
 
