@@ -77,7 +77,7 @@ img[alt]:before {
 
 //disable link previews in safari which scramble buttons up
 a {
-	-webkit-touch-callout: none;
+	-webkit-touch-callout: none !important;
 }
 
 .flex {
