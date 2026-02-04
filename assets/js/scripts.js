@@ -147,8 +147,10 @@ if ('navigation' in window) {
 			}, 0);
 	});
 
+	//the progressive ID used to identify the last navigate event to execute in case of concurrency
+	let progressiveID = 0;
+
 	//register main listener
-	//if the user navigates like crazy it could sometime happen that the current page/url mismatch, really edge case I was able to trigger this only a few times
 	navigation.addEventListener('navigate', navigateEvent => {
 		//0: the home page is missing while in PWA (i.e. the app launched directly to an URL)
 		if (alterNavigation === NAVIGATION_HOME_ADD) {
@@ -258,14 +260,13 @@ if ('navigation' in window) {
 		if (window.reduceanimation || (navigationType != 'traverse' && navigationType != 'push'))
 			return;
 
-		//circle animation could become stuck if the user clicks links or traverse fast enough because of the transitionend not triggering.
-		//the check for existence of animationTarget prevents the behavior by bypassing the result if already animated
-		animationTarget = document.getElementById(circleID);
+		//it is time to set the progressive ID, which will be used to identify the script to
+		//execute in case of concurrency (this fixes user navigating like crazy... like me!)
+		progressiveID++;
+		let internalProgressiveID = progressiveID;
 
-		//prevents the circle getting stuck by bypassing the result if already animated
-		if (animationTarget)
-			animated = true;
-		else if (navigationType == 'push') { //circle animation originating from the link click...
+		//ok this is a real cross-page transition
+		if (navigationType == 'push') { //circle animation originating from the link click...
 			animationTarget = document.createElement('div');
 			animationTarget.id = circleID;
 
@@ -328,6 +329,10 @@ if ('navigation' in window) {
 		//animate the main loading view. This must be kept synced on the longer animation (currently the circle/slide)
 		//it is not necessary here to use setTimeout to prevent bug (user navigating while resizing) beacuse to do this, the user needs to be an acrobat!
 		animationTarget.addEventListener('transitionend', function handler(event) {
+			//we should not continue. This is not the last call for navigate
+			if (internalProgressiveID < progressiveID)
+				return;
+
 			//wait for the longest duration before triggering the load
 			if (duration - (event.elapsedTime * 1000) > 50)
 				return;
@@ -404,6 +409,10 @@ if ('navigation' in window) {
 
 		//renders the page given the content is fully loaded
 		function loadPage(hasUAVisualTransition = false) {
+			//we should not continue. This is not the last call for navigate
+			if (internalProgressiveID < progressiveID)
+				return;
+
 			//the DOM is not ready. We don't know anything yet and we can't continue
 			if (newPageContent == null)
 				return;
