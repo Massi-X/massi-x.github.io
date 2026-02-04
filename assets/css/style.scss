@@ -1623,9 +1623,10 @@ html.swal2-height-auto {
 /***************************** Blog Page Layout ****************************/
 
 #blog {
+	overflow: hidden;
 	border: 1px solid var(--img-border);
 	border-radius: 2em;
-	overflow: hidden;
+	margin-top: 20px;
 }
 
 #blog .heading {
