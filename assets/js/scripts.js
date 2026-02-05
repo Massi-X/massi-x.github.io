@@ -723,12 +723,14 @@ function attachPopupObserver(func) {
 					popupElm = document.querySelector('.swal2-container');
 					bodyElm = popupElm.querySelector('.swal2-html-container');
 				}
-				else if (!window.htmlClasses.includes('show--preferences') && currentClasses.includes('show--preferences')) { //cc popup is being shown
+				else if ((!window.htmlClasses.includes('show--preferences') && currentClasses.includes('show--preferences')) ||
+					(!window.htmlClasses.includes('show--consent') && currentClasses.includes('show--consent'))) { //cc popup (pref or main consent) is being shown
 					popupElm = document.querySelector('#cc-main');
 					bodyElm = popupElm.querySelector('.pm__body');
 				}
 				else if (window.htmlClasses.includes('swal2-shown') && !currentClasses.includes('swal2-shown') ||
-					window.htmlClasses.includes('show--preferences') && !currentClasses.includes('show--preferences'))
+					window.htmlClasses.includes('show--preferences') && !currentClasses.includes('show--preferences') ||
+					window.htmlClasses.includes('show--consent') && !currentClasses.includes('show--consent'))
 					popupElm = false; //a popup is being closed
 
 				//call func only if a change we are interested in has happened
