@@ -45,6 +45,7 @@ body {
 	min-height: 100dvh;
 	overflow: hidden;
 	background: var(--background);
+	padding-top: env(safe-area-inset-top, 0px); //for ios pwa statusbar
 }
 
 img,
@@ -294,14 +295,17 @@ p {
 	margin-top: auto !important;
 	text-align: center;
 	padding-top: 20px;
-	padding-bottom: max(20px, env(safe-area-inset-bottom)); //ios navbar padding
+	padding-bottom: max(
+		20px,
+		env(safe-area-inset-bottom, 0px)
+	); //ios navbar padding
 	font-size: 15px;
 	line-height: 20px;
 }
 
 @media only screen and (max-width: 1023px) {
 	#footer {
-		padding: 25px 0 calc(90px + env(safe-area-inset-bottom));
+		padding: 25px 0 calc(90px + env(safe-area-inset-bottom, 0px));
 	}
 }
 
@@ -872,15 +876,16 @@ html.swal2-height-auto {
 		background-color 0.15s ease,
 		backdrop-filter 0.4s ease,
 		-webkit-backdrop-filter 0.4s ease;
-	height: var(--navbar-noshrink);
+	height: calc(var(--navbar-noshrink) + env(safe-area-inset-top, 0px)); //for ios pwa statusbar
 	width: 100%;
 	position: fixed;
 	left: 0;
+	top: 0; //for ios pwa statusbar
 	z-index: var(--circle-z-index);
 }
 
 #navbar.shrinked + #fake-background {
-	height: var(--navbar-shrinked);
+	height: calc(var(--navbar-shrinked) + env(safe-area-inset-top, 0px)); //for ios pwa statusbar
 	background-color: var(--navbar-bg);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
@@ -915,6 +920,7 @@ html.swal2-height-auto {
 }
 
 #navbar > #breadcumb > .link {
+	z-index: 1; //to make it above title on very small devices
 	flex-shrink: 0;
 	display: flex;
 	justify-content: center;
@@ -950,6 +956,11 @@ html.swal2-height-auto {
 #navbar > #breadcumb > #title-container > .real-title,
 #navbar > #breadcumb > #title-container.loading > .loading-title {
 	opacity: 1;
+}
+
+#navbar > #breadcumb > .link,
+#navbar > #breadcumb > #title-container {
+	margin: auto;
 }
 
 #navbar > #breadcumb > .link,
@@ -991,7 +1002,7 @@ html.swal2-height-auto {
 		height: var(--navbar-noshrink);
 		width: 100%;
 		left: 0;
-		top: 0;
+		//do not set top
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -1022,11 +1033,6 @@ html.swal2-height-auto {
 		margin-left: 4px;
 	}
 
-	#navbar > #breadcumb > #title-container,
-	#navbar > #breadcumb > .link {
-		margin: 18px 0;
-	}
-
 	#navbar > #breadcumb > #title-container {
 		//do not use padding for absolute positioned elements
 		border: 10px solid transparent;
@@ -1053,7 +1059,7 @@ html.swal2-height-auto {
 @media only screen and (max-width: 1023px) {
 	#navbar > #breadcumb {
 		height: var(--navbar-noshrink);
-		top: 0;
+		//do not set top
 		font-size: 20px;
 	}
 
@@ -1077,9 +1083,8 @@ html.swal2-height-auto {
 	}
 
 	#navbar > #breadcumb > #title-container {
-		margin: auto;
-		padding: 0 20px;
-		max-width: calc(100% - (var(--back-width) * 2));
+		padding: 0 calc(var(--back-width) + var(--back-margin) + 10px);
+		max-width: 100%;
 	}
 
 	#navbar > #breadcumb > #title-container > .loading-title {
@@ -1123,7 +1128,7 @@ html.swal2-height-auto {
 
 	#navbar > #breadcumb > .link {
 		position: absolute;
-		margin-left: 10px;
+		margin-left: var(--back-margin);
 	}
 
 	@mixin navbar_buttons-hover($hover_or_active) {
