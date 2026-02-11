@@ -174,6 +174,11 @@ if ('navigation' in window) {
 		let navigationType = navigateEvent.navigationType;
 		const circleID = 'circle-reveal'; //id of circle reveal, used for both push and traverse
 
+		//it is time to set the progressive ID, which will be used to identify the script to
+		//execute in case of concurrency (this fixes user navigating like crazy... like me!)
+		progressiveID++;
+		let internalProgressiveID = progressiveID;
+
 		//if the browser already provides a visual transition then skip mine
 		if (navigateEvent.hasUAVisualTransition) {
 			window.loadProcessing = false; //reset loadPage processing state
@@ -259,11 +264,6 @@ if ('navigation' in window) {
 		//complying to the reduced animation policy is easy as letting the browser handle everything starting from there. Moreover these navigation types are not handled, so we let the broswer do it's default with them
 		if (window.reduceanimation || (navigationType != 'traverse' && navigationType != 'push'))
 			return;
-
-		//it is time to set the progressive ID, which will be used to identify the script to
-		//execute in case of concurrency (this fixes user navigating like crazy... like me!)
-		progressiveID++;
-		let internalProgressiveID = progressiveID;
 
 		//ok this is a real cross-page transition
 		if (navigationType == 'push') { //circle animation originating from the link click...
