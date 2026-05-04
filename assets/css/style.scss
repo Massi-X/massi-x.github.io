@@ -88,7 +88,11 @@ a {
 .pagefixed {
 	height: 100vh;
 	position: fixed;
-	pointer-events: none;
+}
+
+/* Prevent further complication in the navigation function by disallowing clicks during loads */
+.pagefixed > * {
+	pointer-events: none !important;
 }
 
 .invisible {

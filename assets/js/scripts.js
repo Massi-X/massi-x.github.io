@@ -123,6 +123,7 @@ cc_init(ccShowHideDinamic);
 
 //custom navigation handling (transitions and errors)
 if ('navigation' in window) {
+	const circleID = 'circle-reveal'; //id of circle reveal, used for both push and traverse
 	window.alterNavigation = NAVIGATION_UNSET; //for PWA home navigation/injection. See below
 	window.loadProcessing = false;
 	navigation.updateCurrentEntry({ state: { title: document.title } }); //save the page title in the state for later use
@@ -148,6 +149,7 @@ if ('navigation' in window) {
 	});
 
 	//the progressive ID used to identify the last navigate event to execute in case of concurrency
+	//-AND- to take track of abort events
 	let progressiveID = 0;
 
 	//register main listener
@@ -163,6 +165,7 @@ if ('navigation' in window) {
 			return;
 		}
 
+		let navigationType = navigateEvent.navigationType;
 		let newPageContent = null;
 		let animationTarget = null;
 		let animated = false;
@@ -171,8 +174,7 @@ if ('navigation' in window) {
 		const newHash = newURL.href.split('#')[1];
 		const oldURL = new URL(navigation.currentEntry.url);
 		const oldHash = oldURL.href.split('#')[1];
-		let navigationType = navigateEvent.navigationType;
-		const circleID = 'circle-reveal'; //id of circle reveal, used for both push and traverse
+		const circle = document.getElementById(circleID); //get the old circle (if any) to remove it
 
 		//it is time to set the progressive ID, which will be used to identify the script to
 		//execute in case of concurrency (this fixes user navigating like crazy... like me!)
@@ -336,6 +338,10 @@ if ('navigation' in window) {
 			//wait for the longest duration before triggering the load
 			if (duration - (event.elapsedTime * 1000) > 50)
 				return;
+			
+			//previous circle must be removed -> in case of abort and new navigation
+			if (circle)
+				circle.remove();
 
 			//must remove listener manually as once cannot be used!
 			this.removeEventListener('transitionend', handler);
@@ -344,8 +350,8 @@ if ('navigation' in window) {
 			if (window.loadProcessing)
 				return;
 
+			document.body.classList.add('pagefixed');
 			if (navigationType == 'push') {
-				navigationContainer.classList.add('pagefixed');
 				navigationContainer.style = 'margin-top: -' + window.scrollY + 'px;';
 				window.header.classList.remove('delay-anim');
 				animationTarget.classList.add('blink');
@@ -355,7 +361,8 @@ if ('navigation' in window) {
 				animationTarget.style.height = '100vh';
 			}
 			else if (navigationType == 'traverse')
-				document.body.classList.add('pagefixed', 'blink');
+				document.body.classList.add('blink');
+
 
 			animated = true;
 			loadPage();
@@ -389,6 +396,7 @@ if ('navigation' in window) {
 						//this prevents loading the error page in the middle of a navigation if the user navigate fast back/forward.
 						//as the side effect of completely blocking the page if the user abort the loading with the browser button, but I see this as intended behavior so it's fine
 						if (navigateEvent.signal.aborted)
+							//we must not continue
 							return;
 						else
 							response = await fetch('/404.html'); //this is cached when the worker is installed, always present
@@ -432,7 +440,7 @@ if ('navigation' in window) {
 				document.body.classList.add("noanim-all");
 
 			//remove any highlight to the text
-			window.getSelection().removeAllRanges()
+			window.getSelection().removeAllRanges();
 
 			//extract arrow from new page to determine if it should be visible or not
 			slideArrow(!newPageContent.querySelector('[data-insert-navigation="true"]'));
@@ -472,6 +480,9 @@ if ('navigation' in window) {
 			}
 
 			if (!hasUAVisualTransition) {
+				//use dynamic setTimeout instead of transitionEnd here so that the callback is called no matter if user is resizing window
+				setTimeout(() => document.body.classList.remove('pagefixed'), getDuration(animationTarget) + 20);
+
 				//fix user navigating too fast by checking for id instead of push/traverse
 				if (animationTarget.id == circleID) { //if push navigation: fade the circle out and then remove it
 					animationTarget.classList.add('fadeout');
@@ -479,7 +490,6 @@ if ('navigation' in window) {
 					//use dynamic setTimeout instead of transitionEnd here so that the callback is called no matter if user is resizing window
 					setTimeout(() => {
 						animationTarget.remove();
-						navigationContainer.classList.remove('pagefixed');
 					}, getDuration(animationTarget));
 				} else { //if forward/back navigation: slide in new page
 					document.body.classList.remove('blink');
@@ -487,9 +497,6 @@ if ('navigation' in window) {
 
 					//artificial delay to prevent issues with 'slow 3g' mode in Chrome. Don't think this applies to real life scenario, anyway it doesn't matter too much
 					setTimeout(() => animationTarget.classList.remove('noanim', 'navigate-back', 'navigate-forward', 'inverse'), 20);
-
-					//use dynamic setTimeout instead of transitionEnd here so that the callback is called no matter if user is resizing window
-					setTimeout(() => document.body.classList.remove('pagefixed'), getDuration(animationTarget) + 20);
 				}
 			}
 
